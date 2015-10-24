@@ -1,5 +1,7 @@
 package Game;
 
+/*HI I'M MISTER MEEGSEES LOOK AT ME!*/
+
 public class Entity {
 	//stat related
 	double baseHealth;
