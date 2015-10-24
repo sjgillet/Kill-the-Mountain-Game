@@ -99,11 +99,17 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.levels.get(GamePanel.currentLevel).seed++;
 				GamePanel.levels.get(GamePanel.currentLevel).generateMap();
 				GamePanel.levels.get(GamePanel.currentLevel).updateTileMapArt();
+				GamePanel.levels.get(GamePanel.currentLevel).map = new LevelMap(GamePanel.levels.get(GamePanel.currentLevel).tileMap);
+				GamePanel.player.destination.x=(int)GamePanel.player.xpos;
+				GamePanel.player.destination.y=(int)GamePanel.player.ypos;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_DOWN){
 				GamePanel.levels.get(GamePanel.currentLevel).seed--;
 				GamePanel.levels.get(GamePanel.currentLevel).generateMap();
 				GamePanel.levels.get(GamePanel.currentLevel).updateTileMapArt();
+				GamePanel.levels.get(GamePanel.currentLevel).map = new LevelMap(GamePanel.levels.get(GamePanel.currentLevel).tileMap);
+				GamePanel.player.destination.x=(int)GamePanel.player.xpos;
+				GamePanel.player.destination.y=(int)GamePanel.player.ypos;
 			}
 		}
 	}
@@ -117,6 +123,9 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 
 
 	}
+	/*
+	 * Constantly checks for changes in key state by being called by the game loop in applicationUI
+	 */
 	public static void checkKeys(){
 		//check if mouse was pressed
 		if(mousePressed){

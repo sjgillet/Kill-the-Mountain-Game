@@ -15,6 +15,12 @@ public class Level {
 	String name;
 	Random levelGenerationRandom;
 	int seed;
+	int waterlevel;
+	//self explanatory
+	int minIslandSize;
+	int maxIslandSize;
+	int minNumberOfIslands;
+	int maxNumberOfIslands;
 	int minNumberOfMountains;
 	int maxNumberOfMountains;
 	int mountainMaxHeight;
@@ -46,12 +52,17 @@ public class Level {
 			seed = 136;
 			width = 200;
 			height = 200;
-			minNumberOfMountains = 2;
-			maxNumberOfMountains = 10;
-			mountainMaxHeight = 5;
-			mountainMinHeight = 1;
-			mountainMaxSteepness = 8;//each layer is half the size of the one it's built on
-			mountainMinSteepness = 4;//each layer is one quarter of the size of what it's built on
+			minNumberOfIslands = 2;
+			maxNumberOfIslands = 15;
+			minIslandSize = 320;
+			maxIslandSize = (width*height)/minNumberOfIslands;
+			minNumberOfMountains = ((width+height)/2)/50;
+			maxNumberOfMountains = ((width+height)/2)/50;
+			mountainMaxHeight = ((width+height)/2)/25;//max elevation possible for mountains
+			mountainMinHeight = ((width+height)/2)/50;//minimum elevatoin possible for mountains
+			mountainMinSteepness = 2;
+			mountainMaxSteepness = 2;
+
 		}
 
 		//generateDoors();
@@ -87,7 +98,8 @@ public class Level {
 			width = 40;
 			height = 25;
 		}
-		
+
+		//generate the map
 		generateMap();
 
 	}
@@ -116,8 +128,7 @@ public class Level {
 		for(int x = 0; x<width;x++){
 			for(int y = 0; y<height; y++){
 
-				//tileMap[x][y]=new Tile(x,y,6,0);//everything is grass
-				tileMap[x][y]=new Tile(x,y,1,0);//everything is water
+				tileMap[x][y]=new Tile(x,y,0,1);//everything is grass
 
 			}
 		}		
@@ -128,26 +139,19 @@ public class Level {
 			tileMap = hardMap;
 		}
 
-		//create islands
-		int islandCount = randomNumber(2,15);
-		for(int i = 0; i<islandCount; i++){
-			generateLakeOrIsland(randomNumber(320,2550), false);
-		}
-		//create lakes
-		int lakeCount = randomNumber(2,3);
-		for(int i = 0; i<lakeCount; i++){
-			generateLakeOrIsland(randomNumber(120,500), true);
-		}
 		int numberOfMountains = randomNumber(minNumberOfMountains,maxNumberOfMountains);
 		//create mountains
 
 		int mountainHeight = randomNumber(mountainMinHeight,mountainMaxHeight);
+		waterlevel = 3;
 		int steepness = randomNumber(mountainMinSteepness,mountainMaxSteepness);
-		int mountainBaseSize = 500*mountainHeight*steepness;
+		int mountainBaseSize = (width*4)*mountainHeight*steepness;
+
 		for(int f = 1; f<=mountainHeight;f++){
+			ArrayList<Tile> tilesAtDesiredElevation = getTilesAtElevation(f);
 			for(int k = 0; k<numberOfMountains;k++){
 				//create a plateau at the elevation determined by f
-				generatePlateauOrCanyon(f,mountainBaseSize/(f*steepness),true);
+				generatePlateauOrCanyon(f,mountainBaseSize/(f*steepness),true,tilesAtDesiredElevation);
 			}
 			//create the plateau edges
 			setElevationEdges(f+1);
@@ -159,8 +163,7 @@ public class Level {
 
 
 
-		//create the map
-		map = new LevelMap(tileMap);
+
 	}
 	/*
 	 * used to generate an area on the map which has a higher or lower elevation that the elevation it is created on
@@ -172,8 +175,9 @@ public class Level {
 	 * @param isPlateau - true if this feature should be raising elevation compared to build elevation,
 	 * false if it should be lowering elevation compated to the build elevation.
 	 */
-	public void generatePlateauOrCanyon(int buildElevation, int size, boolean isPlateau){
+	public void generatePlateauOrCanyon(int buildElevation, int size, boolean isPlateau, ArrayList<Tile> tilesAtThisElevation){
 		int elevationChange = 0;
+		int timesRepositioned = 0;
 		int count = 0;
 		if(isPlateau){
 			elevationChange = 1;
@@ -183,59 +187,71 @@ public class Level {
 		}
 		ArrayList<Tile> tilesAdded = new ArrayList<Tile>();
 		//find a random tile where the tileMap is not water
-		Point randomlyChosenTile = new Point(randomNumber(0,width-1),randomNumber(0,height-1));
-		int timesTried = 0;
-		int maxTries = 999;
-		while(timesTried<maxTries&&tileMap[randomlyChosenTile.x][randomlyChosenTile.y].elevation!=buildElevation||tileMap[randomlyChosenTile.x][randomlyChosenTile.y].tileID!=0){//could create an infinite loop if the build elevation does not yet exist
-			randomlyChosenTile = new Point(randomNumber(0,width-1),randomNumber(0,height-1));
-			timesTried++;
-		}
-		if(timesTried<maxTries){
-			tileMap[randomlyChosenTile.x][randomlyChosenTile.y] = new Tile(randomlyChosenTile.x,randomlyChosenTile.y,0,buildElevation+elevationChange);
-			tileMap[randomlyChosenTile.x][randomlyChosenTile.y].oldElevation=buildElevation;
-			tilesAdded.add(tileMap[randomlyChosenTile.x][randomlyChosenTile.y]);
-			count++;
-		}
-		while(count<size&&tilesAdded.size()>0){//for the desired amount of tiles
-			//pick a random tile which has already been created for this terrain feature
-			Tile randTile = tilesAdded.get(randomNumber(0,tilesAdded.size()-1));
-			randomlyChosenTile = new Point(randTile.xpos/32,randTile.ypos/32);
-
-			//get all the adjacent grass tiles that are at the same elevation as buildElevation
-			ArrayList<Tile> adjacentTiles = tilesAdjacentToPosition(randomlyChosenTile.x,randomlyChosenTile.y,0,true,buildElevation);
-
-			//make sure there are adjacent tiles that can be modified
-			if(adjacentTiles.size()>0){
-				randTile = adjacentTiles.get(randomNumber(0,adjacentTiles.size()-1));
-				//pick a random one of these tiles
-				randomlyChosenTile = new Point(randTile.xpos/32,randTile.ypos/32);
-				//make sure randTile is not a cliff tile
-				ArrayList<Tile> tilesAdjacentToRandTile = getTilesAdjacentToPosition(new Point(randTile.xpos/32,randTile.ypos/32),true);
-				boolean temp = true;
-				//				for(int f = 0; f<tilesAdjacentToRandTile.size();f++){
-				//					if(tilesAdjacentToRandTile.get(f).elevation<buildElevation){
-				//						temp = false;
-				//					}
-				//				}
-				if(temp&&tileMap[randomlyChosenTile.x][randomlyChosenTile.y].tileID==0&&tileMap[randomlyChosenTile.x][randomlyChosenTile.y].elevation==buildElevation){
-					if(buildElevation!=2||true){
-						//set the tile at this position to be a placeholder tile
-						tileMap[randomlyChosenTile.x][randomlyChosenTile.y]=new Tile(randomlyChosenTile.x,randomlyChosenTile.y,0,buildElevation+elevationChange);
-						tileMap[randomlyChosenTile.x][randomlyChosenTile.y].oldElevation=buildElevation;
-						tilesAdded.add(tileMap[randomlyChosenTile.x][randomlyChosenTile.y]);
-						count++;
-					}
-					else{
-						//tileMap[randomlyChosenTile.x][randomlyChosenTile.y].flagged=true;
-						tilesAdded.add(tileMap[randomlyChosenTile.x][randomlyChosenTile.y]);
-					}
-				}
-				else{
-					System.out.println("failed to pick a grass tile");
+		//Point randomlyChosenTile = new Point(randomNumber(0,width-1),randomNumber(0,height-1));
+		//int timesTried = 0;
+		//int maxTries = 999;
+		if(tilesAtThisElevation.size()>0){
+			Tile randomTile = tilesAtThisElevation.get(randomNumber(0,tilesAtThisElevation.size()-1));
+			//System.out.println("started at elevation: "+buildElevation+", size of list is: "+tilesAtThisElevation.size());
+			while(randomTile.tileID!=0&&tilesAtThisElevation.size()>0){//while random tile is not grass
+				//System.out.println("removed a tile with ID: "+randomTile.tileID);
+				tilesAtThisElevation.remove(randomTile);
+				if(tilesAtThisElevation.size()>0){
+					randomTile = tilesAtThisElevation.get(randomNumber(0,tilesAtThisElevation.size()-1));
 				}
 			}
-			if(randomNumber(1,100)==1){//failsafe to prevent infinite loops
-				count++;
+			//System.out.println("found a desirable tile at elevation: "+buildElevation+", size of list is: "+tilesAtThisElevation.size());
+			if(tilesAtThisElevation.size()>0){
+				tileMap[randomTile.xpos/32][randomTile.ypos/32] = new Tile(randomTile.xpos/32,randomTile.ypos/32,0,buildElevation+elevationChange);
+				//System.out.println("1");
+				tilesAdded.add(randomTile);
+				int tries = 0;
+				while(count<size&&tilesAdded.size()>0&&tilesAtThisElevation.size()>0){//for the desired amount of tiles
+					//System.out.println("inside here");
+					//pick a random tile which has already been created for this terrain feature
+					Tile randTile = tilesAdded.get(randomNumber(0,tilesAdded.size()-1));
+					//randomlyChosenTile = new Point(randTile.xpos/32,randTile.ypos/32);
+
+					//get all the adjacent grass tiles that are at the same elevation as buildElevation
+					ArrayList<Tile> adjacentTiles = tilesAdjacentToPosition(randTile.xpos/32,randTile.ypos/32,0,true,buildElevation);
+					boolean addedATile = false;
+					//make sure there are adjacent tiles that can be modified
+					if(adjacentTiles.size()>0){
+						randTile = adjacentTiles.get(randomNumber(0,adjacentTiles.size()-1));
+						//pick a random one of these tiles
+						//randomlyChosenTile = new Point(randTile.xpos/32,randTile.ypos/32);
+
+
+						if(randTile.tileID==0&&randTile.elevation==buildElevation){
+							//System.out.println("created a tile! "+tilesAtThisElevation.size()+","+tilesAdded.size());
+							//set the tile at this position to be a placeholder tile
+							tileMap[randTile.xpos/32][randTile.ypos/32]=new Tile(randTile.xpos/32,randTile.ypos/32,0,buildElevation+elevationChange);
+							tileMap[randTile.xpos/32][randTile.ypos/32].oldElevation=buildElevation;
+							tilesAdded.add(tileMap[randTile.xpos/32][randTile.ypos/32]);
+							tilesAtThisElevation.remove(randTile);
+							count++;
+							addedATile = true;
+							tries = 0;
+
+
+						}
+						else{
+							System.out.println("failed to pick a grass tile");
+						}
+						if(randomNumber(1,10)==1){
+							count++;
+						}
+						//System.out.println("looping"+randomNumber(1,5));
+					}
+					else{
+						tilesAdded.remove(randTile);
+					}
+					
+					if(addedATile==false){
+						tries++;
+					}
+				}
+				//System.out.println("exited loop");
 			}
 		}
 
@@ -416,6 +432,22 @@ public class Level {
 				}
 			}
 		}
+	}
+	/*
+	 * gets a list of all the tiles at a specified elevation
+	 * 
+	 * @param elevation - the elevation to check for tiles
+	 */
+	public ArrayList<Tile> getTilesAtElevation(int elev){
+		ArrayList<Tile> tilesFound = new ArrayList<Tile>();
+		for(int x = 0; x<width; x++){
+			for(int y = 0; y<height; y++){
+				if(tileMap[x][y].elevation==elev){
+					tilesFound.add(tileMap[x][y]);
+				}
+			}
+		}
+		return tilesFound;
 	}
 	public Tile getNorthTile(Tile tile){
 		if((tile.ypos/32)-1>0){

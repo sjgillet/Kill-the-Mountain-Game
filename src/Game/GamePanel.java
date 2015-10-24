@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel{
 	private static final long serialVersionUID = 496501089018037548L;
 	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/overlappedTiles.png", 32, 32);
+	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
@@ -25,7 +26,8 @@ public class GamePanel extends JPanel{
 		Level testLevel = new Level("Test");
 		levels.add(testLevel);
 		testLevel.updateTileMapArt();
-		
+		//create the map
+		testLevel.map = new LevelMap(testLevel.tileMap);
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

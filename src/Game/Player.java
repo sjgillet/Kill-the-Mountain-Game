@@ -64,6 +64,9 @@ public class Player extends Entity{
 						collidedWithSomethingX = true;
 					}
 				}
+				else{
+					//collidedWithSomethingX = true;
+				}
 			}
 		}
 		for(int x1 = (int)(xpos/32)-((int)movementSpeed+1);x1<(int)(xpos/32)+(int)movementSpeed+1;x1++){
@@ -74,6 +77,9 @@ public class Player extends Entity{
 						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 						collidedWithSomethingY = true;
 					}
+				}
+				else{
+					//collidedWithSomethingY=true;
 				}
 			}
 		}

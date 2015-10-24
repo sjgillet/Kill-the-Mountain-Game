@@ -11,6 +11,8 @@ public class Tile {
 	int ypos;
 	int artX;
 	int artY;
+	int overlayArtX=-1;
+	int overlayArtY=-1;
 	int tileID = 0;
 	int elevation;
 	int oldElevation;
@@ -60,7 +62,7 @@ public class Tile {
 			artX = 1;
 			artY = 10;
 		}
-		if(tileID==6){
+		if(tileID==6){//wall
 			
 		}
 	}
@@ -129,6 +131,21 @@ public class Tile {
 		Tile southWesternTile = getSouthWestTile();
 		Tile westernTile = getWestTile();
 		Tile northWesternTile = getNorthWestTile();
+		if(tileID==0){
+			if(elevation>=GamePanel.levels.get(GamePanel.currentLevel).waterlevel){
+				artX = 6;
+				artY = 0;
+			}
+			else{//below sea level
+				artX = 11;
+				artY = 4;
+				overlayArtX = 0;
+				overlayArtY = GamePanel.levels.get(GamePanel.currentLevel).waterlevel-elevation;
+				if(overlayArtY>4){
+					overlayArtY=4;
+				}
+			}
+		}
 		if(tileID==3){//plateau wall
 			//check if this is the top edge
 			if(northernTile!=null&&northernTile.elevation<elevation){	
@@ -377,6 +394,22 @@ public class Tile {
 					}
 				}
 			}
+			if(elevation>GamePanel.levels.get(GamePanel.currentLevel).waterlevel){//above sea level
+				artX = 9;
+			}
+			else if(elevation==GamePanel.levels.get(GamePanel.currentLevel).waterlevel){//at sea level
+				artX=10;
+				overlayArtX = 1;
+				overlayArtY = artY;
+			}
+			else{//below sea level
+				artX=11;
+				overlayArtX = 0;
+				overlayArtY = GamePanel.levels.get(GamePanel.currentLevel).waterlevel-elevation;
+				if(overlayArtY>4){
+					overlayArtY=4;
+				}
+			}
 
 		}
 	}
@@ -431,7 +464,10 @@ public class Tile {
 	public void Draw(Graphics2D g){
 		//updateArt();
 		g.drawImage(GamePanel.tiles[artX][artY],((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos,32,32,null);
-		
+		//draw the overlay image
+		if(overlayArtX!=-1&&overlayArtY!=-1){
+			g.drawImage(GamePanel.overlayTiles[overlayArtX][overlayArtY],((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos,32,32,null);
+		}
 		if(flagged){
 			g.setColor(flagColor);
 			g.fillRect(((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos, collisionBox.width, collisionBox.height);
