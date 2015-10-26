@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 public class LevelMap {
 	int xpos = 0;
 	int ypos = 0;
-	int pixelWidthPerTile = 4;
+	int pixelWidthPerTile = 2;
 	int borderWidth = 2;
 	BufferedImage mapImage;
 	public LevelMap(Tile[][] map){

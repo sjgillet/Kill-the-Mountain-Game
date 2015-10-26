@@ -3,6 +3,7 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -46,12 +47,11 @@ public class Level {
 
 		//Pre-determined map generation for specified zones or debugging purposes.
 		name = Name;
-		name = "Test";
 		tileMap = new Tile[width][height];
 		if(name.equals("Test")){
-			seed = 136;
-			width = 200;
-			height = 200;
+			seed = 137;
+			width = 400;
+			height = 400;
 			minNumberOfIslands = 2;
 			maxNumberOfIslands = 15;
 			minIslandSize = 320;
@@ -63,6 +63,11 @@ public class Level {
 			mountainMinSteepness = 2;
 			mountainMaxSteepness = 2;
 
+		}
+		else if(name.equals("Dungeon")){
+			seed = 136;
+			width = 100;
+			height = 100;
 		}
 
 		//generateDoors();
@@ -101,6 +106,11 @@ public class Level {
 
 		//generate the map
 		generateMap();
+		if(name.equals("Test")){
+			//add a town
+			generateTown(3,mountainMinHeight);
+			addTrees();
+		}
 
 	}
 	/*
@@ -118,6 +128,27 @@ public class Level {
 		}
 
 	}
+	public void addTrees(){
+		for(int x = 0; x<width;x++){
+			for(int y = 0; y<height;y++){
+				//above sea level and grass with no overlays already on it
+				if(tileMap[x][y].elevation>waterlevel&&tileMap[x][y].tileID==0&&tileMap[x][y].vegetationID==-1){
+					//%chance that a grass tile has something on it
+					if(randomNumber(1,10)==1){
+						int roll = randomNumber(1,100);
+						if(roll<=80){
+							tileMap[x][y].vegetationID=0;
+							tileMap[x][y].vegetationColor=new Color(48+randomNumber(-10,10),255+randomNumber(-10,0),106+randomNumber(-10,10));
+						}
+						else{
+							tileMap[x][y].vegetationID=1;
+							tileMap[x][y].vegetationColor=new Color(255,0,randomNumber(200,220));
+						}
+					}
+				}
+			}
+		}
+	}
 	/*
 	 * Fills in the tileMap array
 	 */
@@ -127,8 +158,12 @@ public class Level {
 		//initialize the tile map
 		for(int x = 0; x<width;x++){
 			for(int y = 0; y<height; y++){
-
-				tileMap[x][y]=new Tile(x,y,0,1);//everything is grass
+				if(name.equals("Dungeon")){
+					tileMap[x][y]=new Tile(x,y,7,1);//everything is abyss
+				}
+				else{
+					tileMap[x][y]=new Tile(x,y,0,1);//everything is grass
+				}
 
 			}
 		}		
@@ -138,31 +173,31 @@ public class Level {
 			buildRoom(-1 - seed);	//translate seed to a key for room ID's, build them
 			tileMap = hardMap;
 		}
-
-		int numberOfMountains = randomNumber(minNumberOfMountains,maxNumberOfMountains);
-		//create mountains
-
-		int mountainHeight = randomNumber(mountainMinHeight,mountainMaxHeight);
-		waterlevel = 3;
-		int steepness = randomNumber(mountainMinSteepness,mountainMaxSteepness);
-		int mountainBaseSize = (width*4)*mountainHeight*steepness;
-
-		for(int f = 1; f<=mountainHeight;f++){
-			ArrayList<Tile> tilesAtDesiredElevation = getTilesAtElevation(f);
-			for(int k = 0; k<numberOfMountains;k++){
-				//create a plateau at the elevation determined by f
-				generatePlateauOrCanyon(f,mountainBaseSize/(f*steepness),true,tilesAtDesiredElevation);
-			}
-			//create the plateau edges
-			setElevationEdges(f+1);
-			//remove all weird outcrops that we don't have textures for
-			removeAnySectionsOfCliffThatAreConnectedToCliffButTooSmallToWalkOn(f+1);
+		if(name.equals("Dungeon")){
+			//generate the first room of the dungeon at a random position
+			Rectangle room = new Rectangle(randomNumber(0,width-30),randomNumber(0,height-20),30,20);
 		}
+		else{
+			int numberOfMountains = randomNumber(minNumberOfMountains,maxNumberOfMountains);
+			//create mountains
 
+			int mountainHeight = randomNumber(mountainMinHeight,mountainMaxHeight);
+			waterlevel = 6;
+			int steepness = randomNumber(mountainMinSteepness,mountainMaxSteepness);
+			int mountainBaseSize = (width*4)*mountainHeight*steepness;
 
-
-
-
+			for(int f = 1; f<=mountainHeight;f++){
+				ArrayList<Tile> tilesAtDesiredElevation = getTilesAtElevation(f);
+				for(int k = 0; k<numberOfMountains;k++){
+					//create a plateau at the elevation determined by f
+					generatePlateauOrCanyon(f,mountainBaseSize/(f*steepness),true,tilesAtDesiredElevation);
+				}
+				//create the plateau edges
+				setElevationEdges(f+1);
+				//remove all weird outcrops that we don't have textures for
+				removeAnySectionsOfCliffThatAreConnectedToCliffButTooSmallToWalkOn(f+1);
+			}
+		}
 
 	}
 	/*
@@ -246,7 +281,7 @@ public class Level {
 					else{
 						tilesAdded.remove(randTile);
 					}
-					
+
 					if(addedATile==false){
 						tries++;
 					}
@@ -256,7 +291,31 @@ public class Level {
 		}
 
 	}
-	public void generateHouse(String id, int xpos, int ypos, int elev){
+	public void generateTown(int numberOfHouses, int elev){
+		for(int i = 0; i<numberOfHouses;i++){
+			//find a valid place for this house
+			ArrayList<Tile> possibleLocations = getTilesAtElevation(elev);
+			if(possibleLocations.size()>0){
+				//check every possible location
+				Tile randomTile = possibleLocations.get(randomNumber(0,possibleLocations.size()-1));//pick a random tile from the possible locations
+				boolean madeAHouse = false;
+				while(!madeAHouse){
+					madeAHouse = generateHouse("Noob Hut", randomTile.xpos/32,randomTile.ypos/32,elev);
+					possibleLocations.remove(randomTile);
+					if(possibleLocations.size()>0){
+						randomTile = possibleLocations.get(randomNumber(0,possibleLocations.size()-1));//pick a random tile from the possible locations
+					}
+					else{
+						elev++;
+						if(elev>mountainMaxHeight){
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	public boolean generateHouse(String id, int xpos, int ypos, int elev){
 		int w=0;
 		int h=0;
 		int roofHeight=0;
@@ -271,6 +330,15 @@ public class Level {
 		int startY = ypos;
 		int endX = xpos+w;
 		int endY = ypos+h;
+
+		//check if there is room for this
+		for(int x = startX; x<=endX;x++){
+			for(int y = startY; y<=endY;y++){
+				if(tileMap[x][y].elevation!=elev||tileMap[x][y].tileID!=0){
+					return false;
+				}
+			}
+		}
 		//create the roof
 		for(int x = startX; x<=endX;x++){
 			for(int y = startY; y<=endY;y++){
@@ -278,8 +346,18 @@ public class Level {
 				if(y<(startY+(roofHeight/3))){
 					tileMap[x][y]= new Tile(x,y,4,elev);
 				}
+				//bottom part of the roof
+				else if(y<=(startY+((roofHeight/3)*2))){
+					tileMap[x][y]= new Tile(x,y,5,elev);
+				}
+				//walls
+				else{
+					tileMap[x][y]= new Tile(x,y,6,elev);
+				}
+
 			}
 		}
+		return true;
 	}
 	/*
 	 * Generates some doors in the level so that you can get from one level to the next.
@@ -866,7 +944,16 @@ public class Level {
 					tileMap[x][y].Draw(g);
 			}
 		}
+
 		GamePanel.player.Draw(g);
+		for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
+			for(int x = (int)(GamePanel.player.xpos/32)-(viewDistanceX); x<(int)(GamePanel.player.xpos/32)+(viewDistanceX);x++){
+
+				if(x>=0&&y>=0&&x<width&&y<height){
+					tileMap[x][y].DrawVegetation(g);
+				}
+			}
+		}
 		drawingLevel = false;
 		//update the player however many times it should have updated but couldn't because of the program 
 		//being in the process of drawing.

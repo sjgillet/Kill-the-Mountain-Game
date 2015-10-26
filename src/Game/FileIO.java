@@ -1,5 +1,6 @@
 package Game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,6 +33,52 @@ public class FileIO {
 			return null;
 		}
 		return image;
+	}
+	public static BufferedImage combineImages(BufferedImage[][] imgs){
+		BufferedImage result = new BufferedImage( (imgs.length)*imgs[0][0].getWidth(),(imgs[0].length)*imgs[0][0].getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = result.getGraphics();
+		for(int x = 0; x<imgs.length;x++){
+			for(int y = 0; y<imgs[0].length;y++){
+				g.drawImage(imgs[x][y], x*imgs[0][0].getWidth(), y*imgs[0][0].getHeight(), imgs[0][0].getWidth(),imgs[0][0].getHeight(),null);
+			}
+		}
+		g.dispose();
+		return result;
+	}
+	public static BufferedImage colorImage(BufferedImage img, Color color){
+		BufferedImage result = new BufferedImage(img.getWidth(),img.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		for(int x = 0; x<img.getWidth();x++){
+			for(int y = 0; y<img.getHeight();y++){
+				Color colorAtThisPoint = new Color(img.getRGB(x, y),true);
+				//pixel is not transparent
+				if(colorAtThisPoint.getAlpha()>0){
+					//System.out.println("a pixel was not transparent");
+					//pixel is some shade of grey
+					if(colorAtThisPoint.getRed()==colorAtThisPoint.getBlue()&&colorAtThisPoint.getRed()==colorAtThisPoint.getGreen()){
+						//System.out.println("pixel was a shade of grey");
+						int red = color.getRed()-colorAtThisPoint.getRed();
+						int green = color.getGreen()-colorAtThisPoint.getGreen();
+						int blue = color.getBlue()-colorAtThisPoint.getBlue();
+						if(red<0){
+							red=0;
+						}
+						if(green<0){
+							green=0;
+						}
+						if(blue<0){
+							blue=0;
+						}
+						result.setRGB(x, y, new Color(red,green,blue,255).getRGB());
+						
+					}
+					else{
+						result.setRGB(x, y, colorAtThisPoint.getRGB());
+					}
+				}
+				
+			}
+		}
+		return result;
 	}
 	/*
 	 * Loads a 2d array of images from an image file

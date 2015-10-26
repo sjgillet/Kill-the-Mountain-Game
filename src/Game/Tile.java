@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Tile {
@@ -16,6 +17,9 @@ public class Tile {
 	int tileID = 0;
 	int elevation;
 	int oldElevation;
+	int vegetationID=-1;
+	Color vegetationColor;
+	BufferedImage vegetationImage;
 	boolean flagged = false;
 	Color flagColor = new Color(200,0,0,100);
 	int collisionType = 0;//0 means no collision, 1 means collision
@@ -62,9 +66,15 @@ public class Tile {
 			artX = 1;
 			artY = 10;
 		}
-		if(tileID==6){//wall
-			
+		if(tileID==6){//house wall
+			artX = 1;
+			artY = 11;
 		}
+		if(tileID==7){//abyss
+			artX = 2;
+			artY = 0;
+		}
+		
 	}
 
 
@@ -131,6 +141,22 @@ public class Tile {
 		Tile southWesternTile = getSouthWestTile();
 		Tile westernTile = getWestTile();
 		Tile northWesternTile = getNorthWestTile();
+		if(vegetationID==0){//tree
+			BufferedImage[][] imagesToCombine = new BufferedImage[3][3];
+			for(int i = 0; i<3;i++){
+				for(int j = 0; j<3;j++){
+					imagesToCombine[i][j]=GamePanel.overlayTiles[i+2][j];
+				}
+			}
+			vegetationImage = FileIO.combineImages(imagesToCombine);
+			vegetationImage = FileIO.colorImage(vegetationImage, vegetationColor);
+			collisionType=1;
+		}
+		if(vegetationID==1){//flower
+			vegetationImage=GamePanel.overlayTiles[2][3];
+			vegetationImage = FileIO.colorImage(vegetationImage, vegetationColor);
+			
+		}
 		if(tileID==0){
 			if(elevation>=GamePanel.levels.get(GamePanel.currentLevel).waterlevel){
 				artX = 6;
@@ -462,15 +488,20 @@ public class Tile {
 		return null;
 	}
 	public void Draw(Graphics2D g){
+		int x = ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos;
+		int y = ((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos;
 		//updateArt();
-		g.drawImage(GamePanel.tiles[artX][artY],((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos,32,32,null);
+		g.drawImage(GamePanel.tiles[artX][artY],x,y,32,32,null);
 		//draw the overlay image
 		if(overlayArtX!=-1&&overlayArtY!=-1){
-			g.drawImage(GamePanel.overlayTiles[overlayArtX][overlayArtY],((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos,32,32,null);
+			g.drawImage(GamePanel.overlayTiles[overlayArtX][overlayArtY],x,y,32,32,null);
+		}
+		if(vegetationID==1){
+			g.drawImage(vegetationImage,x,y,32,32,null);
 		}
 		if(flagged){
 			g.setColor(flagColor);
-			g.fillRect(((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos, collisionBox.width, collisionBox.height);
+			g.fillRect(x,y, collisionBox.width, collisionBox.height);
 			//flagged = false;
 		}
 		//Font font = new Font("Iwona Heavy",Font.BOLD,10);
@@ -479,5 +510,13 @@ public class Tile {
 		//g.drawString(elevation+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+10);
 		//g.setColor(Color.pink);
 		//g.drawString(oldElevation+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+25);
+	}
+	public void DrawVegetation(Graphics2D g){
+		int x = ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos;
+		int y = ((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos;
+		if(vegetationID==0){
+			g.drawImage(vegetationImage,x-32,y-64,96,96,null);
+		}
+		
 	}
 }
