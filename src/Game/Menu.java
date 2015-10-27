@@ -1,6 +1,24 @@
 package Game;
 
+import java.util.ArrayList;
+
 public class Menu {
+	
+	ArrayList<MenuButton> pauseMain = new ArrayList<MenuButton>();
+	
+	
+	public Menu() {
+		
+	}
+	
+	//main
+	String save = "Save";
+	String load = "Load";
+	String options = "Options";
+	String backToPause = "Back to Pause Main";
+	
+	//
+	
 	
 	public enum pauseMenu{
 		
@@ -18,17 +36,19 @@ public class Menu {
 		
 	}
 	
-	public void menuState(pauseMenu current) {
+	public void menuState(String current) {
 		
-		switch(current)
+		switch(current.toLowerCase())
 		{
-		case MAIN:
+		case "main":
+			System.out.println("in Main");
 			//save
 			//load
 			//options
+			//back
 			break;
 			
-		case LOAD:
+		/*case "Load":
 			//load checkpoint
 			//load last save
 			break;
@@ -65,6 +85,7 @@ public class Menu {
 			//Music on/off
 			//sound fx on/off
 			break;
+			*/
 		}
 		
 	}
