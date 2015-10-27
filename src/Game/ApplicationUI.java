@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class ApplicationUI extends JFrame{
 	private static final long serialVersionUID = 1L;
-	Controller ctrl;
+	public Controller ctrl;
 	public static int windowWidth = 800;
 	public static int windowHeight = 600;
 	private int gameFPS = 60;
@@ -60,6 +60,7 @@ public class ApplicationUI extends JFrame{
 	 * The main loop of the game. This will call all of the update methods and repaint the game at a fixed rate
 	 */
 	public void gameLoop(){
+		GamePanel.createLevel();
 		while(true){
 			windowWidth = getWidth();
 			windowHeight = getHeight();
