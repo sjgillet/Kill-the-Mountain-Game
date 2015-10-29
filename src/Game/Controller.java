@@ -149,6 +149,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 			else{
 				GamePanel.paused=true;
+				GamePanel.menu.currentMenu = GamePanel.menu.main;
 			}
 		}//
 	}
@@ -171,8 +172,10 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			//Point temp = MouseEvent.getPoint();
 			if(mousePressed){
 				if(GamePanel.showMap==false){
+					if (!GamePanel.paused){
 					GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
 					GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+					}
 				}
 				else{
 					int changeX = oldMousePosition.x-mousePosition.x;

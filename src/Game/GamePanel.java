@@ -20,6 +20,7 @@ public class GamePanel extends JPanel{
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
+	public static boolean paused = false;
 	public static int currentLevel = 0;
 	public static Player player = new Player(200,200);
 	public static boolean showMap = false;

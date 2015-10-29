@@ -11,6 +11,11 @@ public class Menu {
 	ArrayList<MenuButton> currentMenu = main;
 	ArrayList<MenuButton> pauseMain = new ArrayList<MenuButton>();
 
+	int menuxPos;
+	int menuyPos;
+	int buttonWidth = 250;
+	int buttonHeight = 40;
+	
 	//main
 	String save = "Save";
 	String load = "Load";
@@ -23,11 +28,11 @@ public class Menu {
 	String displaystats = "DisplayStats";
 
 	public Menu() {
-		main.add(new MenuButton(30, 30, backToPause, 50, 50)); //0
-		main.add(new MenuButton(30, 30, save, 90, 50));
-		main.add(new MenuButton(30, 30, load, 50, 90));
-		main.add(new MenuButton(30, 30, options, 90, 90));
-		pauseMain.add(new MenuButton(45,45, game , 45, 10));
+		main.add(new MenuButton(buttonWidth, buttonHeight, backToPause, 50, 50)); //0
+		main.add(new MenuButton(buttonWidth, buttonHeight, save, 90, 50));
+		main.add(new MenuButton(buttonWidth, buttonHeight, load, 50, 90));
+		main.add(new MenuButton(buttonWidth, buttonHeight, options, 90, 90));
+		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, game , 45, 10));
 
 	}
 
@@ -146,10 +151,13 @@ public class Menu {
 	 */
 	public void drawMenu(Graphics2D g, ArrayList<MenuButton> a){
 
+		menuxPos = (ApplicationUI.windowWidth/2 - (buttonWidth/2));
+		menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
+		
 		for (int i = 0; i<a.size(); i++) {
-
+			a.get(i).xPosition=menuxPos;
+			a.get(i).yPosition = menuyPos+(i*buttonHeight);
 			a.get(i).Draw(g);
-
 		}
 
 	}

@@ -54,8 +54,8 @@ public class Level {
 		tileMap = new Tile[width][height];
 		if(name.equals("Test")){
 			seed = 138;
-			width = 500;
-			height = 500;
+			width = 200;
+			height = 200;
 			minNumberOfIslands = 2;
 			maxNumberOfIslands = 15;
 			minIslandSize = 320;

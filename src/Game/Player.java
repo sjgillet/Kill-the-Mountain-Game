@@ -88,7 +88,7 @@ public class Player extends Entity{
 			}
 		}
 		//if player is going to collide with the tile at their future position
-		if(collidedWithSomethingX==false||GamePanel.godmode){
+		if((collidedWithSomethingX==false||GamePanel.godmode)&&(!GamePanel.paused)){
 			xpos = x;
 			collisionBox.x=(int)xpos;
 		}
@@ -97,7 +97,7 @@ public class Player extends Entity{
 				//moveTowardsDestination(1);
 			}
 		}
-		if(collidedWithSomethingY==false||GamePanel.godmode){
+		if((collidedWithSomethingY==false||GamePanel.godmode)&&(!GamePanel.paused)){
 			ypos = y;
 			collisionBox.y=(int)ypos;
 		}
