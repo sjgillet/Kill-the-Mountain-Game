@@ -11,6 +11,8 @@ public class Enemy extends CombatEntity{
 	*/
 	private double[] statWeights;
 	private int statTotal;
+	private int sp = 0;
+	private int luck = 0;
 	private String name;
 	private String description;
 	private double challenge;
@@ -22,6 +24,12 @@ public class Enemy extends CombatEntity{
 	public void setDescription(String newDescript)
 	{
 		description = newDescript;
+	}
+	public void setSP(int newSP){
+		sp = newSP;
+	}
+	public void setLuck(int newLuck){
+		luck = newLuck;
 	}
 	public double getChallenge()
 	{
