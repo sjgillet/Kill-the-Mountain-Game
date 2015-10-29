@@ -56,9 +56,9 @@ public class FileIO {
 					//pixel is some shade of grey
 					if(colorAtThisPoint.getRed()==colorAtThisPoint.getBlue()&&colorAtThisPoint.getRed()==colorAtThisPoint.getGreen()){
 						//System.out.println("pixel was a shade of grey");
-						int red = color.getRed()-colorAtThisPoint.getRed();
-						int green = color.getGreen()-colorAtThisPoint.getGreen();
-						int blue = color.getBlue()-colorAtThisPoint.getBlue();
+						int red = color.getRed()-(255-colorAtThisPoint.getRed());
+						int green = color.getGreen()-(255-colorAtThisPoint.getGreen());
+						int blue = color.getBlue()-(255-colorAtThisPoint.getBlue());
 						if(red<0){
 							red=0;
 						}

@@ -2,6 +2,10 @@ package Game;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -12,10 +16,12 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 
-public class Controller implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener{
+public class Controller implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener,DragSourceListener{
 	private JPanel gamePanel;
 	static boolean mousePressed = false;
 	static Point mousePosition = new Point(0,0);
+	static Point oldMousePosition = new Point(0,0);
+	
 	public void setGamePanel(JPanel panelRef) {
 		gamePanel = panelRef;
 		gamePanel.addKeyListener(this);
@@ -23,14 +29,23 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		gamePanel.addMouseMotionListener(this);
 		gamePanel.addMouseWheelListener(this);
 	}
-	public void mouseWheelMoved(MouseWheelEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		if(e.getWheelRotation()<0){//mouse wheel moved up (zoom in)
+			if(GamePanel.levels.get(GamePanel.currentLevel).map.zoom<1){
+				GamePanel.levels.get(GamePanel.currentLevel).map.zoom+=.125;
+			}
+		}
+		else{//mouse wheel moved down(zoom out)
+			if(GamePanel.levels.get(GamePanel.currentLevel).map.zoom>.125){
+				GamePanel.levels.get(GamePanel.currentLevel).map.zoom-=.125;
+			}
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
 		mousePosition.x = (int) e.getPoint().getX();
 		mousePosition.y = (int) e.getPoint().getY();
+		
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -60,11 +75,21 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		mousePressed = true;
 		mousePosition.x = (int) e.getPoint().getX();
 		mousePosition.y = (int) e.getPoint().getY();
+		if(e.getButton()==MouseEvent.BUTTON3&&GamePanel.showMap&&GamePanel.godmode){
+			LevelMap map = GamePanel.levels.get(GamePanel.currentLevel).map;
+			int x = (int)(double)(((mousePosition.x-(map.xpos*map.zoom))*(map.pixelWidthPerTile/map.zoom)/2));
+			int y = (int)(double)(((mousePosition.y-(map.ypos*map.zoom))*(map.pixelWidthPerTile/map.zoom)/2));
+			GamePanel.player.setPosition(x,y,2);
+			GamePanel.player.destination = new Point(x,y);
+		}
+		
 	}
 
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseReleased(MouseEvent e) {
+		
 		mousePressed = false;
+		
+		
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -131,15 +156,45 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		if(mousePressed){
 			//Point temp = MouseEvent.getPoint();
 			if(mousePressed){
-				GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
-				GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+				if(GamePanel.showMap==false){
+					GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
+					GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+				}
+				else{
+					int changeX = oldMousePosition.x-mousePosition.x;
+					int changeY = oldMousePosition.y-mousePosition.y;
+					GamePanel.levels.get(GamePanel.currentLevel).map.xpos-=changeX/GamePanel.levels.get(GamePanel.currentLevel).map.zoom;
+					GamePanel.levels.get(GamePanel.currentLevel).map.ypos-=changeY/GamePanel.levels.get(GamePanel.currentLevel).map.zoom;
+				}
 			}
 			//System.out.println("destination: "+GamePanel.player.destination.x+","+GamePanel.player.destination.y);
 		}
+		oldMousePosition.x = mousePosition.x;
+		oldMousePosition.y = mousePosition.y;
 	}
 	public void updateAll(){
 		if (gamePanel != null)
 			gamePanel.getParent().repaint();
+	}
+	public void dragDropEnd(DragSourceDropEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void dragEnter(DragSourceDragEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void dragExit(DragSourceEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void dragOver(DragSourceDragEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void dropActionChanged(DragSourceDragEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

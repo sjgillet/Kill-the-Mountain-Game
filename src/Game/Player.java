@@ -9,7 +9,7 @@ public class Player extends Entity{
 	Point destination = new Point(0,0);
 	double angleInRadians;
 	double angleInDegrees;
-	double movementSpeed = 3;
+	double movementSpeed = 6;
 	Rectangle collisionBox;
 	//Stats
 	int level;
@@ -37,7 +37,7 @@ public class Player extends Entity{
 		this.ypos = y;
 		collisionBox = new Rectangle(x,y,32,32);
 	}
-	public void moveTowardsDestination(){
+	public void moveTowardsDestination(double speed){
 
 		if(!atDestination()){
 
@@ -45,23 +45,25 @@ public class Player extends Entity{
 			angleInDegrees = getAngleToDestination();
 			angleInRadians = Math.toRadians(angleInDegrees);
 			//move towards destination
-			setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
+			setPosition(xpos+(speed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)),speed);
 
 
 		}
 	}
-	public void setPosition(double x, double y){
+	public void setPosition(double x, double y, double speed){
 		Rectangle collisionBoxAtNewXPosition = new Rectangle((int)x,(int)ypos,32,32);
 		Rectangle collisionBoxAtNewYPosition = new Rectangle((int)xpos,(int)y,32,32);
 		boolean collidedWithSomethingX = false;
 		boolean collidedWithSomethingY = false;
-		for(int x1 = (int)(xpos/32)-((int)movementSpeed+1);x1<(int)(xpos/32)+(int)movementSpeed+1;x1++){
-			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
+		for(int x1 = (int)(xpos/32)-((int)speed+1);x1<(int)(xpos/32)+(int)speed+1;x1++){
+			for(int y1 = (int)(ypos/32)-((int)speed+1);y1<(int)(ypos/32)+(int)speed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					if(collisionBoxAtNewXPosition.intersects(temp.collisionBox)&&temp.collisionType>=1){
-						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
-						collidedWithSomethingX = true;
+					for(int i = 0; i<temp.collisionBoxes.size();i++){
+						if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+							collidedWithSomethingX = true;
+						}
 					}
 				}
 				else{
@@ -69,13 +71,15 @@ public class Player extends Entity{
 				}
 			}
 		}
-		for(int x1 = (int)(xpos/32)-((int)movementSpeed+1);x1<(int)(xpos/32)+(int)movementSpeed+1;x1++){
-			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
+		for(int x1 = (int)(xpos/32)-((int)speed+1);x1<(int)(xpos/32)+(int)speed+1;x1++){
+			for(int y1 = (int)(ypos/32)-((int)speed+1);y1<(int)(ypos/32)+(int)speed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					if(collisionBoxAtNewYPosition.intersects(temp.collisionBox)&&temp.collisionType>=1){
-						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
-						collidedWithSomethingY = true;
+					for(int i = 0; i<temp.collisionBoxes.size();i++){
+						if(collisionBoxAtNewYPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+							collidedWithSomethingY = true;
+						}
 					}
 				}
 				else{
@@ -88,9 +92,19 @@ public class Player extends Entity{
 			xpos = x;
 			collisionBox.x=(int)xpos;
 		}
+		else{
+			if(speed>1){
+				//moveTowardsDestination(1);
+			}
+		}
 		if(collidedWithSomethingY==false||GamePanel.godmode){
 			ypos = y;
 			collisionBox.y=(int)ypos;
+		}
+		else{
+			if(speed>1){
+				//moveTowardsDestination(1);
+			}
 		}
 	}
 	/*
@@ -100,7 +114,7 @@ public class Player extends Entity{
 	 */
 	public boolean atDestination(){
 		if(Math.abs(xpos-destination.x)<=movementSpeed&&Math.abs(ypos-destination.y)<=movementSpeed){
-			setPosition(destination.x,destination.y);
+			setPosition(destination.x,destination.y,movementSpeed);
 			return true;
 		}
 		return false;
@@ -120,7 +134,7 @@ public class Player extends Entity{
 
 	public void update(){
 		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel){
-			moveTowardsDestination();
+			moveTowardsDestination(movementSpeed);
 		}
 		else{
 			updatesInQue++;
