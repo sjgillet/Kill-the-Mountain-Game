@@ -21,7 +21,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	static boolean mousePressed = false;
 	static Point mousePosition = new Point(0,0);
 	static Point oldMousePosition = new Point(0,0);
-	
+
 	public void setGamePanel(JPanel panelRef) {
 		gamePanel = panelRef;
 		gamePanel.addKeyListener(this);
@@ -45,7 +45,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
 		mousePosition.x = (int) e.getPoint().getX();
 		mousePosition.y = (int) e.getPoint().getY();
-		
+
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -82,14 +82,20 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			GamePanel.player.setPosition(x,y,2);
 			GamePanel.player.destination = new Point(x,y);
 		}
-		
+		//menu stuff here
+		for (int i = 0; i < GamePanel.menu.currentMenu.size(); i++) {
+			if (GamePanel.menu.currentMenu.get(i).isOver()){
+				GamePanel.menu.currentMenu.get(i).isPushed();
+			}
+		}
+
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		
+
 		mousePressed = false;
-		
-		
+
+
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -137,6 +143,14 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.player.destination.y=(int)GamePanel.player.ypos;
 			}
 		}
+		if (e.getKeyCode()==KeyEvent.VK_P){//
+			if(GamePanel.paused){
+				GamePanel.paused=false;
+			}
+			else{
+				GamePanel.paused=true;
+			}
+		}//
 	}
 
 	public void keyReleased(KeyEvent arg0) {
@@ -178,23 +192,23 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	}
 	public void dragDropEnd(DragSourceDropEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void dragEnter(DragSourceDragEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void dragExit(DragSourceEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void dragOver(DragSourceDragEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void dropActionChanged(DragSourceDragEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 

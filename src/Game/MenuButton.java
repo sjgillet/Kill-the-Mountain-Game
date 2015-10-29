@@ -24,9 +24,13 @@ public class MenuButton {
 	public void isPushed() {
 
 		//from pause main
-		if (text.equals("Game")){
+		if (this.text.equals("Game")){
+		
+		GamePanel.menu.menuState("Main");
+		
+		} else if(this.text.equals("Back to Pause Main")){
 			
-			GamePanel.menu.menuState("Main");
+		GamePanel.menu.menuState("PauseMain");
 			
 		}
 
