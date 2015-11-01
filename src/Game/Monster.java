@@ -6,23 +6,23 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Monster extends Entity{
-	
+
 	Point destination = new Point(0,0);
 	double angleInRadians;
 	double angleInDegrees;
 	double movementSpeed = 3;
 	Rectangle collisionBox;
 	public static BufferedImage monsterImage;
-	
+
 	public Monster(int xpos, int ypos, String monsterType) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 		if (monsterType.equals("monster1")){
 			monsterImage = FileIO.loadImage("/Textures/Player.png");
 		}
-		
+
 	}
-	
+
 	public void moveTowardsDestination(){
 
 		if(!atDestination()){
@@ -36,7 +36,7 @@ public class Monster extends Entity{
 
 		}
 	}
-	
+
 	public void setPosition(double x, double y){
 		Rectangle collisionBoxAtNewXPosition = new Rectangle((int)x,(int)ypos,32,32);
 		Rectangle collisionBoxAtNewYPosition = new Rectangle((int)xpos,(int)y,32,32);
@@ -46,9 +46,11 @@ public class Monster extends Entity{
 			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					if(collisionBoxAtNewXPosition.intersects(temp.collisionBox)&&temp.collisionType>=1){
-						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
-						collidedWithSomethingX = true;
+					for(int i = 0; i<temp.collisionBoxes.size();i++){
+						if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+							collidedWithSomethingX = true;
+						}
 					}
 				}
 			}
@@ -57,9 +59,11 @@ public class Monster extends Entity{
 			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					if(collisionBoxAtNewYPosition.intersects(temp.collisionBox)&&temp.collisionType>=1){
-						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
-						collidedWithSomethingY = true;
+					for(int i = 0; i<temp.collisionBoxes.size();i++){
+						if(collisionBoxAtNewYPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+							collidedWithSomethingY = true;
+						}
 					}
 				}
 			}
@@ -74,7 +78,7 @@ public class Monster extends Entity{
 			collisionBox.y=(int)ypos;
 		}
 	}
-	
+
 	/*
 	 * check if the player is already at their destination
 	 * 
@@ -103,9 +107,9 @@ public class Monster extends Entity{
 	public void update(){
 		moveTowardsDestination();
 	}
-	
+
 	public void Draw(Graphics2D g){
 		g.drawImage(GamePanel.playerImage,(ApplicationUI.windowWidth/2)-16,(ApplicationUI.windowHeight/2)-16,32,32,null);
 	}
-	
+
 }
