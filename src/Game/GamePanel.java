@@ -44,7 +44,17 @@ public class GamePanel extends JPanel{
 		//create the map
 		testLevel.map = new LevelMap(testLevel.tileMap);
 		loadingMessages.clear();
-		loadingMessages.add("Finished!");
+		loadingMessages.add("Generating the dungeon...");
+		System.out.println("Generating the dungeon...");
+		currentLevel++;
+		Level dungeon = new Level("Dungeon");
+		levels.add(dungeon);
+		System.out.println("Aligning Tiles...");
+		dungeon.updateTileMapArt();
+		System.out.println("Creating map of the dungeon...");
+		dungeon.map = new LevelMap(dungeon.tileMap);
+		currentLevel--;
+		System.out.println("Finished!");
 		loading = false;
 	}
 	public void paintComponent(Graphics g) {
@@ -121,6 +131,7 @@ public class GamePanel extends JPanel{
 				Font font = new Font("Iwona Heavy",Font.BOLD,18);
 				g.setFont(font);
 				g.setColor(Color.WHITE);
+				g.drawString("Movement Speed: "+player.movementSpeed,5,ApplicationUI.windowHeight-110);
 				g.drawString("Godmode: "+godmode,5,ApplicationUI.windowHeight-80);
 				g.drawString("Seed: "+levels.get(currentLevel).seed,5,ApplicationUI.windowHeight-50);
 			}

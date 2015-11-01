@@ -58,11 +58,16 @@ public class Player extends Entity{
 		for(int x1 = (int)(xpos/32)-((int)speed+1);x1<(int)(xpos/32)+(int)speed+1;x1++){
 			for(int y1 = (int)(ypos/32)-((int)speed+1);y1<(int)(ypos/32)+(int)speed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
-					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					for(int i = 0; i<temp.collisionBoxes.size();i++){
-						if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
-							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
-							collidedWithSomethingX = true;
+					if(GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].elevation>=GamePanel.levels.get(GamePanel.currentLevel).waterlevel){
+						Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
+						for(int i = 0; i<temp.collisionBoxes.size();i++){
+							if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+								//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+								collidedWithSomethingX = true;
+								if(temp.collisionType==2){
+									temp.currentHealth-=1;
+								}
+							}
 						}
 					}
 				}
@@ -74,11 +79,16 @@ public class Player extends Entity{
 		for(int x1 = (int)(xpos/32)-((int)speed+1);x1<(int)(xpos/32)+(int)speed+1;x1++){
 			for(int y1 = (int)(ypos/32)-((int)speed+1);y1<(int)(ypos/32)+(int)speed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
-					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					for(int i = 0; i<temp.collisionBoxes.size();i++){
-						if(collisionBoxAtNewYPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
-							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
-							collidedWithSomethingY = true;
+					if(GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].elevation>=GamePanel.levels.get(GamePanel.currentLevel).waterlevel){
+						Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
+						for(int i = 0; i<temp.collisionBoxes.size();i++){
+							if(collisionBoxAtNewYPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+								//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+								collidedWithSomethingY = true;
+								if(temp.collisionType==2){
+									temp.currentHealth-=1;
+								}
+							}
 						}
 					}
 				}

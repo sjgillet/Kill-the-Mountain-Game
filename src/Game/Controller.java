@@ -126,6 +126,16 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.player.movementSpeed+=.05;
 
 			}
+			if(e.getKeyCode()==KeyEvent.VK_3){
+				if(GamePanel.currentLevel>0){
+					GamePanel.currentLevel--;
+				}
+			}
+			if(e.getKeyCode()==KeyEvent.VK_4){
+				if(GamePanel.currentLevel<GamePanel.levels.size()-1){
+					GamePanel.currentLevel++;
+				}
+			}
 			if(e.getKeyCode()==KeyEvent.VK_UP){
 				GamePanel.levels.get(GamePanel.currentLevel).seed++;
 				GamePanel.levels.get(GamePanel.currentLevel).generateMap();
