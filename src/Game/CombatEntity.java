@@ -26,7 +26,7 @@ public class CombatEntity {
 		
 	/*ABILITY STATS*/
 	private int hp;		//hit points; character dies at 0hp
-	private int man;	//mana; must have mana to use magic attacks
+	private int sp;		//skill points; must have sufficient sp to use skill
 	private int str;	//strength; basis for physical damage
 	private int acc;	//accuracy; basis for attack hit chance
 	private int mag;	//magic; basis for magical damage
@@ -48,6 +48,11 @@ public class CombatEntity {
 	private int totalArmor; //total armor; includes all armor items and natural
 	private int totalMRE;	//total magic resist; includes all items and natural
 	
+	/*Encounter Stats*/
+	private int statTotal;
+	
+	
+	
 	private ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public int getHP()
@@ -58,13 +63,13 @@ public class CombatEntity {
 	{
 		this.hp = newHP;
 	}
-	public int getMana()
+	public int getSP()
 	{
-		return this.man;
+		return this.sp;
 	}
-	public void setMana(int newMana)
+	public void setSP(int newSP)
 	{
-		this.hp = newMana;
+		this.sp = newSP;
 	}
 	public int getStrength()
 	{
@@ -110,7 +115,7 @@ public class CombatEntity {
 	{
 		return this.lck;
 	}
-	public void SetLuck(int newLuck)
+	public void setLuck(int newLuck)
 	{
 		this.lck = newLuck;
 	}
@@ -146,6 +151,11 @@ public class CombatEntity {
 	{
 		return this.magDamage;
 	}
+	public int getStatTotal()
+	{
+		return (this.acc + this.arm + this.eva + this.intel 
+				+ this.lck + this.mag + this.mre + this.str);
+	}
 		
 	/**
 	 * Update combat statistics based on ability stats
@@ -164,7 +174,7 @@ public class CombatEntity {
 		arm = 0;
 		eva = 10;
 		hp = 10;
-		man = 10;
+		sp = 10;
 		mag = 10;
 		intel = 10;
 		str = 10;
@@ -178,7 +188,7 @@ public class CombatEntity {
 		{
 		case HUMAN:	//average statistics
 			hp  = 10;
-			man = 0;
+			sp = 0;
 			str = 10;
 			arm = 0;
 			acc = 10;
@@ -191,7 +201,7 @@ public class CombatEntity {
 			
 		case DWARF:	//high natural resistances and hp, but clumsy
 			hp  = 15;
-			man = 0;
+			sp = 0;
 			str = 12;
 			arm = 10;
 			acc = 7;
@@ -203,7 +213,7 @@ public class CombatEntity {
 			
 		case ELF:	//high magic, low natural resistances
 			hp  = 8;
-			man = 10;
+			sp = 10;
 			str = 6;
 			arm = 0;
 			acc = 12;
@@ -216,7 +226,7 @@ public class CombatEntity {
 			
 		case MUNCHKIN: //high accuracy/evasion, low hp/resistance
 			hp  = 10;
-			man = 0;
+			sp = 0;
 			str = 7;
 			arm = 0;
 			acc = 14;
@@ -229,7 +239,7 @@ public class CombatEntity {
 			
 		case BEAR:	//very high damage, but clumsy and little magic
 			hp  = 20;
-			man = 0;
+			sp = 0;
 			str = 20;
 			arm = 5;
 			acc = 6;
@@ -244,7 +254,7 @@ public class CombatEntity {
 		{
 		case FIGHTER:	
 			hp += 0;
-			man += 0;
+			sp += 0;
 			str += 0;
 			arm += 0;
 			acc += 0;
@@ -257,7 +267,7 @@ public class CombatEntity {
 				
 		case TANK:
 			hp += 0;
-			man += 0;
+			sp += 0;
 			str += 0;
 			arm += 0;
 			acc += 0;
@@ -270,7 +280,7 @@ public class CombatEntity {
 			
 		case ROGUE:	
 			hp += 0;
-			man += 0;
+			sp += 0;
 			str += 0;
 			arm += 0;
 			acc += 0;
@@ -283,7 +293,7 @@ public class CombatEntity {
 			
 		case WIZARD:	
 			hp += 0;
-			man += 0;
+			sp += 0;
 			str += 0;
 			arm += 0;
 			acc += 0;
@@ -296,7 +306,7 @@ public class CombatEntity {
 		
 		case SORCERER:		
 			hp += 0;
-			man += 0;
+			sp += 0;
 			str += 0;
 			arm += 0;
 			acc += 0;
@@ -309,7 +319,7 @@ public class CombatEntity {
 		
 		case PEASANT:		
 			hp += 0;
-			man += 0;
+			sp += 0;
 			str += 0;
 			arm += 0;
 			acc += 0;
