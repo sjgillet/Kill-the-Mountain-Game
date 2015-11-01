@@ -46,6 +46,9 @@ public class Level {
 	ArrayList<ArrayList<Tile>> lakes = new ArrayList<ArrayList<Tile>>();
 	Point townLocation;
 
+	//list of all monsters in terms of stats. To be referenced for battles
+	public final MonsterList monsters;
+	
 
 	public Level(String Name){
 		GamePanel.loading=true;
@@ -123,6 +126,11 @@ public class Level {
 		System.out.println("coloring tiles");
 		colorTiles();
 		System.out.println("finished coloring tiles!");
+		
+		System.out.println("Generating Monsters");
+		monsters = new MonsterList();
+		System.out.println("Monsters Catologued");
+		
 		GamePanel.loading=false;
 	}
 	public void colorTiles(){

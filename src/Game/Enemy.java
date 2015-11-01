@@ -11,29 +11,59 @@ public class Enemy extends CombatEntity{
 	*/
 	private double[] statWeights;
 	private int statTotal;
-	private int sp = 0;
-	private int luck = 0;
 	private String name;
 	private String description;
 	private double challenge;
+	private int xp;
 	
+	/**
+	 * Applies a given amount of damage to the monster's hp
+	 * If hp reaches 0 after this damage is applied, 
+	 * the monster dies and xp is awarded to the player
+	 * @param damage
+	 */
+	public void applyDamage(int damage)
+	{
+		this.currHP -= damage;
+		if(currHP <= 0)
+			this.kill();
+			
+	}
+	public void kill()
+	{
+		this.isDead = true;
+		//TODO: Reload last save or Exit
+	}
+	
+	
+	public String getName()
+	{
+		return name;
+	}
 	public void setName(String newName)
 	{
 		name = newName;
+	}
+	public String getDescription()
+	{
+		return description;
 	}
 	public void setDescription(String newDescript)
 	{
 		description = newDescript;
 	}
-	public void setSP(int newSP){
-		sp = newSP;
-	}
-	public void setLuck(int newLuck){
-		luck = newLuck;
-	}
+	
 	public double getChallenge()
 	{
 		return this.challenge;
+	}
+	public void setXP(int newXP)
+	{
+		xp = newXP;
+	}
+	public int getXP()
+	{
+		return xp;
 	}
 	
 	/**
@@ -68,10 +98,11 @@ public class Enemy extends CombatEntity{
 		statWeights[9] = SP;
 	}
 	
-	public Enemy(String newName, String descript /*Texture*/, double challenge ){
+	public Enemy(String newName, String descript /*Texture*/, double challengeRating, int experiencePoints){
 		this.setName(newName);
 		this.setDescription(descript);
-		
+		this.challenge = challengeRating;
+		this.xp = experiencePoints;		
 	}
 	
 	public void Initialize()
@@ -80,12 +111,16 @@ public class Enemy extends CombatEntity{
 		this.setArmor((int)(statTotal * statWeights[1]));			//ARM
 		this.setEvasion((int)(statTotal * statWeights[2]));			//EVA
 		this.setHP((int)(statTotal * statWeights[3]));				//HP
-		this.setIntelligence((int)(statTotal * statWeights[4]));	//INT
+		this.setIntel((int)(statTotal * statWeights[4]));			//INT
 		this.setLuck((int)(statTotal * statWeights[5]));			//LCK
 		this.setMagic((int)(statTotal * statWeights[6]));			//MAG
-		this.setMagicResist((int)(statTotal * statWeights[7]));		//MRE
+		this.setMagicRes((int)(statTotal * statWeights[7]));		//MRE
 		this.setStrength((int)(statTotal * statWeights[8]));		//STR
 		this.setSP((int)(statTotal * statWeights[9]));				//SP
+		
+		this.setCurrHP(this.getHP());
+		this.setCurrSP(this.getSP());
+		
 	}
 	
 	
