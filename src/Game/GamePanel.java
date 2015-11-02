@@ -26,6 +26,8 @@ public class GamePanel extends JPanel{
 	public static boolean showMap = false;
 	public static boolean godmode = false;
 	public static boolean loading = false;
+	public static boolean inBattle = false;
+	public static Battle bat = null;
 	public static ArrayList<String> loadingMessages = new ArrayList<String>();
 	public GamePanel(){
 
@@ -135,6 +137,16 @@ public class GamePanel extends JPanel{
 				g.drawString("Godmode: "+godmode,5,ApplicationUI.windowHeight-80);
 				g.drawString("Seed: "+levels.get(currentLevel).seed,5,ApplicationUI.windowHeight-50);
 			}
+			//display for being in battle
+			if(inBattle)
+			{
+				Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
+				g.setFont(font);
+				g.setColor(Color.WHITE);
+				g.drawString(bat.getPlayer().getName() + "\tVS!\t" + bat.getEnemies().get(0).getName(),
+						5, ApplicationUI.windowHeight - 140);
+			}
+			
 			//			g.setColor(Color.yellow);
 			//			g.fillRect(0, 0, (50*32)+2, (14*32)+2);
 			//			for(int i = 0; i<50; i++){

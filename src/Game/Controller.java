@@ -161,7 +161,15 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.paused=true;
 				GamePanel.menu.currentMenu = GamePanel.menu.main;
 			}
-		}//
+		}
+		//debug into a battle
+		if(e.getKeyCode() == KeyEvent.VK_B)
+		{
+			GamePanel.inBattle = true;
+			Battle battle = new Battle("Goblin");
+			
+		}
+		
 	}
 
 	public void keyReleased(KeyEvent arg0) {

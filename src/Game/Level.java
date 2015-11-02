@@ -47,7 +47,7 @@ public class Level {
 	Point townLocation;
 
 	//list of all monsters in terms of stats. To be referenced for battles
-	public final MonsterList monsters;
+	public static MonsterList monsters;
 	
 
 	public Level(String Name){
@@ -127,9 +127,9 @@ public class Level {
 		colorTiles();
 		System.out.println("finished coloring tiles!");
 		
-		System.out.println("Generating Monsters");
+		System.out.println("Generating Monsters...");
 		monsters = new MonsterList();
-		System.out.println("Monsters Catologued");
+		System.out.println("Monsters Catologued!");
 		
 		GamePanel.loading=false;
 	}
