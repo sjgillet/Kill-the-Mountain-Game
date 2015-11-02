@@ -54,6 +54,12 @@ public class Level {
 	int weatherID = 0;//-1 none, 0 rain, 1 ash,
 
 	ArrayList<weatherParticle> weather = new ArrayList<weatherParticle>();
+
+
+	//list of all monsters in terms of stats. To be referenced for battles
+	public static MonsterList monstersList;
+	
+
 	public Level(String Name){
 		GamePanel.loading=true;
 		//Pre-determined map generation for specified zones or debugging purposes.
@@ -67,18 +73,22 @@ public class Level {
 			maxNumberOfIslands = 15;
 			minIslandSize = 320;
 			maxIslandSize = (width*height)/minNumberOfIslands;
+
 			minNumberOfMountains = ((width+height)/2)/80;
 			maxNumberOfMountains = ((width+height)/2)/80;
+
 			mountainMaxHeight = 15;//((width+height)/2)/25;//max elevation possible for mountains
 			mountainMinHeight = 15;//((width+height)/2)/50;//minimum elevatoin possible for mountains
 			mountainMinSteepness = 5;
 			mountainMaxSteepness = 5;
 
 		}
+
 		else if(name.equals("Forest")){
 			seed = 137;
 			width = 500;
 			height = 500;
+
 		}
 		else if(name.equals("Dungeon")){
 			seed = 130;
@@ -129,8 +139,16 @@ public class Level {
 
 		System.out.println("coloring tiles");
 		colorTiles();
+
 		System.out.println("Adding monsters...");
 		addMonsters();
+
+		
+		
+		System.out.println("Generating Monsters...");
+		monstersList = new MonsterList();
+		System.out.println("Monsters Catologued!");
+		
 		GamePanel.loading=false;
 	}
 	public void colorTiles(){
@@ -236,6 +254,7 @@ public class Level {
 			}
 		}
 	}
+
 	public void addMonsters(){
 		if(name.equalsIgnoreCase("Dungeon")){
 			for(int i = 0;i<rooms.size();i++){
@@ -246,6 +265,7 @@ public class Level {
 			}
 		}
 	}
+
 	/*
 	 * Fills in the tileMap array
 	 */
@@ -271,6 +291,9 @@ public class Level {
 			tileMap = hardMap;
 		}
 		if(name.equals("Dungeon")){
+
+			ArrayList<Room> rooms = new ArrayList<Room>();
+			ArrayList<Hallway> hallways = new ArrayList<Hallway>();
 
 			//generate the first room of the dungeon at a random position
 			Room room = new Room((width/2)+randomNumber(-40,40),(height/2)+randomNumber(-30,30),40,30);
@@ -541,7 +564,9 @@ public class Level {
 			ArrayList<Tile> volcanoTiles = getTilesAtElevation(i);
 			if(volcanoTiles.size()>300&&i<=48){
 				int sizeOfThisLayer = (int)(double)(baseSize*(Math.pow(.9, i)));
+
 				System.out.println("Generating a plateau with "+sizeOfThisLayer+" tiles...");
+
 				generatePlateauOrCanyon(i,sizeOfThisLayer,true,volcanoTiles);
 				setElevationEdges(i+1,3);
 				//remove all weird outcrops that we don't have textures for
@@ -1379,6 +1404,7 @@ public class Level {
 		int viewDistanceX = ((ApplicationUI.windowWidth/32)/2)+3;
 		int viewDistanceY = ((ApplicationUI.windowHeight/32)/2)+3;
 		drawingLevel = true;
+
 		ArrayList<Tile> overlayTilesToDraw = new ArrayList<Tile>();
 		for(int x = (int)(GamePanel.player.xpos/32)-(viewDistanceX); x<(int)(GamePanel.player.xpos/32)+(viewDistanceX);x++){
 			for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
@@ -1412,6 +1438,7 @@ public class Level {
 		for(int i = 0; i<weather.size();i++){
 			weather.get(i).update();
 			weather.get(i).Draw(g);
+
 		}
 		drawingLevel = false;
 		//update the player however many times it should have updated but couldn't because of the program 

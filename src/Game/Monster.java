@@ -1,9 +1,14 @@
 package Game;
 
+<<<<<<< HEAD
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
+=======
+import java.awt.Graphics2D;
+import java.awt.Point;
+>>>>>>> 728bba7e18683c12d9fee763a138912209584536
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -36,11 +41,13 @@ public class Monster extends Entity{
 		double desiredAngle = getAngleToDestination();
 
 		if(atDestination()==false){
+
 			//find angle between current position and destination
 			angleInDegrees = getAngleToDestination();
 			angleInRadians = Math.toRadians(angleInDegrees);
 			//move towards destination
 			setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
+
 		}
 
 	}
@@ -56,6 +63,7 @@ public class Monster extends Entity{
 			//pick a random point that is within 200 pixels of the anchor
 			int distance = GamePanel.randomNumber(0,200);
 			destination = new Point((int)(double)(anchor.x+(distance*Math.cos(angleInRadians))),(int)(double)(anchor.y+(distance*Math.sin(angleInRadians))));
+
 		}
 	}
 
@@ -72,9 +80,11 @@ public class Monster extends Entity{
 						if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
 							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 							collidedWithSomethingX = true;
+
 							if(temp.collisionType==2){
 								temp.currentHealth-=1;
 							}
+
 						}
 					}
 				}
@@ -88,15 +98,18 @@ public class Monster extends Entity{
 						if(collisionBoxAtNewYPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
 							//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 							collidedWithSomethingY = true;
+
 							if(temp.collisionType==2){
 								temp.currentHealth-=1;
 							}
+
 						}
 					}
 				}
 			}
 		}
 		//if player is going to collide with the tile at their future position
+
 		if(collidedWithSomethingX==false){	
 			if(!collidedWithSomethingY||true){
 				xpos = x;//xpos+(movementSpeed*Math.cos(angleInRadians));
@@ -118,6 +131,7 @@ public class Monster extends Entity{
 		if(collidedWithSomethingX&&collidedWithSomethingY){
 			changeDirection();
 		}
+
 
 	}
 
@@ -199,6 +213,7 @@ public class Monster extends Entity{
 		int y = (int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos));
 		g.drawImage(GamePanel.monsterImage,x,y,32,32,null);	
 		drawVisionCone(g);
+
 	}
 
 }

@@ -4,51 +4,44 @@ import java.util.ArrayList;
 
 public class CombatEntity {
 	
-	/*REMOVE THESE WHEN POSSIBLE*/
-	double xpos;
-	double ypos;
-	double movespeed;
-	
-	/*Character's combat class. Affects character progression, 
+	/* Character's combat class. Player only.
+	 * Affects character progression, 
 	 * statistics, and specific game conditions/effects*/
-	public enum playerRace
-	{
-		HUMAN, DWARF, ELF, MUNCHKIN, BEAR
-	}
 	
-	public enum combatClass
-	{
-		FIGHTER, TANK, 
-		ROGUE,
-		WIZARD, SORCERER,
-		PEASANT
-	}
 		
 	/*ABILITY STATS*/
-	private int hp;		//hit points; character dies at 0hp
-	private int man;	//mana; must have mana to use magic attacks
-	private int str;	//strength; basis for physical damage
-	private int acc;	//accuracy; basis for attack hit chance
-	private int mag;	//magic; basis for magical damage
-	private int intel;	//intelligence; basis for skill/spell hit chance
-	private int eva;	//evasion; basis for avoiding attacks/skills
-	private int	lck;	//luck; affects nearly everything in your favor
-	private int arm;	//armor; basis for reducing physical damage
-	private int mre;	//magic resistance; basis for reducing magic damage
+	protected int hp;		//maxiumum hit points; measures the character's health
+	protected int sp;		//maximum skill points; measures the character's exhaustion
+	protected int str;		//strength; basis for physical damage
+	protected int acc;		//accuracy; basis for attack hit chance
+	protected int mag;		//magic; basis for magical damage
+	protected int intel;	//intelligence; basis for skill/spell hit chance
+	protected int eva;		//evasion; basis for avoiding attacks/skills; determines turn order
+	protected int lck;		//luck; affects nearly everything in your favor
+	protected int arm;		//armor; basis for reducing physical damage
+	protected int mre;		//magic resistance; basis for reducing magic damage
 	
+	protected int currHP;	//current hit points; character dies at 0hp;
+	protected int currSP;	//current skill points; must have enough sp to use a skill
+	protected boolean isDead;	//Flag for death. If monsters die they award xp
+								//if player dies, reload save or exit game
 	
 	/*COMBAT STATISTICS*/
 	//damage variables
-	private int physDamage;
-	private int magDamage;
+	protected int physDamage;
+	protected int magDamage;
 	
 	//damage reduction multipliers.
-	private double physDR;  //physical damage resistance; based on armor
-	private double magDR;   //magical damage resistance; based on MRe
-	private int totalArmor; //total armor; includes all armor items and natural
-	private int totalMRE;	//total magic resist; includes all items and natural
+	protected double physDR;  //physical damage resistance; based on armor
+	protected double magDR;   //magical damage resistance; based on MRe
+	protected int totalArmor; //total armor; includes all armor items and natural
+	protected int totalMRE;	//total magic resist; includes all items and natural
 	
-	private ArrayList<Skill> skills = new ArrayList<Skill>();
+	/*Encounter Stats*/
+	protected int statTotal;
+	
+	
+	protected ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public int getHP()
 	{
@@ -58,13 +51,13 @@ public class CombatEntity {
 	{
 		this.hp = newHP;
 	}
-	public int getMana()
+	public int getSP()
 	{
-		return this.man;
+		return this.sp;
 	}
-	public void setMana(int newMana)
+	public void setSP(int newSP)
 	{
-		this.hp = newMana;
+		this.sp = newSP;
 	}
 	public int getStrength()
 	{
@@ -90,11 +83,11 @@ public class CombatEntity {
 	{
 		this.mag = newMagic;
 	}
-	public int getIntelligence()
+	public int getIntel()
 	{
 		return this.intel;
 	}
-	public void setIntelligence(int newIntel)
+	public void setIntel(int newIntel)
 	{
 		this.intel = newIntel;
 	}
@@ -110,7 +103,7 @@ public class CombatEntity {
 	{
 		return this.lck;
 	}
-	public void SetLuck(int newLuck)
+	public void setLuck(int newLuck)
 	{
 		this.lck = newLuck;
 	}
@@ -122,11 +115,11 @@ public class CombatEntity {
 	{
 		this.arm = newArmor;
 	}
-	public int getMagicResist()
+	public int getMagicRes()
 	{
 		return this.mre;
 	}
-	public void setMagicResist(int newMagicResist)
+	public void setMagicRes(int newMagicResist)
 	{
 		this.mre = newMagicResist;
 	}
@@ -146,6 +139,53 @@ public class CombatEntity {
 	{
 		return this.magDamage;
 	}
+	
+	public int getStatTotal()
+	{
+		return (this.acc + this.arm + this.eva + this.intel 
+				+ this.lck + this.mag + this.mre + this.str);
+	}
+	
+	public int getCurrHP()
+	{
+		return this.currHP;
+	}
+	public void setCurrHP(int newHP)
+	{
+		this.currHP = newHP;
+	}
+	
+		
+	//Heals an entity by the given amount, up to max HP
+	public void heal(int healAmt)
+	{
+		this.currHP += healAmt;
+		if(this.currHP > this.hp)
+			currHP = hp;
+	}
+	
+	
+	public int getCurrSP()
+	{
+		return this.currSP;
+	}
+	public void setCurrSP(int newSP)
+	{
+		this.currSP = newSP;
+	}
+	public void spendSP(int cost)
+	{
+		this.currSP -= cost;
+		if(currSP < 0)
+			currSP = 0;
+	}
+	public void restSP(int restAmt)
+	{
+		currSP += restAmt;
+		if(currSP > sp)
+			currSP = sp;
+	}
+	
 		
 	/**
 	 * Update combat statistics based on ability stats
@@ -158,169 +198,10 @@ public class CombatEntity {
 		magDR = 100/(100 + mre);
 	}	
 	
-	public CombatEntity()
-	{
-		acc = 10;
-		arm = 0;
-		eva = 10;
-		hp = 10;
-		man = 10;
-		mag = 10;
-		intel = 10;
-		str = 10;
-		lck = 10;
-		mre = 10;
+	public CombatEntity(){
+		
 	}
 	
-	public CombatEntity(playerRace race, combatClass startingClass)
-	{
-		switch(race)
-		{
-		case HUMAN:	//average statistics
-			hp  = 10;
-			man = 0;
-			str = 10;
-			arm = 0;
-			acc = 10;
-			eva = 10;
-			mag = 10;
-			mre = 10;
-			lck = 10;
-			
-			break;
-			
-		case DWARF:	//high natural resistances and hp, but clumsy
-			hp  = 15;
-			man = 0;
-			str = 12;
-			arm = 10;
-			acc = 7;
-			eva = 7;
-			mag = 10;
-			mre = 8;
-			lck = 8;
-			break;
-			
-		case ELF:	//high magic, low natural resistances
-			hp  = 8;
-			man = 10;
-			str = 6;
-			arm = 0;
-			acc = 12;
-			eva = 8;
-			mag = 10;
-			mre = 8;
-			lck = 8;
-			
-			break;
-			
-		case MUNCHKIN: //high accuracy/evasion, low hp/resistance
-			hp  = 10;
-			man = 0;
-			str = 7;
-			arm = 0;
-			acc = 14;
-			eva = 14;
-			mag = 10;
-			mre = 6;
-			lck = 15;
-			
-			break;
-			
-		case BEAR:	//very high damage, but clumsy and little magic
-			hp  = 20;
-			man = 0;
-			str = 20;
-			arm = 5;
-			acc = 6;
-			eva = 6;
-			mag = 0;
-			mre = 6;
-			lck = 8;
-			
-			break;			
-		}		
-		switch(startingClass)
-		{
-		case FIGHTER:	
-			hp += 0;
-			man += 0;
-			str += 0;
-			arm += 0;
-			acc += 0;
-			eva += 0;
-			mag += 0;
-			mre += 0;
-			lck += 0;
-			
-			break;	
-				
-		case TANK:
-			hp += 0;
-			man += 0;
-			str += 0;
-			arm += 0;
-			acc += 0;
-			eva += 0;
-			mag += 0;
-			mre += 0;
-			lck += 0;
-			
-			break;
-			
-		case ROGUE:	
-			hp += 0;
-			man += 0;
-			str += 0;
-			arm += 0;
-			acc += 0;
-			eva += 0;
-			mag += 0;
-			mre += 0;
-			lck += 0;
-				
-			break;
-			
-		case WIZARD:	
-			hp += 0;
-			man += 0;
-			str += 0;
-			arm += 0;
-			acc += 0;
-			eva += 0;
-			mag += 0;
-			mre += 0;
-			lck += 0;
-			
-			break;
-		
-		case SORCERER:		
-			hp += 0;
-			man += 0;
-			str += 0;
-			arm += 0;
-			acc += 0;
-			eva += 0;
-			mag += 0;
-			mre += 0;
-			lck += 0;
-			
-			break;
-		
-		case PEASANT:		
-			hp += 0;
-			man += 0;
-			str += 0;
-			arm += 0;
-			acc += 0;
-			eva += 0;
-			mag += 0;
-			mre += 0;
-			lck += 0;
-					
-			break;
-		}		
-		updateStats();		
-	}
+	
 	
 }

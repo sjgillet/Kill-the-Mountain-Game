@@ -198,9 +198,11 @@ public class Tile {
 			if(vegetationID==5){
 				vegetationImage = GamePanel.overlayTiles[8][GamePanel.levels.get(GamePanel.currentLevel).randomNumber(0, 7)];
 			}
+
 			if(vegetationID==6){//tall tree
 				
 			}
+
 			if(tileID==0){
 				if(elevation>=GamePanel.levels.get(GamePanel.currentLevel).waterlevel){
 					artX = 6;

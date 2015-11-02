@@ -137,6 +137,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				}
 			}
 			if(e.getKeyCode()==KeyEvent.VK_UP){
+
 				if(!GamePanel.loading){
 					GamePanel.levels.get(GamePanel.currentLevel).seed++;
 					GamePanel.levels.get(GamePanel.currentLevel).generateMap();
@@ -155,6 +156,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.player.destination.x=(int)GamePanel.player.xpos;
 					GamePanel.player.destination.y=(int)GamePanel.player.ypos;
 				}
+
 			}
 		}
 		if (e.getKeyCode()==KeyEvent.VK_P){//
@@ -165,7 +167,17 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.paused=true;
 				GamePanel.menu.currentMenu = GamePanel.menu.main;
 			}
-		}//
+
+		}
+		//debug into a battle
+		if(e.getKeyCode() == KeyEvent.VK_B)
+		{
+			GamePanel.inBattle = true;
+			Battle battle = new Battle("Goblin");
+			
+		}
+		
+
 	}
 
 	public void keyReleased(KeyEvent arg0) {
@@ -187,8 +199,10 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			if(mousePressed){
 				if(GamePanel.showMap==false){
 					if (!GamePanel.paused){
+
 						GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
 						GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+
 					}
 				}
 				else{
