@@ -79,9 +79,15 @@ public class MonsterList {
 	 */
 	public Enemy getMonster(String name)
 	{
+		System.out.println("Searching for " + name);
 		for(Enemy e : allMonsters)
 			if(e.getName().equals(name))
-				return e;
+				{
+					System.out.println(name + " found!");
+					return e;
+					
+				}
+		System.out.println(name + " not found.");
 		return null;
 	}
 	

@@ -41,7 +41,6 @@ public class CombatEntity {
 	protected int statTotal;
 	
 	
-	
 	protected ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public int getHP()

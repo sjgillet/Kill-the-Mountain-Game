@@ -1,5 +1,8 @@
 package Game;
 
+
+import java.awt.Color;
+
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -100,7 +103,9 @@ public class Player extends Entity{
 		//if player is going to collide with the tile at their future position
 		if((collidedWithSomethingX==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
 			xpos = x;
-			collisionBox.x=(int)xpos;
+
+			collisionBox.x=(int)(double)((((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos));
+
 		}
 		else{
 			if(speed>1){
@@ -109,7 +114,9 @@ public class Player extends Entity{
 		}
 		if((collidedWithSomethingY==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
 			ypos = y;
-			collisionBox.y=(int)ypos;
+
+			collisionBox.y=(int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos));
+
 		}
 		else{
 			if(speed>1){
@@ -143,11 +150,13 @@ public class Player extends Entity{
 	}
 
 	public void update(){
-		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel){
+
+		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel||true){
 			moveTowardsDestination(movementSpeed);
 		}
 		else{
-			updatesInQue++;
+			//updatesInQue++;
+
 		}
 
 	}

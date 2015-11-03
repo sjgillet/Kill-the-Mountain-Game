@@ -16,8 +16,12 @@ public class GamePanel extends JPanel{
 	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/overlappedTiles.png", 32, 32);
 	public static BufferedImage colorGradients = FileIO.loadImage("/Textures/OverworldGradients.png");
 	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
+
+
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
+	public static BufferedImage monsterImage = FileIO.loadImage("/Textures/Monster.png");
 	public static BufferedImage inventorySlotImage = FileIO.loadImage("/Textures/InventorySlot.png");
+
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
@@ -28,8 +32,25 @@ public class GamePanel extends JPanel{
 	public static boolean showMap = false;
 	public static boolean godmode = false;
 	public static boolean loading = false;
+
+	public static boolean inBattle = false;
+	public static Battle bat = null;
 	public static ArrayList<String> loadingMessages = new ArrayList<String>();
+	static Random random;
 	public GamePanel(){
+		random = new Random();
+	}
+	public static int randomNumber(int min, int max){
+		if(min>max){
+			int temp = min;
+			min = max;
+			max = temp;
+		}
+		if(max==min){
+			return max;
+		}
+		int randNum = random.nextInt((max-min)+1) + min;
+		return randNum;
 
 	}
 	public static void createLevel(){
@@ -137,6 +158,17 @@ public class GamePanel extends JPanel{
 				g.drawString("Godmode: "+godmode,5,ApplicationUI.windowHeight-80);
 				g.drawString("Seed: "+levels.get(currentLevel).seed,5,ApplicationUI.windowHeight-50);
 			}
+
+			//display for being in battle
+			if(inBattle)
+			{
+				Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
+				g.setFont(font);
+				g.setColor(Color.WHITE);
+				g.drawString(bat.getPlayer().getName() + "\tVS!\t" + bat.getEnemies().get(0).getName(),
+						5, ApplicationUI.windowHeight - 140);
+			}
+
 			//			g.setColor(Color.yellow);
 			//			g.fillRect(0, 0, (50*32)+2, (14*32)+2);
 			//			for(int i = 0; i<50; i++){

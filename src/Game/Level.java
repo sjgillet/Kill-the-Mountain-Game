@@ -44,10 +44,20 @@ public class Level {
 	boolean drawingLevel = false;
 
 	ArrayList<ArrayList<Tile>> lakes = new ArrayList<ArrayList<Tile>>();
+	ArrayList<Monster> monsters = new ArrayList<Monster>();
+	ArrayList<Room> rooms = new ArrayList<Room>();
+	ArrayList<Hallway> hallways = new ArrayList<Hallway>();
 	Point townLocation;
 
+	//weather variables
+	double windDirection = -100;//X distance from center of screen
+	int weatherID = 0;//-1 none, 0 rain, 1 ash,
+
+	ArrayList<weatherParticle> weather = new ArrayList<weatherParticle>();
+
+
 	//list of all monsters in terms of stats. To be referenced for battles
-	public final MonsterList monsters;
+	public static MonsterList monstersList;
 	
 
 	public Level(String Name){
@@ -63,18 +73,22 @@ public class Level {
 			maxNumberOfIslands = 15;
 			minIslandSize = 320;
 			maxIslandSize = (width*height)/minNumberOfIslands;
-			minNumberOfMountains = ((width+height)/2)/50;
-			maxNumberOfMountains = ((width+height)/2)/50;
+
+			minNumberOfMountains = ((width+height)/2)/80;
+			maxNumberOfMountains = ((width+height)/2)/80;
+
 			mountainMaxHeight = 15;//((width+height)/2)/25;//max elevation possible for mountains
 			mountainMinHeight = 15;//((width+height)/2)/50;//minimum elevatoin possible for mountains
 			mountainMinSteepness = 5;
 			mountainMaxSteepness = 5;
 
 		}
-		else if(name.equals("Canyon")){
+
+		else if(name.equals("Forest")){
 			seed = 137;
-			width = 100;
-			height = 100;
+			width = 500;
+			height = 500;
+
 		}
 		else if(name.equals("Dungeon")){
 			seed = 130;
@@ -125,11 +139,15 @@ public class Level {
 
 		System.out.println("coloring tiles");
 		colorTiles();
-		System.out.println("finished coloring tiles!");
+
+		System.out.println("Adding monsters...");
+		addMonsters();
+
 		
-		System.out.println("Generating Monsters");
-		monsters = new MonsterList();
-		System.out.println("Monsters Catologued");
+		
+		System.out.println("Generating Monsters...");
+		monstersList = new MonsterList();
+		System.out.println("Monsters Catologued!");
 		
 		GamePanel.loading=false;
 	}
@@ -236,6 +254,18 @@ public class Level {
 			}
 		}
 	}
+
+	public void addMonsters(){
+		if(name.equalsIgnoreCase("Dungeon")){
+			for(int i = 0;i<rooms.size();i++){
+				Room currentRoom = rooms.get(i);
+				int randX = randomNumber(currentRoom.area.x+1,currentRoom.area.x+currentRoom.area.width-2);
+				int randY = randomNumber(currentRoom.area.y+1,currentRoom.area.y+currentRoom.area.height-2);
+				monsters.add(new Monster(randX*32, randY*32,"monster1"));
+			}
+		}
+	}
+
 	/*
 	 * Fills in the tileMap array
 	 */
@@ -261,8 +291,10 @@ public class Level {
 			tileMap = hardMap;
 		}
 		if(name.equals("Dungeon")){
+
 			ArrayList<Room> rooms = new ArrayList<Room>();
 			ArrayList<Hallway> hallways = new ArrayList<Hallway>();
+
 			//generate the first room of the dungeon at a random position
 			Room room = new Room((width/2)+randomNumber(-40,40),(height/2)+randomNumber(-30,30),40,30);
 			rooms.add(room);
@@ -532,7 +564,9 @@ public class Level {
 			ArrayList<Tile> volcanoTiles = getTilesAtElevation(i);
 			if(volcanoTiles.size()>300&&i<=48){
 				int sizeOfThisLayer = (int)(double)(baseSize*(Math.pow(.9, i)));
-				System.out.println(sizeOfThisLayer);
+
+				System.out.println("Generating a plateau with "+sizeOfThisLayer+" tiles...");
+
 				generatePlateauOrCanyon(i,sizeOfThisLayer,true,volcanoTiles);
 				setElevationEdges(i+1,3);
 				//remove all weird outcrops that we don't have textures for
@@ -693,17 +727,7 @@ public class Level {
 						tries++;
 					}
 				}
-				//				//check all the tiles and make sure there aren't any spots that are 1 tile wide because pyramids are ugly
-				//								for(int i = 0; i<tilesAtThisElevation.size();i++){
-				//									ArrayList<Tile> adjacentTiles = tilesAdjacentToPosition(tilesAtThisElevation.get(i).xpos/32,tilesAtThisElevation.get(i).ypos/32,0,true,buildElevation);
-				//									if(adjacentTiles.size()==0){
-				//										int x = tilesAtThisElevation.get(i).xpos/32;
-				//										int y = tilesAtThisElevation.get(i).ypos/32;
-				//										tileMap[x][y]=new Tile(x,y,0,buildElevation+elevationChange);
-				//										tileMap[x][y].oldElevation=buildElevation;
-				//									}
-				//								}
-				//				//System.out.println("exited loop");
+
 			}
 		}
 
@@ -1380,22 +1404,41 @@ public class Level {
 		int viewDistanceX = ((ApplicationUI.windowWidth/32)/2)+3;
 		int viewDistanceY = ((ApplicationUI.windowHeight/32)/2)+3;
 		drawingLevel = true;
+
+		ArrayList<Tile> overlayTilesToDraw = new ArrayList<Tile>();
 		for(int x = (int)(GamePanel.player.xpos/32)-(viewDistanceX); x<(int)(GamePanel.player.xpos/32)+(viewDistanceX);x++){
 			for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
-				if(x>=0&&y>=0&&x<width&&y<height)
+				if(randomNumber(1,50)==1){
+					//add weather particle
+					int tempX = (x*32)+randomNumber(0,31);
+					int tempY = (y*32)+randomNumber(0,31);
+					weather.add(new weatherParticle(tempX,tempY,0));
+				}
+				if(x>=0&&y>=0&&x<width&&y<height){
 					tileMap[x][y].Draw(g,1,false);
+					if(tileMap[x][y].vegetationID!=-1){
+						overlayTilesToDraw.add(tileMap[x][y]);
+					}
+				}
 			}
 		}
-
+		//draw monsters
+		for(int i = 0; i<monsters.size();i++){
+			monsters.get(i).update();
+			monsters.get(i).Draw(g);
+		}
+		drawingLevel = false;
 		GamePanel.player.Draw(g);
-		for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
-			for(int x = (int)(GamePanel.player.xpos/32)-(viewDistanceX); x<(int)(GamePanel.player.xpos/32)+(viewDistanceX);x++){
+		drawingLevel = true;
+		//draw vegetation
+		for(int i = 0; i<overlayTilesToDraw.size();i++){
+			overlayTilesToDraw.get(i).DrawVegetation(g, 1.0, false);
+		}
+		//draw weather
+		for(int i = 0; i<weather.size();i++){
+			weather.get(i).update();
+			weather.get(i).Draw(g);
 
-				if(x>=0&&y>=0&&x<width&&y<height){
-					tileMap[x][y].DrawVegetation(g,1,false);
-				}
-				
-			}
 		}
 		drawingLevel = false;
 		//update the player however many times it should have updated but couldn't because of the program 

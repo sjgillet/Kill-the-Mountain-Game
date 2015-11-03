@@ -4,17 +4,35 @@ import java.util.Random;
 import java.util.ArrayList;
 
 public class Battle {
-	private PlayerCombatant player;
-	private ArrayList<Enemy> enemies;
-	private ArrayList<Enemy> availableMonsters;
+
+	private PlayerCombatant player = new PlayerCombatant();
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Enemy> availableMonsters = new ArrayList<Enemy>();
 	private MonsterList monsters;
 	private Level lvl;
 	private Random rand = new Random();
 
+	public ArrayList<Enemy> getEnemies()
+	{
+		return this.enemies;
+	}
+	public PlayerCombatant getPlayer()
+	{
+		return this.player;
+	}
+	public void addMonster(String name)
+	{
+		enemies.add(monsters.getMonster(name));
+	}
+	
+	
+
+	
 	public Battle()
 	{
 		
 	}
+
 	
 	/**
 	 * Creates a random encounter with monsters to fight.
@@ -67,12 +85,15 @@ public class Battle {
 	}
 	
 	/**
+
 	 * Generates the battle data for fighting a given boss.
 	 * @param boss	The boss of a dungeon for the player 
 	 * to fight. 
 	 */
 	public Battle(Enemy boss)
 	{
+		lvl = GamePanel.levels.get(GamePanel.currentLevel);
+		monsters = lvl.monsters;
 		enemies.add(boss);
 	}	
 	
@@ -83,6 +104,8 @@ public class Battle {
 	 */
 	public Battle(String name)
 	{
+		lvl = GamePanel.levels.get(GamePanel.currentLevel);
+		monsters = lvl.monsters;
 		enemies.add(monsters.getMonster(name));
 	}
 	
@@ -90,11 +113,10 @@ public class Battle {
 	 * TODO: Implement attacks/skills/etc.
 	 * TODO: After attack, check if target is dead. If dead, award XP
 	 */
-	
-	
-	
+		
 
 	/**
+
 	 * Retrieve a random monster whose challenge is less than or equal to a given
 	 * double-precision value
 	 * @param challengeRating	Determines the highest difficulty creature to be fought
@@ -104,6 +126,7 @@ public class Battle {
 	{
 		Enemy opponent;
 		
+
 		//retrieve a random monster from possible opponents
 		while(true)
 		{
@@ -117,4 +140,5 @@ public class Battle {
 		}
 	}
 	
+
 }

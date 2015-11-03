@@ -27,6 +27,7 @@ public class ApplicationUI extends JFrame{
 		ctrl.setGamePanel(drawPanel);
 		this.setFocusable(true);
 		pane.add(drawPanel);
+		this.setIgnoreRepaint(true);
 		setFullScreen(false);
 		Thread gameThread = new Thread(){
 			public void run(){

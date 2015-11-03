@@ -19,7 +19,8 @@ public class PlayerCombatant extends CombatEntity{
 	
 	public combatClass cls;
 	private short level;
-	private int xp;
+	private int xp; 
+	private String name = "Dovahabear";
 	
 	public playerRace getRace()
 	{
@@ -72,6 +73,15 @@ public class PlayerCombatant extends CombatEntity{
 	{
 		this.xp = newTotal;
 	}
+	public String getName()
+	{
+		return this.name;
+	}
+	public void setName(String newName)
+	{
+		this.name = newName;
+	}
+	
 	
 	public PlayerCombatant()
 	{
