@@ -46,8 +46,9 @@ public class Battle {
 	 */
 	public Battle(double challengeRating)
 	{
+		player = GamePanel.player.playerCombatant;
 		lvl = GamePanel.levels.get(GamePanel.currentLevel);
-		monsters = lvl.monsters;
+		monsters = lvl.monstersList;
 		
 		/* Collect list of available opponents
 		 * based on location and player level */		
@@ -92,8 +93,9 @@ public class Battle {
 	 */
 	public Battle(Enemy boss)
 	{
+		player = GamePanel.player.playerCombatant;
 		lvl = GamePanel.levels.get(GamePanel.currentLevel);
-		monsters = lvl.monsters;
+		monsters = lvl.monstersList;
 		enemies.add(boss);
 	}	
 	
@@ -104,8 +106,9 @@ public class Battle {
 	 */
 	public Battle(String name)
 	{
+		player = GamePanel.player.playerCombatant;
 		lvl = GamePanel.levels.get(GamePanel.currentLevel);
-		monsters = lvl.monsters;
+		monsters = lvl.monstersList;
 		enemies.add(monsters.getMonster(name));
 	}
 	

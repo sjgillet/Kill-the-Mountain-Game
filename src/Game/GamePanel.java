@@ -152,6 +152,7 @@ public class GamePanel extends JPanel{
 				g.drawString("Movement Speed: "+player.movementSpeed,5,ApplicationUI.windowHeight-110);
 				g.drawString("Godmode: "+godmode,5,ApplicationUI.windowHeight-80);
 				g.drawString("Seed: "+levels.get(currentLevel).seed,5,ApplicationUI.windowHeight-50);
+				g.drawString("WeatherID = " + levels.get(currentLevel).weatherID, ApplicationUI.windowWidth - 180,  ApplicationUI.windowHeight - 50);
 			}
 
 			//display for being in battle
@@ -160,7 +161,10 @@ public class GamePanel extends JPanel{
 				Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 				g.setFont(font);
 				g.setColor(Color.WHITE);
-				g.drawString(bat.getPlayer().getName() + "\tVS!\t" + bat.getEnemies().get(0).getName(),
+//				g.drawString(bat.getPlayer().getName(), 5, ApplicationUI.windowHeight - 170);
+//				g.drawString(bat.getEnemies().get(0).getName(), 150, ApplicationUI.windowHeight - 170);
+				
+				g.drawString(bat.getPlayer().getName() + " VS! " + bat.getEnemies().get(0).getName(),
 						5, ApplicationUI.windowHeight - 140);
 			}
 

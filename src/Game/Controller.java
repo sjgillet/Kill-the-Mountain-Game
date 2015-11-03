@@ -158,6 +158,13 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				}
 
 			}
+			if(e.getKeyCode()== KeyEvent.VK_W){
+				if(GamePanel.levels.get(GamePanel.currentLevel).weatherID < 1)
+					GamePanel.levels.get(GamePanel.currentLevel).weatherID++;
+				else GamePanel.levels.get(GamePanel.currentLevel).weatherID = -1;
+					
+					
+			}
 		}
 		if (e.getKeyCode()==KeyEvent.VK_P){//
 			if(GamePanel.paused){
@@ -169,14 +176,22 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 
 		}
+		
+		
 		//debug into a battle
 		if(e.getKeyCode() == KeyEvent.VK_B)
 		{
-			GamePanel.inBattle = true;
-			Battle battle = new Battle("Goblin");
-			
+			if(GamePanel.inBattle)
+			{
+				GamePanel.inBattle = false;
+			}
+			else
+			{
+				GamePanel.inBattle = true;
+				GamePanel.bat = new Battle("Goblin");
+			}
 		}
-		
+
 
 	}
 
