@@ -14,14 +14,11 @@ public class MenuButton {
 	int buttonWidth;
 	int buttonHeight;
 
-	public MenuButton(int buttonWidth, int buttonHeight, String text, int x, int y) {
+	public MenuButton(int buttonWidth, int buttonHeight, String text) {
 
 		this.buttonWidth = buttonWidth;
 		this.buttonHeight = buttonHeight;
 		this.text = text;
-		System.out.println(text);
-		xPosition = x;
-		yPosition = y;
 
 	}
 
@@ -29,14 +26,29 @@ public class MenuButton {
 
 		//from pause main
 		if (this.text.equals("Game")){
-		
-		GamePanel.menu.menuState("Main");
-		
-		} else if(this.text.equals("Back to Pause Main")){
-			
-		GamePanel.menu.menuState("PauseMain");
+
+			GamePanel.menu.menuState("Main");
+
+		} else if (this.text.equals("Load")){
+
+			GamePanel.menu.menuState("Load");
+
+		} else if(this.text.equals("Back")){
+
+			GamePanel.menu.menuState("PauseMain");
+
+		} else if (this.text.equals("Back to Save/Load")){
+
+			GamePanel.menu.menuState("Main");
 			
 		}
+
+		else if (this.text.equals("Options")){
+
+			GamePanel.menu.menuState("Options");
+
+		} 
+
 
 	}
 

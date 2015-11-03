@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 public class Player extends Entity{
-	Inventory inventory = new Inventory();
+	Inventory inventory = new Inventory(0, 0);
 	Point destination = new Point(0,0);
 	double angleInRadians;
 	double angleInDegrees;
@@ -98,7 +98,7 @@ public class Player extends Entity{
 			}
 		}
 		//if player is going to collide with the tile at their future position
-		if((collidedWithSomethingX==false||GamePanel.godmode)&&(!GamePanel.paused)){
+		if((collidedWithSomethingX==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
 			xpos = x;
 			collisionBox.x=(int)xpos;
 		}
@@ -107,7 +107,7 @@ public class Player extends Entity{
 				//moveTowardsDestination(1);
 			}
 		}
-		if((collidedWithSomethingY==false||GamePanel.godmode)&&(!GamePanel.paused)){
+		if((collidedWithSomethingY==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
 			ypos = y;
 			collisionBox.y=(int)ypos;
 		}

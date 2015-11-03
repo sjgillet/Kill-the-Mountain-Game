@@ -1,7 +1,7 @@
 package Game;
 
 public class Item {
-	
+
 	String name = "";
 	boolean onGround;
 	int attack;
@@ -11,11 +11,15 @@ public class Item {
 	int armor;
 	int xID;
 	int yID;
-	
-	public Item(String name, boolean onGround) {
-		
+
+	//item types
+	String type;
+
+	public Item(String name, boolean onGround, String type) {
+
 		this.name = name;
 		this.onGround = onGround;
-		
+		this.type = type;
+
 	}
 }

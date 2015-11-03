@@ -17,9 +17,11 @@ public class GamePanel extends JPanel{
 	public static BufferedImage colorGradients = FileIO.loadImage("/Textures/OverworldGradients.png");
 	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
+	public static BufferedImage inventorySlotImage = FileIO.loadImage("/Textures/InventorySlot.png");
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
+	public static boolean inInventory = false;
 	public static boolean paused = false;
 	public static int currentLevel = 0;
 	public static Player player = new Player(200,200);
@@ -33,7 +35,7 @@ public class GamePanel extends JPanel{
 	public static void createLevel(){
 		loading = true;
 		loadingMessages.add("Generating overworld...");
-		button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
+		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		Level testLevel = new Level("Test");
 		levels.add(testLevel);
 		loadingMessages.clear();
@@ -145,6 +147,10 @@ public class GamePanel extends JPanel{
 		
 			if (paused){ 
 				menu.drawMenu(g, menu.currentMenu);
+			}
+			
+			if (inInventory){
+				player.inventory.drawInventory(g);
 			}
 			
 		}

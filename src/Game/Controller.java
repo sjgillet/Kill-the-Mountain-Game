@@ -158,10 +158,20 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.paused=false;
 			}
 			else{
+				GamePanel.inInventory=false;
 				GamePanel.paused=true;
 				GamePanel.menu.currentMenu = GamePanel.menu.main;
 			}
 		}//
+		if (e.getKeyCode()==KeyEvent.VK_I) {
+			if (GamePanel.inInventory){
+				GamePanel.inInventory=false;
+			}
+			else{
+				GamePanel.paused=false; //so you can't be in inventory and paused at the same time
+				GamePanel.inInventory=true;
+			}
+		}
 	}
 
 	public void keyReleased(KeyEvent arg0) {
@@ -183,8 +193,8 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			if(mousePressed){
 				if(GamePanel.showMap==false){
 					if (!GamePanel.paused){
-					GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
-					GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+						GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
+						GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
 					}
 				}
 				else{
