@@ -165,6 +165,8 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					
 					
 			}
+			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				System.exit(0);
 		}
 		if (e.getKeyCode()==KeyEvent.VK_P){//
 			if(GamePanel.paused){
@@ -192,7 +194,14 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 		}
 
-
+		if(GamePanel.inBattle)
+		{
+			if(e.getKeyCode() == KeyEvent.VK_E)
+			{
+				System.out.println("Key Pressed: E");
+				GamePanel.bat.Attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+			}
+		}
 	}
 
 	public void keyReleased(KeyEvent arg0) {
