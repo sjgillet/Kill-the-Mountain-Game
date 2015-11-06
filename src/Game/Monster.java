@@ -1,14 +1,12 @@
 package Game;
 
-<<<<<<< HEAD
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
-=======
 import java.awt.Graphics2D;
 import java.awt.Point;
->>>>>>> 728bba7e18683c12d9fee763a138912209584536
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -19,6 +17,8 @@ public class Monster extends Entity{
 	double angleInDegrees;
 	double baseMovementSpeed = 1;
 	double movementSpeed = 1;
+	double baseVisionWidth = 150;
+	double baseViewDistance = 300;
 	double visionWidth = 150;
 	double viewDistance = 300;
 	Rectangle collisionBox;
@@ -128,7 +128,7 @@ public class Monster extends Entity{
 			}
 			collisionBox.y=(int)ypos;
 		}
-		if(collidedWithSomethingX&&collidedWithSomethingY){
+		if(collidedWithSomethingX||collidedWithSomethingY){
 			changeDirection();
 		}
 
@@ -202,8 +202,17 @@ public class Monster extends Entity{
 			target = GamePanel.player;
 			changeDirection();
 			movementSpeed = baseMovementSpeed*3;
+			if(viewDistance<baseViewDistance*2){
+				viewDistance +=2;
+				visionWidth +=2;
+			}
 		}
 		else{
+			if(viewDistance>baseViewDistance){
+				viewDistance-=1;
+				visionWidth-=1;
+			}
+			target = null;
 			movementSpeed = baseMovementSpeed;
 		}
 	}

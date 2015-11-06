@@ -43,7 +43,6 @@ public class Player extends Entity{
 	public void moveTowardsDestination(double speed){
 
 		if(!atDestination()){
-
 			//find angle between current position and destination
 			angleInDegrees = getAngleToDestination();
 			angleInRadians = Math.toRadians(angleInDegrees);
@@ -70,6 +69,9 @@ public class Player extends Entity{
 								if(temp.collisionType==2){
 									temp.currentHealth-=1;
 								}
+								else if(temp.collisionType==3){
+									temp.door.enterDoor();
+								}
 							}
 						}
 					}
@@ -90,6 +92,10 @@ public class Player extends Entity{
 								collidedWithSomethingY = true;
 								if(temp.collisionType==2){
 									temp.currentHealth-=1;
+								}
+								else if(temp.collisionType==3){
+									System.out.println("dsoifjsoidjf");
+									temp.door.enterDoor();
 								}
 							}
 						}

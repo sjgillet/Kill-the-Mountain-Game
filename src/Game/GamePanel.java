@@ -71,8 +71,16 @@ public class GamePanel extends JPanel{
 		dungeon.updateTileMapArt();
 		System.out.println("Creating map of the dungeon...");
 		dungeon.map = new LevelMap(dungeon.tileMap);
-		currentLevel--;
-		System.out.println("Finished!");
+//		//forest
+//		currentLevel++;
+//		Level forest = new Level("Forest");
+//		levels.add(forest);
+//		System.out.println("Aligning Tiles...");
+//		forest.updateTileMapArt();
+//		System.out.println("Creating map of the forest...");
+//		forest.map = new LevelMap(forest.tileMap);
+//		currentLevel=0;
+//		System.out.println("Finished!");
 		loading = false;
 	}
 	public void paintComponent(Graphics g) {

@@ -21,10 +21,12 @@ public class Tile {
 	Color vegetationColor;
 	BufferedImage vegetationImage;
 	boolean flagged = false;
+	boolean isOpen = false;
 	Color flagColor = new Color(200,0,0,100);
 	int collisionType = 0;//0 means no collision, 1 means collision
 	double maxHealth = -1;
 	double currentHealth = -1;
+	Door door;
 	ArrayList<Rectangle> collisionBoxes = new ArrayList<Rectangle>();
 
 	public Tile(int x, int y, int id, int elev){
@@ -89,7 +91,7 @@ public class Tile {
 			artY = 1;
 			collisionType=1;
 		}
-		if(tileID==10){//door
+		if(tileID==10){//house door
 			artX = 0;
 			artY = 0;
 			collisionType = 3;
@@ -227,6 +229,7 @@ public class Tile {
 					artX = 1;
 					artY = 13;
 				}
+				collisionType=1;
 			}
 			if(tileID==10){//house door
 				artX = 0;
@@ -780,8 +783,16 @@ public class Tile {
 			y = (int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos)*scale);
 		}
 
-		if(tileID!=3&&tileID!=0){
+		if(tileID!=3&&tileID!=0&&tileID!=10){
 			g.drawImage(GamePanel.tiles[artX][artY],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
+		}
+		else if(tileID==10){
+			if(isOpen){
+				g.drawImage(GamePanel.tiles[artX][artY+2],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
+			}
+			else{
+				g.drawImage(GamePanel.tiles[artX][artY],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
+			}
 		}
 		else if(tileID==0){
 			g.drawImage(GamePanel.levels.get(GamePanel.currentLevel).tilesRankedByElevation[index][4],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
