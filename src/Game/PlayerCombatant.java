@@ -46,6 +46,10 @@ public class PlayerCombatant extends CombatEntity{
 		//TODO: Reload last save or Exit
 	}
 	
+	public int getStatTotal()
+	{
+		return (acc + eva + str + intel + mag + mre + lck);
+	}
 	
 	public short getLevel()
 	{
@@ -426,8 +430,7 @@ public class PlayerCombatant extends CombatEntity{
 			setLuck(getLuck() + 		0);
 			break;
 		}
-		updateStats();
-		
+		updateStats();		
 	}
 	
 }

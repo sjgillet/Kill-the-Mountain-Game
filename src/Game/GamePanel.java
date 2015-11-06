@@ -33,7 +33,7 @@ public class GamePanel extends JPanel{
 	public static boolean loading = false;
 
 	public static boolean inBattle = false;
-	public static Battle bat = null;
+	public static Battle bat = new Battle();
 	public static ArrayList<String> loadingMessages = new ArrayList<String>();
 	static Random random;
 	public GamePanel(){
@@ -156,6 +156,7 @@ public class GamePanel extends JPanel{
 				g.drawString("Movement Speed: "+player.movementSpeed,5,ApplicationUI.windowHeight-110);
 				g.drawString("Godmode: "+godmode,5,ApplicationUI.windowHeight-80);
 				g.drawString("Seed: "+levels.get(currentLevel).seed,5,ApplicationUI.windowHeight-50);
+				g.drawString("WeatherID = " + levels.get(currentLevel).weatherID, ApplicationUI.windowWidth - 180,  ApplicationUI.windowHeight - 50);
 			}
 
 			//display for being in battle
@@ -164,7 +165,13 @@ public class GamePanel extends JPanel{
 				Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 				g.setFont(font);
 				g.setColor(Color.WHITE);
-				g.drawString(bat.getPlayer().getName() + "\tVS!\t" + bat.getEnemies().get(0).getName(),
+//				g.drawString(bat.getPlayer().getName(), 5, ApplicationUI.windowHeight - 170);
+//				g.drawString(bat.getEnemies().get(0).getName(), 150, ApplicationUI.windowHeight - 170);
+				PlayerCombatant plr = bat.getPlayer();
+				Enemy e = bat.getEnemies().get(0);
+				g.drawString(plr.getName() + " HP: " + plr.getCurrHP() + " | DMG: " + plr.getPDmg()
+						+ "VS! " 
+						+ e.getName() + " HP: " + e.getCurrHP() + " | DMG: " + e.getPDmg(),
 						5, ApplicationUI.windowHeight - 140);
 			}
 

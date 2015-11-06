@@ -163,6 +163,14 @@ public class CombatEntity {
 		if(this.currHP > this.hp)
 			currHP = hp;
 	}
+	public void applyDamage(int damage)
+	{
+		System.out.println("Do Nothing");
+//		this.currHP -= damage;
+//		if(this.currHP <=0)
+//			this.isDead = true;
+//		
+	}
 	
 	
 	public int getCurrSP()
@@ -192,9 +200,9 @@ public class CombatEntity {
 	 */
 	public void updateStats()
 	{
-		physDamage = str + (1/4)*acc;
+		physDamage = str + (1/4)*acc;	System.out.println("Damage: " + physDamage);
 		magDamage = mag + (1/4)*intel;
-		physDR = 100/(100 + arm);
+		physDR = 100/(100 + arm);		System.out.println("DR: " + physDR);
 		magDR = 100/(100 + mre);
 	}	
 	
