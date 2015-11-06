@@ -16,11 +16,15 @@ public class GamePanel extends JPanel{
 	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/overlappedTiles.png", 32, 32);
 	public static BufferedImage colorGradients = FileIO.loadImage("/Textures/OverworldGradients.png");
 	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
+	public static BufferedImage sword = FileIO.loadImage("/Textures/Sword.png");
+
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
 	public static BufferedImage monsterImage = FileIO.loadImage("/Textures/Monster.png");
+	public static BufferedImage inventorySlotImage = FileIO.loadImage("/Textures/InventorySlot.png");
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
+	public static boolean inInventory = false;
 	public static boolean paused = false;
 	public static int currentLevel = 0;
 	public static Player player = new Player(200,200);
@@ -29,7 +33,7 @@ public class GamePanel extends JPanel{
 	public static boolean loading = false;
 
 	public static boolean inBattle = false;
-	public static Battle bat = null;
+	public static Battle bat = new Battle();
 	public static ArrayList<String> loadingMessages = new ArrayList<String>();
 	static Random random;
 	public GamePanel(){
@@ -51,7 +55,7 @@ public class GamePanel extends JPanel{
 	public static void createLevel(){
 		loading = true;
 		loadingMessages.add("Generating overworld...");
-		button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
+		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		Level testLevel = new Level("Test");
 		levels.add(testLevel);
 		loadingMessages.clear();
@@ -160,6 +164,7 @@ public class GamePanel extends JPanel{
 				g.drawString("Movement Speed: "+player.movementSpeed,5,ApplicationUI.windowHeight-110);
 				g.drawString("Godmode: "+godmode,5,ApplicationUI.windowHeight-80);
 				g.drawString("Seed: "+levels.get(currentLevel).seed,5,ApplicationUI.windowHeight-50);
+				g.drawString("WeatherID = " + levels.get(currentLevel).weatherID, ApplicationUI.windowWidth - 180,  ApplicationUI.windowHeight - 50);
 			}
 
 			//display for being in battle
@@ -168,7 +173,13 @@ public class GamePanel extends JPanel{
 				Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 				g.setFont(font);
 				g.setColor(Color.WHITE);
-				g.drawString(bat.getPlayer().getName() + "\tVS!\t" + bat.getEnemies().get(0).getName(),
+//				g.drawString(bat.getPlayer().getName(), 5, ApplicationUI.windowHeight - 170);
+//				g.drawString(bat.getEnemies().get(0).getName(), 150, ApplicationUI.windowHeight - 170);
+				PlayerCombatant plr = bat.getPlayer();
+				Enemy e = bat.getEnemies().get(0);
+				g.drawString(plr.getName() + " HP: " + plr.getCurrHP() + " | DMG: " + plr.getPDmg()
+						+ "VS! " 
+						+ e.getName() + " HP: " + e.getCurrHP() + " | DMG: " + e.getPDmg(),
 						5, ApplicationUI.windowHeight - 140);
 			}
 
@@ -182,6 +193,11 @@ public class GamePanel extends JPanel{
 		
 			if (paused){ 
 				menu.drawMenu(g, menu.currentMenu);
+			}
+			
+			if (inInventory){
+				player.inventory.drawInventory(g);
+				
 			}
 			
 		}

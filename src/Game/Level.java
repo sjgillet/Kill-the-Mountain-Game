@@ -61,7 +61,7 @@ public class Level {
 
 	//weather variables
 	double windDirection = -100;//X distance from center of screen
-	int weatherID = 0;//-1 none, 0 rain, 1 ash,
+	int weatherID = -1;//-1 none, 0 rain, 1 ash,
 
 	ArrayList<weatherParticle> weather = new ArrayList<weatherParticle>();
 	ArrayList<Level> houseLevels = new ArrayList<Level>();
@@ -69,7 +69,7 @@ public class Level {
 	//list of all monsters in terms of stats. To be referenced for battles
 	public static MonsterList monstersList;
 
-	
+
 	public Level(String Name){
 		GamePanel.loading=true;
 		//Pre-determined map generation for specified zones or debugging purposes.
@@ -79,6 +79,7 @@ public class Level {
 			seed = 138;
 			width = 600;
 			height = 600;
+
 
 			minNumberOfMountains = ((width+height)/2)/80;
 			maxNumberOfMountains = ((width+height)/2)/80;
@@ -313,7 +314,9 @@ public class Level {
 			buildRoom(-1 - seed);	//translate seed to a key for room ID's, build them
 			tileMap = hardMap;
 		}
+
 		if(name.equals("Dungeon")){
+
 			//ArrayList<Room> rooms = new ArrayList<Room>();
 			//ArrayList<Hallway> hallways = new ArrayList<Hallway>();
 
@@ -1461,11 +1464,14 @@ public class Level {
 		ArrayList<Tile> overlayTilesToDraw = new ArrayList<Tile>();
 		for(int x = (int)(GamePanel.player.xpos/32)-(viewDistanceX); x<(int)(GamePanel.player.xpos/32)+(viewDistanceX);x++){
 			for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
-				if(randomNumber(1,50)==1){
-					//add weather particle
-					int tempX = (x*32)+randomNumber(0,31);
-					int tempY = (y*32)+randomNumber(0,31);
-					weather.add(new weatherParticle(tempX,tempY,0));
+				if(weatherID != -1)
+				{
+					if(randomNumber(1,50)==1){
+						//add weather particle
+						int tempX = (x*32)+randomNumber(0,31);
+						int tempY = (y*32)+randomNumber(0,31);
+						weather.add(new weatherParticle(tempX,tempY,weatherID));
+					}
 				}
 				if(x>=0&&y>=0&&x<width&&y<height){
 					tileMap[x][y].Draw(g,1,false);

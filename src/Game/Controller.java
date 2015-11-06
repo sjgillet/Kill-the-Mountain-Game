@@ -88,6 +88,27 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.menu.currentMenu.get(i).isPushed();
 			}
 		}
+		
+		if (GamePanel.inInventory) {
+			if (GamePanel.player.inventory.head.isOver()){
+				GamePanel.player.inventory.head.isPushed();
+			}
+			
+			for (int i = 0; i < GamePanel.player.inventory.equipped.length; i++) {
+				if (GamePanel.player.inventory.equipped[i].isOver()) {
+					GamePanel.player.inventory.head.isPushed();
+				}
+			}
+			
+			for (int i = 0; i<GamePanel.player.inventory.main.length; i++) {
+				for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
+					if (GamePanel.player.inventory.main[i][j].isOver()) {
+						GamePanel.player.inventory.main[i][j].isPushed();
+					}
+				}
+			}
+			
+		}
 
 	}
 
@@ -158,25 +179,61 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				}
 
 			}
+			if(e.getKeyCode()== KeyEvent.VK_W){
+				if(GamePanel.levels.get(GamePanel.currentLevel).weatherID < 1)
+					GamePanel.levels.get(GamePanel.currentLevel).weatherID++;
+				else GamePanel.levels.get(GamePanel.currentLevel).weatherID = -1;
+					
+					
+			}
+			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				System.exit(0);
 		}
 		if (e.getKeyCode()==KeyEvent.VK_P){//
 			if(GamePanel.paused){
 				GamePanel.paused=false;
 			}
 			else{
+				GamePanel.inInventory=false;
 				GamePanel.paused=true;
 				GamePanel.menu.currentMenu = GamePanel.menu.main;
 			}
 
+		}//
+		if (e.getKeyCode()==KeyEvent.VK_I) {
+			if (GamePanel.inInventory){
+				GamePanel.inInventory=false;
+			}
+			else{
+				GamePanel.paused=false; //so you can't be in inventory and paused at the same time
+				GamePanel.inInventory=true;
+			}
 		}
+
+		
 		//debug into a battle
 		if(e.getKeyCode() == KeyEvent.VK_B)
 		{
-			GamePanel.inBattle = true;
-			Battle battle = new Battle("Goblin");
-			
+			if(GamePanel.inBattle)
+			{
+				GamePanel.inBattle = false;
+			}
+			else
+			{
+				GamePanel.inBattle = true;
+				GamePanel.bat = new Battle("Goblin");
+			}
 		}
-		
+
+
+		if(GamePanel.inBattle)
+		{
+			if(e.getKeyCode() == KeyEvent.VK_E)
+			{
+				System.out.println("Key Pressed: E");
+				GamePanel.bat.Attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+			}
+		}
 
 	}
 
@@ -202,6 +259,10 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 
 						GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
 						GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+
+
+
+
 
 					}
 				}

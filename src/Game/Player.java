@@ -8,31 +8,16 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 public class Player extends Entity{
+
+	PlayerCombatant.playerRace race; PlayerCombatant.combatClass cls;
+	PlayerCombatant playerCombatant = new PlayerCombatant(race.BEAR, cls.TANK);
 	Inventory inventory = new Inventory();
+
 	Point destination = new Point(0,0);
 	double angleInRadians;
 	double angleInDegrees;
 	double movementSpeed = 6;
 	Rectangle collisionBox;
-	//Stats
-	int level;
-	int strength;
-	int minStrength = 1;
-	int maxStrength = 25;
-	int maxHealth = 100;
-	int currentHealth;
-	double luck;
-	boolean armorOn;
-	boolean isAlive = true;
-	int maxMana = 100;
-	int minMana = 0;
-	int currentMana = 0;
-	double maxSpeed = 6;
-	double minSpeed = 1;
-	double magicResistance;
-	double physicalResistance;
-	double fireResistance;
-	double iceResistance;
 	int updatesInQue = 0;
 
 	public Player(int x, int y){
@@ -107,7 +92,7 @@ public class Player extends Entity{
 			}
 		}
 		//if player is going to collide with the tile at their future position
-		if((collidedWithSomethingX==false||GamePanel.godmode)&&(!GamePanel.paused)){
+		if((collidedWithSomethingX==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
 			xpos = x;
 
 			collisionBox.x=(int)(double)((((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos));
@@ -118,7 +103,7 @@ public class Player extends Entity{
 				//moveTowardsDestination(1);
 			}
 		}
-		if((collidedWithSomethingY==false||GamePanel.godmode)&&(!GamePanel.paused)){
+		if((collidedWithSomethingY==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
 			ypos = y;
 
 			collisionBox.y=(int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos));
