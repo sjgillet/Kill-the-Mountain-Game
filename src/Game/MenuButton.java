@@ -22,6 +22,15 @@ public class MenuButton {
 
 	}
 
+	/*
+	 * Called from the controller when the mouse is clicked
+	 * Depending on which MenuButton the mouse is over when clicked, 
+	 * determines what the next menu state will be
+	 * 
+	 * @param N/A
+	 * 
+	 * @return N/A
+	 */
 	public void isPushed() {
 
 		//from pause main
@@ -40,7 +49,6 @@ public class MenuButton {
 		} else if (this.text.equals("Back to Save/Load")){
 
 			GamePanel.menu.menuState("Main");
-			
 		}
 
 		else if (this.text.equals("Options")){
@@ -52,6 +60,12 @@ public class MenuButton {
 
 	}
 
+	/*
+	 * How to know if the mouse is currently over a particular MenuButton
+	 * 
+	 * @param N/A
+	 * @return true if the mouse position is within this button, false if not
+	 */
 	public boolean isOver() {
 		if (((Controller.mousePosition.x >= this.xPosition) && 
 				(Controller.mousePosition.x<=this.xPosition + this.buttonWidth) &&

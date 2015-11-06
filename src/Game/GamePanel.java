@@ -16,12 +16,11 @@ public class GamePanel extends JPanel{
 	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/overlappedTiles.png", 32, 32);
 	public static BufferedImage colorGradients = FileIO.loadImage("/Textures/OverworldGradients.png");
 	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
-
+	public static BufferedImage sword = FileIO.loadImage("/Textures/Sword.png");
 
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
 	public static BufferedImage monsterImage = FileIO.loadImage("/Textures/Monster.png");
 	public static BufferedImage inventorySlotImage = FileIO.loadImage("/Textures/InventorySlot.png");
-
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
@@ -183,6 +182,7 @@ public class GamePanel extends JPanel{
 			
 			if (inInventory){
 				player.inventory.drawInventory(g);
+				
 			}
 			
 		}

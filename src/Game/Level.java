@@ -67,8 +67,8 @@ public class Level {
 		tileMap = new Tile[width][height];
 		if(name.equals("Test")){
 			seed = 138;
-			width = 500;
-			height = 500;
+			width = 200;
+			height = 200;
 			minNumberOfIslands = 2;
 			maxNumberOfIslands = 15;
 			minIslandSize = 320;
@@ -292,8 +292,8 @@ public class Level {
 		}
 		if(name.equals("Dungeon")){
 
-			ArrayList<Room> rooms = new ArrayList<Room>();
-			ArrayList<Hallway> hallways = new ArrayList<Hallway>();
+			//ArrayList<Room> rooms = new ArrayList<Room>();
+			//ArrayList<Hallway> hallways = new ArrayList<Hallway>();
 
 			//generate the first room of the dungeon at a random position
 			Room room = new Room((width/2)+randomNumber(-40,40),(height/2)+randomNumber(-30,30),40,30);

@@ -18,6 +18,7 @@ public class Inventory {
 	InventorySlot hands;
 	int xPosition;
 	int yPosition;
+	Item currentHeldItem = new Item("holdingNothing", false, "hi");
 
 	public Inventory(int x, int y) {
 
@@ -27,6 +28,7 @@ public class Inventory {
 		equipped = new InventorySlot[4];
 
 		for (int i = 0; i < equipped.length; i++) {
+			
 			equipped[i] = new InventorySlot(i*50, 250, new Item("test", false, "type"));
 		}
 
@@ -37,14 +39,19 @@ public class Inventory {
 			}
 		}
 
-		head = new InventorySlot(0, 0, new Item("head", false, "helmet"));
+		head = new InventorySlot(0, 0, new Item("sword", false, "physical"));
 
 
 	}
 
-	//draw method
+	/*
+	 * Loops through the arrays of inventory slots and displays them
+	 * 
+	 * @param Graphics2D g
+	 * @return N/A
+	 */
 	public void drawInventory(Graphics2D g) {
-
+		
 		Font font = new Font("Iwona Heavy",Font.BOLD,12);
 		g.setFont(font);
 		g.setColor(Color.black);
@@ -68,42 +75,26 @@ public class Inventory {
 		head.drawInventorySlot(g);
 		
 		if (head.isOver()) {
-				g.setColor(Color.white);
-				g.fillRect(Controller.mousePosition.x-75, Controller.mousePosition.y-60, 75, 50);
-				g.setColor(Color.black);
-				g.drawRect(Controller.mousePosition.x-75, Controller.mousePosition.y-60, 75, 50);
-				g.drawString(head.item.name, Controller.mousePosition.x-70, Controller.mousePosition.y-45);
-				g.drawString(head.item.type, Controller.mousePosition.x-70, Controller.mousePosition.y-35);
+			GamePanel.player.inventory.head.item.drawItemToolTip(g, head.item);
 		}
-
+		
 		//loop through inventory to check if item stats will be displayed
-		for (int i = 0; i<main.length; i++) {
-			for (int j = 0; j<main[i].length; j++){
-				if (main[i][j].isOver()) {
-
-					//if (!inventorySlot.type.equals("empty"))
-					g.setColor(Color.white);
-					g.fillRect(Controller.mousePosition.x-75, Controller.mousePosition.y-60, 75, 50);
-					g.setColor(Color.black);
-					g.drawRect(Controller.mousePosition.x-75, Controller.mousePosition.y-60, 75, 50);
-					g.drawString(main[i][j].item.name, Controller.mousePosition.x-70, Controller.mousePosition.y-45);
-					g.drawString(main[i][j].item.type, Controller.mousePosition.x-70, Controller.mousePosition.y-35);
+		for (int i = 0; i<GamePanel.player.inventory.main.length; i++) {
+			for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
+				if (GamePanel.player.inventory.main[i][j].isOver()) {
+					GamePanel.player.inventory.main[i][j].item.drawItemToolTip(g, main[i][j].item);
 				}
 			}
 		}
 
 		//loop through equipped items to check if item stats will be displayed
-		for (int i = 0; i<equipped.length; i++) {
-			if (equipped[i].isOver()){
-				g.setColor(Color.white);
-				g.fillRect(Controller.mousePosition.x-75, Controller.mousePosition.y-60, 75, 50);
-				g.setColor(Color.black);
-				g.drawRect(Controller.mousePosition.x-75, Controller.mousePosition.y-60, 75, 50);
-				g.drawString(equipped[i].item.name, Controller.mousePosition.x-70, Controller.mousePosition.y-45);
-				g.drawString(equipped[i].item.type, Controller.mousePosition.x-70, Controller.mousePosition.y-35);
+		for (int i = 0; i<GamePanel.player.inventory.equipped.length; i++) {
+			if (GamePanel.player.inventory.equipped[i].isOver()){
+				GamePanel.player.inventory.equipped[i].item.drawItemToolTip(g, equipped[i].item);
 			}
 		}
 
+		
 	}
 
 }

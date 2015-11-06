@@ -88,6 +88,27 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.menu.currentMenu.get(i).isPushed();
 			}
 		}
+		
+		if (GamePanel.inInventory) {
+			if (GamePanel.player.inventory.head.isOver()){
+				GamePanel.player.inventory.head.isPushed();
+			}
+			
+			for (int i = 0; i < GamePanel.player.inventory.equipped.length; i++) {
+				if (GamePanel.player.inventory.equipped[i].isOver()) {
+					GamePanel.player.inventory.head.isPushed();
+				}
+			}
+			
+			for (int i = 0; i<GamePanel.player.inventory.main.length; i++) {
+				for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
+					if (GamePanel.player.inventory.main[i][j].isOver()) {
+						GamePanel.player.inventory.main[i][j].isPushed();
+					}
+				}
+			}
+			
+		}
 
 	}
 
@@ -181,7 +202,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		}
 
 
-		}
+		
 		//debug into a battle
 		if(e.getKeyCode() == KeyEvent.VK_B)
 		{
