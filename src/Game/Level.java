@@ -141,7 +141,7 @@ public class Level {
 		
 
 		//load the map
-		//if(loadLevel()==false){
+		//if(name.equals("Dungeon")||loadLevel()==false){
 			System.out.println(name+" did not exist, generating "+name);
 			//generate the map because the level did not have an existing file to represent it
 			generateMap();

@@ -11,7 +11,7 @@ public class Player extends Entity{
 
 	PlayerCombatant.playerRace race; PlayerCombatant.combatClass cls;
 	PlayerCombatant playerCombatant = new PlayerCombatant(race.BEAR, cls.TANK);
-	Inventory inventory = new Inventory();
+	Inventory inventory = new Inventory(0,0);
 
 	Point destination = new Point(0,0);
 	double angleInRadians;
