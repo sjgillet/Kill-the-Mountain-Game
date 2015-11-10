@@ -90,16 +90,19 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		}
 		
 		if (GamePanel.inInventory) {
+			//head slot
 			if (GamePanel.player.inventory.head.isOver()){
 				GamePanel.player.inventory.head.isPushed();
 			}
 			
+			//equipped items
 			for (int i = 0; i < GamePanel.player.inventory.equipped.length; i++) {
 				if (GamePanel.player.inventory.equipped[i].isOver()) {
-					GamePanel.player.inventory.head.isPushed();
+					GamePanel.player.inventory.equipped[i].isPushed();
 				}
 			}
 			
+			//main inventory items
 			for (int i = 0; i<GamePanel.player.inventory.main.length; i++) {
 				for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
 					if (GamePanel.player.inventory.main[i][j].isOver()) {

@@ -55,26 +55,29 @@ public class ApplicationUI extends JFrame{
 		ApplicationUI f = new ApplicationUI();
 		f.setSize(windowWidth,windowHeight);
 		f.setVisible(true);
-		
+
 	}
 	/*
 	 * The main loop of the game. This will call all of the update methods and repaint the game at a fixed rate
 	 */
 	public void gameLoop(){
-		GamePanel.createLevel();
+		//GamePanel.createLevel();
 		while(true){
 			windowWidth = getWidth();
 			windowHeight = getHeight();
 			beginTime=System.nanoTime();
 			//check keys
 			Controller.checkKeys();
-			
+
 			//repaint the graphics of the game
 			//look into buffer strategy and active rendering
 			repaint();
-			
-			//update
-			GamePanel.levels.get(GamePanel.currentLevel).update();
+
+			if (!GamePanel.atTitleScreen&&!GamePanel.loading&&GamePanel.levels.size()>GamePanel.currentLevel){
+				//update
+				GamePanel.levels.get(GamePanel.currentLevel).update();
+			}
+
 			//the time taken to do everything with the frame in nanoseconds
 			long timeTaken = System.nanoTime()-beginTime;
 			long timeLeft = (updatePeriod - timeTaken) / 1000000L;; // In milliseconds
