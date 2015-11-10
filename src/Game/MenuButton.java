@@ -56,6 +56,12 @@ public class MenuButton {
 			GamePanel.menu.menuState("Options");
 
 		} 
+		
+		//title screen
+		else if (this.text.equals("New Game")){
+			System.out.println("here");
+			GamePanel.createLevel();
+		}
 
 
 	}

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 public class Menu {
 
 
-
+	ArrayList<MenuButton> title = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> main = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> pauseMain = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> options = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> load = new ArrayList<MenuButton>();
-	ArrayList<MenuButton> currentMenu = pauseMain;
+	ArrayList<MenuButton> currentMenu = title;
 
 	int menuxPos;
 	int menuyPos;
@@ -19,6 +19,10 @@ public class Menu {
 	int buttonHeight = 40;
 
 	public Menu() {
+		title.add(new MenuButton(buttonWidth, buttonHeight,"New Game"));
+		title.add(new MenuButton(buttonWidth, buttonHeight,"Load Game"));
+		title.add(new MenuButton(buttonWidth, buttonHeight,"Exit"));
+		
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Game"));
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Inventory"));
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Display Stats"));

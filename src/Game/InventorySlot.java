@@ -13,7 +13,7 @@ public class InventorySlot {
 	int width = 50;
 	int height = 50;
 	boolean holdingItem = false;
-	
+
 
 	public InventorySlot(int x, int y, Item i) {
 
@@ -23,7 +23,7 @@ public class InventorySlot {
 
 	}
 
-	
+
 	/*
 	 * Called from the controller when the mouse is clicked
 	 * Depending on which InventorySlot the mouse is over when clicked, 
@@ -36,17 +36,31 @@ public class InventorySlot {
 	 */
 	public void isPushed() {
 
-		// if you're holding an item and click a slot, replace held item with item in slot
-		if (holdingItem) {
+
+		//holding an item, somthing in the slot
+		if (GamePanel.player.inventory.currentHeldItem!=null&&item!=null) {
 			//temporarily keep track of the item you're holding on to
+			Item oldItem = item;
+			//item = new Item (GamePanel.player.inventory.currentHeldItem.name,GamePanel.player.inventory.currentHeldItem.onGround, GamePanel.player.inventory.currentHeldItem.type);
 			item = GamePanel.player.inventory.currentHeldItem;
-			GamePanel.player.inventory.currentHeldItem = null;
+			GamePanel.player.inventory.currentHeldItem = oldItem;
 			holdingItem = false;
 		}
-		else {
-			holdingItem = true;
-			GamePanel.player.inventory.currentHeldItem = item;
+		//holding item , nothing in slot (placing into empty slot)
+		else if (GamePanel.player.inventory.currentHeldItem!=null&&item==null){
+			holdingItem = false;
+			item = GamePanel.player.inventory.currentHeldItem;
+			GamePanel.player.inventory.currentHeldItem = null;
 		}
+		//not holding item, something in the slot
+		else if (GamePanel.player.inventory.currentHeldItem==null&&item!=null) {
+			GamePanel.player.inventory.currentHeldItem = new Item(item.name, item.onGround, item.type);
+			item = null;
+			holdingItem = true;
+		}
+
+
+
 
 
 	}
@@ -66,15 +80,11 @@ public class InventorySlot {
 
 		g.drawImage(GamePanel.inventorySlotImage,(int)xPosition,(int)yPosition,50,50,null);
 
-		if (item.name.equals("sword")) {
-			g.drawImage(GamePanel.sword,(int)xPosition,(int)yPosition,50,50,null);
+		if (item!=null){
+
+			g.drawImage(item.itemArtwork,(int)xPosition,(int)yPosition,50,50,null);
+
 		}
-
-		if (holdingItem) {
-			g.drawImage(GamePanel.sword,(int)Controller.mousePosition.x,(int)Controller.mousePosition.y,30,30,null);
-		}
-
-
 
 
 	}
