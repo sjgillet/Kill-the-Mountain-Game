@@ -20,6 +20,17 @@ public class Player extends Entity{
 	Rectangle collisionBox;
 	int updatesInQue = 0;
 
+	
+	
+	public Item[] getEquipment()
+	{
+		Item[] items = new Item[5];
+		for(int i = 0; i < inventory.equipped.length; i++)
+			if(inventory.equipped[i] != null)
+				items[i] = inventory.equipped[i].item;
+		return items;
+	}
+	
 	public Player(int x, int y){
 		this.xpos = x;
 		this.ypos = y;

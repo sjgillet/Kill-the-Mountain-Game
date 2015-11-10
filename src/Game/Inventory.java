@@ -4,21 +4,23 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class Inventory {
 
 	//2d array of slots
 	InventorySlot[][] main;
 	InventorySlot[] equipped;
+	InventorySlot weapon;
 	InventorySlot head;
 	InventorySlot torso;
 	InventorySlot legs;
 	InventorySlot arms;
-	InventorySlot feet;
-	InventorySlot hands;
 	int xPosition;
 	int yPosition;
 	Item currentHeldItem = null;
+	
+	public ArrayList<Item> weapons; 
 
 	public Inventory(int x, int y) {
 
@@ -42,9 +44,21 @@ public class Inventory {
 		main[1][1].item = new Item("test2", false, "whatever");
 		head = new InventorySlot(0, 0, new Item("sword", false, "physical"));
 
-
+		compileItems();		
 	}
 
+	
+	private void compileItems()
+	{
+		weapons = new ArrayList<Item>();
+		Item longsword = new Item("Longsword", "Weapon", 10);		weapons.add(longsword);
+		Item plateMail = new Item("Plate Mail", "Armor", 50);		weapons.add(plateMail);
+		Item steelHelm = new Item("Steel Helm", "Helmet", 25);		weapons.add(steelHelm);
+		Item steelGnt = new Item("Steel Gauntlets", "Gloves", 15);	weapons.add(steelGnt);
+		Item steelBoots = new Item("SteelBoots", "Boots", 10);		weapons.add(steelBoots);
+		Item naturalWeapon = new Item("Natural Weapon", "No modifiers", 1.0, 1.0);
+	}
+	
 	/*
 	 * Loops through the arrays of inventory slots and displays them
 	 * 

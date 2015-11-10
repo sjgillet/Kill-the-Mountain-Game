@@ -35,7 +35,8 @@ public class CombatEntity {
 	protected double physDR;  //physical damage resistance; based on armor
 	protected double magDR;   //magical damage resistance; based on MRe
 	protected int totalArmor; //total armor; includes all armor items and natural
-	protected int totalMRE;	//total magic resist; includes all items and natural
+	protected int totalMRE;	  //total magic resist; includes all items and natural
+	protected Item weapon;	  //weapon used in combat; affects physical damage;
 	
 	/*Encounter Stats*/
 	protected int statTotal;
@@ -138,6 +139,11 @@ public class CombatEntity {
 	public int getMDmg()
 	{
 		return this.magDamage;
+	}
+	
+	public void setWeapon(Item wpn)
+	{
+		this.weapon = wpn;
 	}
 	
 	public int getStatTotal()
