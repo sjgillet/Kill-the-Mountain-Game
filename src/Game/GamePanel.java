@@ -17,6 +17,8 @@ public class GamePanel extends JPanel{
 	public static BufferedImage colorGradients = FileIO.loadImage("/Textures/OverworldGradients.png");
 	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
 	public static BufferedImage sword = FileIO.loadImage("/Textures/Sword.png");
+	public static BufferedImage titleScreen = FileIO.loadImage("/Textures/TitleScreen.png");
+	
 
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
 	public static BufferedImage monsterImage = FileIO.loadImage("/Textures/Monster.png");
@@ -24,6 +26,7 @@ public class GamePanel extends JPanel{
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
+	public static boolean atTitleScreen = true;
 	public static boolean inInventory = false;
 	public static boolean paused = false;
 	public static int currentLevel = 0;
@@ -53,6 +56,7 @@ public class GamePanel extends JPanel{
 
 	}
 	public static void createLevel(){
+		atTitleScreen = false;
 		loading = true;
 		loadingMessages.add("Generating overworld...");
 		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
@@ -99,7 +103,12 @@ public class GamePanel extends JPanel{
 		}
 	}
 	public void Draw(Graphics2D g){
-		if(loading){
+		
+		if (atTitleScreen&&!loading){
+			g.drawImage(titleScreen,0,0,ApplicationUI.windowWidth,ApplicationUI.windowHeight,null);
+			menu.drawMenu(g, menu.title);
+		}
+		else if(loading){
 			g.setColor(new Color(0,0,0));
 			g.drawRect(0, 0, ApplicationUI.windowWidth, ApplicationUI.windowHeight);
 			Font font = new Font("Iwona Heavy",Font.BOLD,18);

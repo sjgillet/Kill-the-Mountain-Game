@@ -18,7 +18,7 @@ public class Inventory {
 	InventorySlot hands;
 	int xPosition;
 	int yPosition;
-	Item currentHeldItem = new Item("holdingNothing", false, "hi");
+	Item currentHeldItem = null;
 
 	public Inventory(int x, int y) {
 
@@ -28,17 +28,18 @@ public class Inventory {
 		equipped = new InventorySlot[4];
 
 		for (int i = 0; i < equipped.length; i++) {
-			
-			equipped[i] = new InventorySlot(i*50, 250, new Item("test", false, "type"));
+
+			equipped[i] = new InventorySlot(i*50, 250, null);
 		}
 
 		main = new InventorySlot[10][3];
 		for (int i = 0; i<main.length; i++) {
 			for (int j = 0; j<main[i].length; j++) {
-				main[i][j] = new InventorySlot(i*50,j*50,new Item("test", false, "type"));
+				main[i][j] = new InventorySlot(i*50,j*50,null);
 			}
 		}
 
+		main[1][1].item = new Item("test2", false, "whatever");
 		head = new InventorySlot(0, 0, new Item("sword", false, "physical"));
 
 
@@ -51,7 +52,7 @@ public class Inventory {
 	 * @return N/A
 	 */
 	public void drawInventory(Graphics2D g) {
-		
+
 		Font font = new Font("Iwona Heavy",Font.BOLD,12);
 		g.setFont(font);
 		g.setColor(Color.black);
@@ -73,28 +74,34 @@ public class Inventory {
 		head.xPosition = (ApplicationUI.windowWidth/2) + ((50*main.length)/2) + 50;
 		head.yPosition = main[9][0].yPosition;
 		head.drawInventorySlot(g);
-		
-		if (head.isOver()) {
+
+		if (head.isOver()&&GamePanel.player.inventory.head.item!=null) {
 			GamePanel.player.inventory.head.item.drawItemToolTip(g, head.item);
 		}
-		
+
 		//loop through inventory to check if item stats will be displayed
 		for (int i = 0; i<GamePanel.player.inventory.main.length; i++) {
 			for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
-				if (GamePanel.player.inventory.main[i][j].isOver()) {
-					GamePanel.player.inventory.main[i][j].item.drawItemToolTip(g, main[i][j].item);
+				if (GamePanel.player.inventory.main[i][j].item!=null){
+					if (GamePanel.player.inventory.main[i][j].isOver()) {
+						GamePanel.player.inventory.main[i][j].item.drawItemToolTip(g, main[i][j].item);
+					}
 				}
 			}
 		}
 
 		//loop through equipped items to check if item stats will be displayed
 		for (int i = 0; i<GamePanel.player.inventory.equipped.length; i++) {
-			if (GamePanel.player.inventory.equipped[i].isOver()){
-				GamePanel.player.inventory.equipped[i].item.drawItemToolTip(g, equipped[i].item);
+			if (GamePanel.player.inventory.equipped[i].item!=null) {
+				if (GamePanel.player.inventory.equipped[i].isOver()){
+					GamePanel.player.inventory.equipped[i].item.drawItemToolTip(g, equipped[i].item);
+				}
 			}
 		}
 
-		
+		if (currentHeldItem!=null) {
+			g.drawImage(currentHeldItem.itemArtwork,(int)Controller.mousePosition.x,(int)Controller.mousePosition.y,30,30,null);
+		}
 	}
 
 }
