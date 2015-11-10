@@ -19,7 +19,7 @@ public class ApplicationUI extends JFrame{
 	public ApplicationUI(){
 		Container pane = getContentPane();
 		pane.setLayout(new BorderLayout());
-		JPanel drawPanel = new GamePanel();
+		JPanel drawPanel = new GamePanel(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		drawPanel.setBackground(Color.BLACK);
 		ctrl = new Controller();
@@ -72,10 +72,12 @@ public class ApplicationUI extends JFrame{
 			//repaint the graphics of the game
 			//look into buffer strategy and active rendering
 			repaint();
+
 			if (!GamePanel.atTitleScreen&&!GamePanel.loading&&GamePanel.levels.size()>GamePanel.currentLevel){
 				//update
 				GamePanel.levels.get(GamePanel.currentLevel).update();
 			}
+
 			//the time taken to do everything with the frame in nanoseconds
 			long timeTaken = System.nanoTime()-beginTime;
 			long timeLeft = (updatePeriod - timeTaken) / 1000000L;; // In milliseconds

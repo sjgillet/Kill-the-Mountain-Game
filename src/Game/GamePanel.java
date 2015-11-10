@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
@@ -39,7 +40,9 @@ public class GamePanel extends JPanel{
 	public static Battle bat = new Battle();
 	public static ArrayList<String> loadingMessages = new ArrayList<String>();
 	static Random random;
-	public GamePanel(){
+	static JFrame jframe;
+	public GamePanel(JFrame frame){
+		jframe = frame;
 		random = new Random();
 	}
 	public static int randomNumber(int min, int max){
@@ -58,19 +61,26 @@ public class GamePanel extends JPanel{
 	public static void createLevel(){
 		atTitleScreen = false;
 		loading = true;
+		
 		loadingMessages.add("Generating overworld...");
 		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		Level testLevel = new Level("Test");
 		levels.add(testLevel);
 		loadingMessages.clear();
 		loadingMessages.add("Aligning tiles...");
+		loading = true;
+		jframe.paint(jframe.getGraphics());
 		testLevel.updateTileMapArt();
 		loadingMessages.clear();
 		loadingMessages.add("Creating world map...");
+		loading = true;
+		jframe.paint(jframe.getGraphics());
 		//create the map
 		testLevel.map = new LevelMap(testLevel.tileMap);
 		loadingMessages.clear();
 		loadingMessages.add("Generating the dungeon...");
+		loading = true;
+		jframe.paint(jframe.getGraphics());
 		System.out.println("Generating the dungeon...");
 		currentLevel++;
 		Level dungeon = new Level("Dungeon");
@@ -87,7 +97,7 @@ public class GamePanel extends JPanel{
 //		forest.updateTileMapArt();
 //		System.out.println("Creating map of the forest...");
 //		forest.map = new LevelMap(forest.tileMap);
-//		currentLevel=0;
+		currentLevel=0;
 //		System.out.println("Finished!");
 		loading = false;
 	}
