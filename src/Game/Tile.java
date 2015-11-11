@@ -28,6 +28,7 @@ public class Tile {
 	double currentHealth = -1;
 	Door door;
 	ArrayList<Rectangle> collisionBoxes = new ArrayList<Rectangle>();
+	ArrayList<Item> itemsOnThisTile = new ArrayList<Item>();
 
 	public Tile(int x, int y, int id, int elev){
 		xpos = x*32;
@@ -820,6 +821,10 @@ public class Tile {
 		if(vegetationID==5){//blood
 			g.drawImage(vegetationImage,x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
 		}
+		for (int i = 0; i<itemsOnThisTile.size(); i++){
+			itemsOnThisTile.get(i).draw(g);
+		}
+		
 		if(flagged){
 			g.setColor(flagColor);
 			g.fillRect(x,y, 32, 32);

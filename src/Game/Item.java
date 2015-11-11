@@ -16,8 +16,8 @@ public class Item {
 	int health;
 	int armor;
 	int magicResist;
-	int xID;
-	int yID;
+	int xPosition;
+	int yPosition;
 	BufferedImage itemArtwork = null;
 	
 	public double getDamage()
@@ -106,6 +106,14 @@ public class Item {
 
 	}
 
+	public void draw(Graphics2D g) {
+		
+		if (onGround) {
+			g.drawImage(itemArtwork,(int)((ApplicationUI.windowWidth/2)-16)+xPosition-(int)GamePanel.player.xpos,(int)((ApplicationUI.windowHeight/2)-16)+yPosition-(int)GamePanel.player.ypos,20,20,null);
+		}
+		
+	}
+	
 	/*
 	 * Draw method for the info box when hovering over an inventorySlot
 	 * 

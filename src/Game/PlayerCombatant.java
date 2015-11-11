@@ -105,7 +105,7 @@ public class PlayerCombatant extends CombatEntity{
 		
 		currHP = hp;
 		currSP = sp;
-		updateStats();		
+		//updateStats();		
 	}
 	
 	public PlayerCombatant(playerRace startingRace, combatClass startingClass)
@@ -264,7 +264,7 @@ public class PlayerCombatant extends CombatEntity{
 		}		
 		currHP = hp;
 		currSP = sp;
-		updateStats();		
+		//updateStats();		
 	}
 	
 	public void levelUp()
@@ -440,8 +440,10 @@ public class PlayerCombatant extends CombatEntity{
 	{
 		Inventory inv = GamePanel.player.inventory;
 		
+		if (inv.weapon!=null){
 		double wpn = inv.weapon.item.getDamage();
 		physDamage = (int)(Math.floor(str + (1/4)*acc)*wpn);	System.out.println(this.getName() + "'s Damage: " + physDamage);
+		}
 		magDamage = mag + (1/4)*intel;
 		
 		int totalArmor = getArmor();
