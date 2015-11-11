@@ -160,6 +160,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.currentLevel++;
 				}
 			}
+
 			if(e.getKeyCode()==KeyEvent.VK_5){
 				GamePanel.dialog.addMessage("Added a message to dialog! Does it work?"+System.currentTimeMillis());
 				if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
@@ -167,6 +168,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.dialog.currentIndex=0;
 				}
 			}
+
 			if(e.getKeyCode()==KeyEvent.VK_UP){
 
 				if(!GamePanel.loading){
@@ -193,7 +195,6 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				if(GamePanel.levels.get(GamePanel.currentLevel).weatherID < 1)
 					GamePanel.levels.get(GamePanel.currentLevel).weatherID++;
 				else GamePanel.levels.get(GamePanel.currentLevel).weatherID = -1;
-
 
 			}
 			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)

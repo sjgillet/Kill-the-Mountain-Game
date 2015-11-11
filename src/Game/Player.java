@@ -20,6 +20,19 @@ public class Player extends Entity{
 	Rectangle collisionBox;
 	int updatesInQue = 0;
 
+
+	
+	
+	public Item[] getEquipment()
+	{
+		Item[] items = new Item[5];
+		for(int i = 0; i < inventory.equipped.length; i++)
+			if(inventory.equipped[i] != null)
+				items[i] = inventory.equipped[i].item;
+		return items;
+	}
+	
+
 	public Player(int x, int y){
 		this.xpos = x;
 		this.ypos = y;
@@ -49,14 +62,16 @@ public class Player extends Entity{
 						Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
 						for(int i = 0; i<temp.collisionBoxes.size();i++){
 							if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
-								temp.flagged=true;
+
 								//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 								collidedWithSomethingX = true;
 								if(temp.collisionType==2){
 									temp.currentHealth-=1;
 								}
 								else if(temp.collisionType==3){
+
 									collidedWithSomethingX = false;
+
 									temp.door.enterDoor();
 								}
 							}
@@ -81,7 +96,9 @@ public class Player extends Entity{
 									temp.currentHealth-=1;
 								}
 								else if(temp.collisionType==3){
+
 									collidedWithSomethingY = false;
+
 									temp.door.enterDoor();
 								}
 							}
@@ -144,11 +161,12 @@ public class Player extends Entity{
 
 	public void update(){
 
-		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel||true){
+
+		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel){
 			moveTowardsDestination(movementSpeed);
 		}
 		else{
-			//updatesInQue++;
+			updatesInQue++;
 
 		}
 

@@ -840,9 +840,11 @@ public class Tile {
 				vegetationImage = GamePanel.overlayTiles[6][2];
 			}
 		}
+
 		if(door!=null){
 			//door.Draw(g);
 		}
+
 		//Font font = new Font("Iwona Heavy",Font.BOLD,10);
 		//g.setFont(font);
 		//g.setColor(Color.WHITE);

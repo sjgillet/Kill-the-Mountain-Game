@@ -62,9 +62,10 @@ public class Level {
 	//weather variables
 	double windDirection = -100;//X distance from center of screen
 	int weatherID = -1;//-1 none, 0 rain, 1 ash,
+
 	Color fogColor = new Color(20,20,80,0);
 	double fogAlpha = 0;
-	
+
 	ArrayList<weatherParticle> weather = new ArrayList<weatherParticle>();
 	ArrayList<Level> houseLevels = new ArrayList<Level>();
 
@@ -79,9 +80,9 @@ public class Level {
 		tileMap = new Tile[width][height];
 		if(name.equals("Test")){
 			seed = 138;
+
 			width = 300;
 			height = 300;
-
 
 			minNumberOfMountains = ((width+height)/2)/80;
 			maxNumberOfMountains = ((width+height)/2)/80;
@@ -142,11 +143,13 @@ public class Level {
 		System.out.println("generating map");
 
 
+
 		//load the map
 		//if(name.equals("Dungeon")||loadLevel()==false){
 		System.out.println(name+" did not exist, generating "+name);
 		//generate the map because the level did not have an existing file to represent it
 		generateMap();
+
 		//}
 		System.out.println("adding vegetation");
 
@@ -505,7 +508,9 @@ public class Level {
 					//create a plateau at the elevation determined by f
 					//generatePlateauOrCanyon(f,mountainBaseSize/(f*steepness),true,tilesAtDesiredElevation);
 					generatePlateauOrCanyon(f,(int)((double)(mountainBaseSize*Math.pow(steepness, f))),true,tilesAtDesiredElevation);
+
 					GamePanel.drawLoadingMessage("Adding plateau's to overworld: "+(int)(total/(double)(mountainHeight*numberOfMountains)*100)+"%", true);
+
 				}			
 				//System.out.println("creating layer with base size: "+(mountainBaseSize/Math.pow(steepness, f))+", base of mountain is size: "+mountainBaseSize+", f = "+f);
 				//create the plateau edges
@@ -593,6 +598,7 @@ public class Level {
 				int sizeOfThisLayer = (int)(double)(baseSize*(Math.pow(.9, i)));
 
 				GamePanel.drawLoadingMessage("Generating Plateau's for the mountain... Progress: "+(int)(double)(((double)i/(double)volcanoHeight)*100.0)+"%",true);
+
 
 				generatePlateauOrCanyon(i,sizeOfThisLayer,true,volcanoTiles);
 				setElevationEdges(i+1,3);
@@ -835,6 +841,7 @@ public class Level {
 		theInsideOfThisHouse.height = h*2;
 		houseLevels.add(theInsideOfThisHouse);
 		Door door = new Door(doorX, startY+roofHeight, theInsideOfThisHouse, 1, doorX*2, theInsideOfThisHouse.height-2);
+
 		//GamePanel.levels.add(theInsideOfThisHouse);
 		for(int x = doorX; x<doorX+3; x++){
 			for(int y = startY+roofHeight;y<endY;y++){
@@ -1469,7 +1476,9 @@ public class Level {
 			for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
 				if(weatherID != -1)
 				{
+
 					if(randomNumber(1,2500/(int)(fogAlpha+1))==1){
+
 						//add weather particle
 						int tempX = (x*32)+randomNumber(0,31);
 						int tempY = (y*32)+randomNumber(0,31);
@@ -1497,6 +1506,7 @@ public class Level {
 			overlayTilesToDraw.get(i).DrawVegetation(g, 1.0, false);
 		}
 		//draw weather
+
 		if(weatherID==0){
 			if(fogAlpha<50){
 				fogAlpha+=.05;
@@ -1513,6 +1523,7 @@ public class Level {
 				}
 			}
 		}
+
 		for(int i = 0; i<weather.size();i++){
 			weather.get(i).update();
 			weather.get(i).Draw(g);

@@ -62,6 +62,7 @@ public class GamePanel extends JPanel{
 	public static void createLevel(){
 		atTitleScreen = false;
 		loading = true;
+
 		drawLoadingMessage("Generating overworld...",true);
 		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		Level testLevel = new Level("Test");
@@ -78,6 +79,7 @@ public class GamePanel extends JPanel{
 		drawLoadingMessage("Aligning Tiles...",true);
 		dungeon.updateTileMapArt();
 		drawLoadingMessage("Creating map of the dungeon...",true);
+
 		dungeon.map = new LevelMap(dungeon.tileMap);
 //		//forest
 //		currentLevel++;
@@ -88,13 +90,16 @@ public class GamePanel extends JPanel{
 //		System.out.println("Creating map of the forest...");
 //		forest.map = new LevelMap(forest.tileMap);
 		currentLevel=0;
+
 		System.out.println("Finished!");
+
 		loading = false;
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Draw((Graphics2D)g);
 	}
+
 	public static void drawLoadingMessage(String msg, boolean clearLoadingMessages){
 		loading = true;
 		if(clearLoadingMessages){
@@ -219,7 +224,9 @@ public class GamePanel extends JPanel{
 				player.inventory.drawInventory(g);
 				
 			}
+
 			dialog.Draw(g);
+
 			
 		}
 	}
