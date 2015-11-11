@@ -22,7 +22,6 @@ public class Player extends Entity{
 	int updatesInQue = 0;
 
 
-
 	public Item[] getEquipment()
 	{
 		Item[] items = new Item[5];
@@ -61,12 +60,16 @@ public class Player extends Entity{
 						Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
 						for(int i = 0; i<temp.collisionBoxes.size();i++){
 							if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
+
 								//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 								collidedWithSomethingX = true;
 								if(temp.collisionType==2){
 									temp.currentHealth-=1;
 								}
 								else if(temp.collisionType==3){
+
+									collidedWithSomethingX = false;
+
 									temp.door.enterDoor();
 								}
 							}
@@ -91,7 +94,9 @@ public class Player extends Entity{
 									temp.currentHealth-=1;
 								}
 								else if(temp.collisionType==3){
-									System.out.println("dsoifjsoidjf");
+
+									collidedWithSomethingY = false;
+
 									temp.door.enterDoor();
 								}
 							}
@@ -153,6 +158,7 @@ public class Player extends Entity{
 	}
 
 	public void update(){
+
 
 		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel){
 			moveTowardsDestination(movementSpeed);

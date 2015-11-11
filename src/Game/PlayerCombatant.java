@@ -37,10 +37,12 @@ public class PlayerCombatant extends CombatEntity{
 	{
 		this.currHP -= damage;
 		if(currHP <= 0)
+
 		{
 			currHP = 0;
 			this.kill();
 		}
+
 			
 	}
 	public void kill()
@@ -436,6 +438,7 @@ public class PlayerCombatant extends CombatEntity{
 		updateStats();		
 	}
 	
+
 	public void updateStats()
 	{
 		Inventory inv = GamePanel.player.inventory;

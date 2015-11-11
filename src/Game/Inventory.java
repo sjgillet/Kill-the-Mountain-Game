@@ -6,21 +6,25 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+
 public class Inventory {
 
 	//2d array of slots
 	InventorySlot[][] main;
 	InventorySlot[] equipped;
+
 	InventorySlot weapon;
 	InventorySlot head;
 	InventorySlot torso;
 	InventorySlot legs;
 	InventorySlot arms;
+
 	int xPosition;
 	int yPosition;
 	Item currentHeldItem = null;
 	
 	public ArrayList<Item> weapons; 
+
 
 	public Inventory(int x, int y) {
 
@@ -43,6 +47,7 @@ public class Inventory {
 
 		main[1][1].item = new Item("test2", false, "whatever");
 		head = new InventorySlot(0, 0, new Item("sword", false, "physical"));
+
 
 		compileItems();		
 	}

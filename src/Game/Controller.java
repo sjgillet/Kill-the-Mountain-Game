@@ -88,20 +88,20 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				GamePanel.menu.currentMenu.get(i).isPushed();
 			}
 		}
-		
+
 		if (GamePanel.inInventory) {
 			//head slot
 			if (GamePanel.player.inventory.head.isOver()){
 				GamePanel.player.inventory.head.isPushed();
 			}
-			
+
 			//equipped items
 			for (int i = 0; i < GamePanel.player.inventory.equipped.length; i++) {
 				if (GamePanel.player.inventory.equipped[i].isOver()) {
 					GamePanel.player.inventory.equipped[i].isPushed();
 				}
 			}
-			
+
 			//main inventory items
 			for (int i = 0; i<GamePanel.player.inventory.main.length; i++) {
 				for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
@@ -110,7 +110,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					}
 				}
 			}
-			
+
 		}
 
 	}
@@ -160,6 +160,15 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.currentLevel++;
 				}
 			}
+
+			if(e.getKeyCode()==KeyEvent.VK_5){
+				GamePanel.dialog.addMessage("Added a message to dialog! Does it work?"+System.currentTimeMillis());
+				if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
+					GamePanel.dialog.currentMessage+=1;
+					GamePanel.dialog.currentIndex=0;
+				}
+			}
+
 			if(e.getKeyCode()==KeyEvent.VK_UP){
 
 				if(!GamePanel.loading){
@@ -186,8 +195,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				if(GamePanel.levels.get(GamePanel.currentLevel).weatherID < 1)
 					GamePanel.levels.get(GamePanel.currentLevel).weatherID++;
 				else GamePanel.levels.get(GamePanel.currentLevel).weatherID = -1;
-					
-					
+
 			}
 			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				System.exit(0);
@@ -213,7 +221,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 		}
 
-		
+
 		//debug into a battle
 		if(e.getKeyCode() == KeyEvent.VK_B)
 		{

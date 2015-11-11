@@ -39,6 +39,7 @@ public class GamePanel extends JPanel{
 	public static boolean inBattle = false;
 	public static Battle bat = new Battle();
 	public static ArrayList<String> loadingMessages = new ArrayList<String>();
+	public static MessageBox dialog = new MessageBox();
 	static Random random;
 	static JFrame jframe;
 	public GamePanel(JFrame frame){
@@ -64,33 +65,24 @@ public class GamePanel extends JPanel{
 		atTitleScreen = false;
 		menu.currentMenu = menu.pauseMain;
 		loading = true;
-		
-		loadingMessages.add("Generating overworld...");
+
+		drawLoadingMessage("Generating overworld...",true);
 		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		Level testLevel = new Level("Test");
 		levels.add(testLevel);
-		loadingMessages.clear();
-		loadingMessages.add("Aligning tiles...");
-		loading = true;
-		jframe.paint(jframe.getGraphics());
+		drawLoadingMessage("Aligning Tiles...",true);
 		testLevel.updateTileMapArt();
-		loadingMessages.clear();
-		loadingMessages.add("Creating world map...");
-		loading = true;
-		jframe.paint(jframe.getGraphics());
+		drawLoadingMessage("Creating world map...",true);
 		//create the map
 		testLevel.map = new LevelMap(testLevel.tileMap);
-		loadingMessages.clear();
-		loadingMessages.add("Generating the dungeon...");
-		loading = true;
-		jframe.paint(jframe.getGraphics());
-		System.out.println("Generating the dungeon...");
+		drawLoadingMessage("Generating the dungeon...",true);
 		currentLevel++;
 		Level dungeon = new Level("Dungeon");
 		levels.add(dungeon);
-		System.out.println("Aligning Tiles...");
+		drawLoadingMessage("Aligning Tiles...",true);
 		dungeon.updateTileMapArt();
-		System.out.println("Creating map of the dungeon...");
+		drawLoadingMessage("Creating map of the dungeon...",true);
+
 		dungeon.map = new LevelMap(dungeon.tileMap);
 //		//forest
 //		currentLevel++;
@@ -101,19 +93,33 @@ public class GamePanel extends JPanel{
 //		System.out.println("Creating map of the forest...");
 //		forest.map = new LevelMap(forest.tileMap);
 		currentLevel=0;
-//		System.out.println("Finished!");
+
+		System.out.println("Finished!");
+
 		loading = false;
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Draw((Graphics2D)g);
 	}
+
+	public static void drawLoadingMessage(String msg, boolean clearLoadingMessages){
+		loading = true;
+		if(clearLoadingMessages){
+			loadingMessages.clear();
+		}
+		loadingMessages.add(msg);
+		jframe.paint(jframe.getGraphics());		
+	}
 	public static void setCurrentLevel(Level lvl){
 		for(int i = 0; i<levels.size();i++){
-			if(levels.get(i)==lvl){
+			if(levels.get(i).name.equals(lvl.name)){
+				System.out.println("Set level!");
 				currentLevel = i;
+				return;
 			}
 		}
+		System.out.println("failed to set level");
 	}
 	public void Draw(Graphics2D g){
 		
@@ -221,6 +227,9 @@ public class GamePanel extends JPanel{
 				player.inventory.drawInventory(g);
 				
 			}
+
+			dialog.Draw(g);
+
 			
 		}
 	}

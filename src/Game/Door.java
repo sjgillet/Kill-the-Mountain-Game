@@ -1,6 +1,10 @@
 package Game;
 
 
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -25,8 +29,10 @@ public class Door {
 	 * @param destY - the y position to put the player at in the level that is loaded
 	 */
 	public Door(int x, int y, Level destination, int ID, int x2, int y2){
-		xposA = x;
-		yposA = y;
+
+		xposA = x*32;
+		yposA = y*32;
+
 		id=ID;
 		levelB = destination;
 		spawnPointB = new Point(x2,y2);		
@@ -62,7 +68,13 @@ public class Door {
 		}
 	}
 	public void enterDoor(){
-		System.out.println("ENTERED DOOR!");
+
 		GamePanel.setCurrentLevel(levelB);
+
 	}
+	public void Draw(Graphics2D g){
+		g.setColor(Color.red);
+		g.fillRect(((ApplicationUI.windowWidth/2)-16)+xposA-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+yposA-(int)GamePanel.player.ypos,96,64);
+	}
+
 }

@@ -8,18 +8,23 @@ import java.awt.image.BufferedImage;
 public class Item {
 
 	String name = "";
+
 	String description;
 	boolean onGround;
 	double damage;
+
 	double speed;
 	int mana;
 	int health;
 	int armor;
+
 	int magicResist;
 	int xPosition;
 	int yPosition;
+
 	BufferedImage itemArtwork = null;
 	
+
 	public double getDamage()
 	{
 		return damage;
@@ -87,6 +92,7 @@ public class Item {
 			}
 	}
 	
+
 	//item types
 	String type;
 
