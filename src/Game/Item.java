@@ -115,7 +115,8 @@ public class Item {
 	public void draw(Graphics2D g) {
 		
 		if (onGround) {
-			g.drawImage(itemArtwork,(int)((ApplicationUI.windowWidth/2)-16)+xPosition-(int)GamePanel.player.xpos,(int)((ApplicationUI.windowHeight/2)-16)+yPosition-(int)GamePanel.player.ypos,20,20,null);
+			System.out.println("Drawing item on tile " );
+			g.drawImage(itemArtwork,(int)((ApplicationUI.windowWidth/2)-16)+xPosition+6-(int)GamePanel.player.xpos,(int)((ApplicationUI.windowHeight/2)-16)+yPosition+6-(int)GamePanel.player.ypos,20,20,null);
 		}
 		
 	}

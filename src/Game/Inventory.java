@@ -22,7 +22,7 @@ public class Inventory {
 	int xPosition;
 	int yPosition;
 	Item currentHeldItem = null;
-	
+
 	public ArrayList<Item> weapons; 
 
 
@@ -47,12 +47,37 @@ public class Inventory {
 
 		main[1][1].item = new Item("test2", false, "whatever");
 		head = new InventorySlot(0, 0, new Item("sword", false, "physical"));
+		torso = new InventorySlot(0, 0, null);
+		arms = new InventorySlot(0, 0, null);
+		legs = new InventorySlot(0, 0, null);
 
 
 		compileItems();		
 	}
 
-	
+	/*
+	 * Puts item that was clicked on in the game into the overworld, if space available
+	 * 
+	 * @param Item to be picked up
+	 * @return boolean true if space was available and item was successfully picked up
+	 */
+	public boolean pickUpItem(Item item) {
+
+		boolean hasEmptySlot = false;
+
+		for (int i = 0; i<main.length; i++) {
+			for (int j = 0; j<main[i].length; j++) {
+				if (main[i][j].item==null){
+					main[i][j].item = item;
+					hasEmptySlot = true;
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	private void compileItems()
 	{
 		weapons = new ArrayList<Item>();
@@ -63,7 +88,7 @@ public class Inventory {
 		Item steelBoots = new Item("SteelBoots", "Boots", 10);		weapons.add(steelBoots);
 		Item naturalWeapon = new Item("Natural Weapon", "No modifiers", 1.0, 1.0);
 	}
-	
+
 	/*
 	 * Loops through the arrays of inventory slots and displays them
 	 * 
@@ -76,12 +101,14 @@ public class Inventory {
 		g.setFont(font);
 		g.setColor(Color.black);
 
+		//equipped inventory placement
 		for (int i = 0; i<equipped.length; i++) {
 			equipped[i].xPosition = (ApplicationUI.windowWidth/2) - ((50*main.length)/2) + (i*50);
 			equipped[i].yPosition = (ApplicationUI.windowHeight/2) - 135;
 			equipped[i].drawInventorySlot(g);
 		}
 
+		//main inventory placement
 		for (int i = 0; i<main.length; i++) {
 			for (int j = 0; j<main[i].length; j++){
 				main[i][j].xPosition = (ApplicationUI.windowWidth/2) - ((50*main.length)/2) + (i*50); 
@@ -90,12 +117,43 @@ public class Inventory {
 			}
 		}
 
-		head.xPosition = (ApplicationUI.windowWidth/2) + ((50*main.length)/2) + 50;
+		//helmet/head inventory slot placement
+		head.xPosition = (ApplicationUI.windowWidth/2) + ((50*main.length)/2) + 25;
 		head.yPosition = main[9][0].yPosition;
 		head.drawInventorySlot(g);
 
 		if (head.isOver()&&GamePanel.player.inventory.head.item!=null) {
 			GamePanel.player.inventory.head.item.drawItemToolTip(g, head.item);
+		}
+
+		//torso inventory slot placement
+		torso.xPosition = (ApplicationUI.windowWidth/2) + ((50*main.length)/2) + 25;
+		torso.yPosition = main[9][0].yPosition + 50;
+		torso.drawInventorySlot(g);
+
+		//torso tooltip
+		if (torso.isOver()&&GamePanel.player.inventory.torso.item!=null) {
+			GamePanel.player.inventory.torso.item.drawItemToolTip(g, torso.item);
+		}
+
+		//arms inventory slot placement
+		arms.xPosition = (ApplicationUI.windowWidth/2) + ((50*main.length)/2) + 75;
+		arms.yPosition = main[9][1].yPosition;
+		arms.drawInventorySlot(g);
+
+		//arms tooltip
+		if (arms.isOver()&&GamePanel.player.inventory.arms.item!=null) {
+			GamePanel.player.inventory.arms.item.drawItemToolTip(g, arms.item);
+		}
+
+		//legs inventory slot placement
+		legs.xPosition = (ApplicationUI.windowWidth/2) + ((50*main.length)/2) + 25;
+		legs.yPosition = main[9][2].yPosition;
+		legs.drawInventorySlot(g);
+
+		//legs tooltip
+		if (legs.isOver()&&GamePanel.player.inventory.legs.item!=null) {
+			GamePanel.player.inventory.legs.item.drawItemToolTip(g, legs.item);
 		}
 
 		//loop through inventory to check if item stats will be displayed
@@ -118,6 +176,7 @@ public class Inventory {
 			}
 		}
 
+		//if holding an item, draw the item next to the cursor
 		if (currentHeldItem!=null) {
 			g.drawImage(currentHeldItem.itemArtwork,(int)Controller.mousePosition.x,(int)Controller.mousePosition.y,30,30,null);
 		}

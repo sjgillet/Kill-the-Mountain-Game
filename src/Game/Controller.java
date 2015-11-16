@@ -82,6 +82,37 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			GamePanel.player.setPosition(x,y,2);
 			GamePanel.player.destination = new Point(x,y);
 		}
+
+		// right clicking over a tile with an item over it will pick it up
+		if(e.getButton()==MouseEvent.BUTTON3&&!GamePanel.showMap&&!GamePanel.paused&&!GamePanel.inInventory){
+
+			int x = 0;
+			int y = 0;
+
+			if (GamePanel.levels.size()>GamePanel.currentLevel){
+				
+				//determines tile location based on player position and window width and height
+				x = (mousePosition.x + (int)(GamePanel.player.xpos+16) - (ApplicationUI.windowWidth/2))/32;
+				y = (mousePosition.y + (int)(GamePanel.player.ypos+16) - (ApplicationUI.windowHeight/2))/32;
+
+
+				if (x>=0&&y>=0&&x<GamePanel.levels.get(GamePanel.currentLevel).width&&y<GamePanel.levels.get(GamePanel.currentLevel).height){
+					
+					//if this tile item arraylist isnt empty
+					if (GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.size()>0){
+						
+						//get first item of the arraylist
+						Item temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.get(0);
+
+						//call method in inventory to pick up item
+						if (GamePanel.player.inventory.pickUpItem(temp)){
+							GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.remove(0);
+						}
+					}
+				}
+			}
+		}
+
 		//menu stuff here
 		for (int i = 0; i < GamePanel.menu.currentMenu.size(); i++) {
 			if (GamePanel.menu.currentMenu.get(i).isOver()){
@@ -110,7 +141,19 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					}
 				}
 			}
+			
+			if (GamePanel.player.inventory.torso.isOver()) {
+				GamePanel.player.inventory.torso.isPushed();
+			}
 
+			if (GamePanel.player.inventory.arms.isOver()) {
+				GamePanel.player.inventory.arms.isPushed();
+			}
+			
+			if (GamePanel.player.inventory.legs.isOver()) {
+				GamePanel.player.inventory.legs.isPushed();
+			}
+			
 		}
 
 	}
@@ -261,6 +304,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	 * Constantly checks for changes in key state by being called by the game loop in applicationUI
 	 */
 	public static void checkKeys(){
+
 		//check if mouse was pressed
 		if(mousePressed){
 			//Point temp = MouseEvent.getPoint();

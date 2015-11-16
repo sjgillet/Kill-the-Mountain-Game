@@ -478,7 +478,7 @@ public class Level {
 			//initialize items in rooms further than 8 rooms away from the start and at dead ends
 			for (int i = 0; i<rooms.size(); i++) {
 				
-				if (rooms.get(i).shortestPathToThisFromStart.size() >= 8 && rooms.get(i).hallways.size()==1){
+				if (rooms.get(i).shortestPathToThisFromStart.size() >= 10 && rooms.get(i).hallways.size()==1){
 					
 					//randomly place an item in the room
 					
@@ -489,8 +489,8 @@ public class Level {
 					y = rooms.get(i).area.y + (rooms.get(i).area.height/2);
 					
 					Item temp = new Item("sword",true,"physical");
-					temp.xPosition = x;
-					temp.yPosition = y;
+					temp.xPosition = x*32;
+					temp.yPosition = y*32;
 					
 					tileMap[x][y].itemsOnThisTile.add(temp);
 					

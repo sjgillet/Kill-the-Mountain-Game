@@ -451,22 +451,22 @@ public class PlayerCombatant extends CombatEntity{
 		
 		int totalArmor = getArmor();
 		int totalMR = getMagicRes();
-		if(inv.head != null)
+		if(inv.head.item != null)
 		{
 			totalArmor += inv.head.item.getArmor();
 			totalMR += inv.head.item.getMagicResist();
 		}
-		if(inv.torso != null)
+		if(inv.torso.item != null)
 		{
 			totalArmor += inv.torso.item.getArmor();
 			totalMR += inv.torso.item.getMagicResist();
 		}
-		if(inv.legs != null)
+		if(inv.legs.item != null)
 		{	
 			totalArmor += inv.legs.item.getArmor();
 			totalMR += inv.legs.item.getMagicResist();
 		}
-		if(inv.arms != null)
+		if(inv.arms.item != null)
 		{
 			totalArmor += inv.arms.item.getArmor();
 			totalMR += inv.arms.item.getArmor();

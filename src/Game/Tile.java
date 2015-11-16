@@ -822,13 +822,15 @@ public class Tile {
 			g.drawImage(vegetationImage,x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
 		}
 		for (int i = 0; i<itemsOnThisTile.size(); i++){
+			System.out.println("called draw method");
 			itemsOnThisTile.get(i).draw(g);
 		}
 		
-		if(flagged){
+		//flags where items are placed in the dungeon and elsewhere
+		if(flagged||itemsOnThisTile.size()>0){
 			g.setColor(flagColor);
 			g.fillRect(x,y, 32, 32);
-			//flagged = false;
+			flagged = false;
 		}
 		Tile northernTile = getNorthTile();
 		if(northernTile!=null&&northernTile.artX==4&&northernTile.artY==1){
