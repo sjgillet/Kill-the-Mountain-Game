@@ -1,6 +1,7 @@
 package Game;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MonsterList {
 	
@@ -10,6 +11,7 @@ public class MonsterList {
 	private ArrayList<Enemy> midLevelMonsters;	//monsters to fight in 2nd dungeon and onward
 	private ArrayList<Enemy> highLevelMonsters;	//monsters to fight near at at the end of the game
 	private ArrayList<Double[]> weights;		//REMOVE?
+	private Inventory inv= GamePanel.player.inventory;
 	
 	public ArrayList<Enemy> getAllMonsters()
 	{
@@ -43,18 +45,17 @@ public class MonsterList {
 		
 		//golem
 
-		golem.setWeights(0.1, 0.3, 0.05, 0.5, 0.05, 0.075, 0.0, 0.2, 0.225, 0.1);	
-		golem.setWeapon(new Item("Natural Weapon", "Weapon", 15));
+		golem.setWeights(0.1, 0.3, 0.05, 0.5, 0.05, 0.075, 0.0, 0.2, 0.225, 0.1);
 		golem.setXP(50);
-
+		
 		allMonsters.add(golem);
 		
 		//goblin
 		goblin.setWeights(0.15, 0.08, 0.12, 0.2, 0.075, 0.125, 0.0, 0.05, 0.05, 0.05);
-
-		goblin.setWeapon(new Item("Rusty Spear", "Weapon", 5));
 		goblin.setXP(10);
-
+		goblin.lootList.add(GamePanel.player.inventory.getItem("Rusty Spear"));
+		goblin.lootList.add(GamePanel.player.inventory.getItem("Potion of Healing 10"));
+		goblin.lootRates = new double[]{0.50, 0.75};
 		allMonsters.add(goblin);
 		
 		//kobold

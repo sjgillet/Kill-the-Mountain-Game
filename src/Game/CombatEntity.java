@@ -13,7 +13,7 @@ public class CombatEntity {
 	protected int hp;		//maxiumum hit points; measures the character's health
 	protected int sp;		//maximum skill points; measures the character's exhaustion
 	protected int str;		//strength; basis for physical damage
-	protected int acc;		//accuracy; basis for attack hit chance
+	protected int acc;		//accuracy; basis for attack hit chance and speed stat
 	protected int mag;		//magic; basis for magical damage
 	protected int intel;	//intelligence; basis for skill/spell hit chance
 	protected int eva;		//evasion; basis for avoiding attacks/skills; determines turn order
@@ -37,7 +37,6 @@ public class CombatEntity {
 	protected int totalArmor; //total armor; includes all armor items and natural
 
 	protected int totalMRE;	  //total magic resist; includes all items and natural
-	protected Item weapon;	  //weapon used in combat; affects physical damage;
 
 	
 	/*Encounter Stats*/
@@ -143,10 +142,9 @@ public class CombatEntity {
 		return this.magDamage;
 	}
 	
-
-	public void setWeapon(Item wpn)
+	public boolean isDead()
 	{
-		this.weapon = wpn;
+		return isDead;
 	}
 
 	public int getStatTotal()
@@ -162,6 +160,11 @@ public class CombatEntity {
 	public void setCurrHP(int newHP)
 	{
 		this.currHP = newHP;
+	}
+	
+	public void kill()
+	{
+		//to be overloaded in subclasses
 	}
 	
 		

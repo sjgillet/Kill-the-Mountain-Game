@@ -285,7 +285,11 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			if(e.getKeyCode() == KeyEvent.VK_E)
 			{
 				System.out.println("Key Pressed: E");
-				GamePanel.bat.Attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+				GamePanel.bat.attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+			}
+			if(e.getKeyCode() == KeyEvent.VK_W)
+			{
+				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(0));
 			}
 		}
 

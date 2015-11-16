@@ -7,24 +7,33 @@ import java.awt.image.BufferedImage;
 
 public class Item {
 
-	String name = "";
-
-	String description;
-	boolean onGround;
-	double damage;
-
-	double speed;
-	int mana;
-	int health;
-	int armor;
-
-	int magicResist;
+	//UI variables
+	String name = "";		//name of the item that is displayed in a tooltip
+	String description;		//description of the item that is displayed in a tooltip
+	String type;			//category of item; helmet, torso, arms, legs, weapon, or consumable
+	boolean onGround;		//designates whether an item is interactable and displayed on map
+	
+	//Combat Stats
+	double damage;		//damage multiplier of a weapon item; influences attack damage
+	double speed;		//speed multiplier of a weapon item; influences order of attacks in battle
+	int armor;			//armor rating of an armor item; affects physical damage resistance
+	int magicResist;	//magic resistence granted by an armor item; affects magic resist
+	
+	int healAmt = 0;	//amount that an item restores hp
+	int restAmt = 0;	//amount that an item restores sp
+	boolean statusRestore = false;  //whether an item will alleviate an ailment
+	
+	//GUI variables
 	int xPosition;
 	int yPosition;
 
 	BufferedImage itemArtwork = null;
 	
-
+	public String getName()
+	{
+		return name;
+	}
+	
 	public double getDamage()
 	{
 		return damage;
@@ -55,46 +64,43 @@ public class Item {
 		onGround = true;
 	}
 	
-	public Item(String name, String description, double damage, double speed)
+	public Item(String name, String description,  String type, double damage, double speed)
 	{
 		this.name = name;
 		this.description = description;
+		this.type = type;
 		this.damage = damage;
 		this.speed = speed;
 		this.armor = 0;
 		this.magicResist = 0;
 	}
 	
-	public Item(String name, String description, int armor, int magicResist)
+	public Item(String name, String description, String type, int armor, int magicResist)
 	{
 		this.name = name;
 		this.description = description;
+		this.type = type;
 		this.armor = armor;
 		this.magicResist = magicResist;
 		this.damage = 0;
 		this.speed = 0;
 	}
 	
-	public Item(String name, String type, int stat)
+	public Item (String name, String description, String type, int heal, int rest, boolean restore)
 	{
 		this.name = name;
-		this.onGround = false;
+		this.description = description;
 		this.type = type;
-		if(type.equals("Weapon"))
-		{
-			setDamage(stat);
-			setArmor(0);
-		}
-		else 
-			{
-				setArmor(stat);
-				setDamage(0);
-			}
+		this.healAmt = heal;
+		this.restAmt = rest;
+		this.statusRestore = restore;
 	}
+	
+	
 	
 
 	//item types
-	String type;
+	
 
 	public Item(String name, boolean onGround, String type) {
 
