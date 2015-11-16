@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class Item {
 
+
 	//UI variables
 	String name = "";		//name of the item that is displayed in a tooltip
 	String description;		//description of the item that is displayed in a tooltip
@@ -24,16 +25,18 @@ public class Item {
 	boolean statusRestore = false;  //whether an item will alleviate an ailment
 	
 	//GUI variables
+
 	int xPosition;
 	int yPosition;
 
 	BufferedImage itemArtwork = null;
 	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public double getDamage()
 	{
 		return damage;
@@ -95,8 +98,6 @@ public class Item {
 		this.restAmt = rest;
 		this.statusRestore = restore;
 	}
-	
-	
 	
 
 	//item types

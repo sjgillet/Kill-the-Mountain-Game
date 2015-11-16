@@ -19,13 +19,13 @@ public class LevelMap {
 		//g.fillRect(0, 0, mapImage.getWidth(), mapImage.getHeight());
 		for(int x = 0; x<map.length;x++){
 			for(int y = 0; y<map[0].length;y++){
-				GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].Draw((Graphics2D)g, (double)pixelWidthPerTile/32.0,true);
+				map[x][y].Draw((Graphics2D)g, (double)pixelWidthPerTile/32.0,true);
 				//g.drawImage(GamePanel.tiles[map[x][y].artX][map[x][y].artY], (x*pixelWidthPerTile), (y*pixelWidthPerTile),pixelWidthPerTile,pixelWidthPerTile, null);
 			}
 		}
 		for(int x = 0; x<map.length;x++){
 			for(int y = 0; y<map[0].length;y++){
-				GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].DrawVegetation((Graphics2D)g, (double)pixelWidthPerTile/32.0,true);
+				map[x][y].DrawVegetation((Graphics2D)g, (double)pixelWidthPerTile/32.0,true);
 				//g.drawImage(GamePanel.tiles[map[x][y].artX][map[x][y].artY], (x*pixelWidthPerTile), (y*pixelWidthPerTile),pixelWidthPerTile,pixelWidthPerTile, null);
 			}
 		}

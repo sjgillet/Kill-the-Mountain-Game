@@ -141,6 +141,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					}
 				}
 			}
+
 			
 			if (GamePanel.player.inventory.torso.isOver()) {
 				GamePanel.player.inventory.torso.isPushed();
@@ -153,7 +154,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			if (GamePanel.player.inventory.legs.isOver()) {
 				GamePanel.player.inventory.legs.isPushed();
 			}
-			
+
 		}
 
 	}
@@ -203,7 +204,6 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.currentLevel++;
 				}
 			}
-
 			if(e.getKeyCode()==KeyEvent.VK_5){
 				GamePanel.dialog.addMessage("Added a message to dialog! Does it work?"+System.currentTimeMillis());
 				if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
@@ -211,7 +211,6 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.dialog.currentIndex=0;
 				}
 			}
-
 			if(e.getKeyCode()==KeyEvent.VK_UP){
 
 				if(!GamePanel.loading){
@@ -238,6 +237,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				if(GamePanel.levels.get(GamePanel.currentLevel).weatherID < 1)
 					GamePanel.levels.get(GamePanel.currentLevel).weatherID++;
 				else GamePanel.levels.get(GamePanel.currentLevel).weatherID = -1;
+
 
 			}
 			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -315,14 +315,8 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			if(mousePressed){
 				if(GamePanel.showMap==false){
 					if (!GamePanel.paused){
-
 						GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
 						GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
-
-
-
-
-
 					}
 				}
 				else{

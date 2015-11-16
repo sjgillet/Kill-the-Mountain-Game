@@ -45,9 +45,11 @@ public class MonsterList {
 		
 		//golem
 
+
 		golem.setWeights(0.1, 0.3, 0.05, 0.5, 0.05, 0.075, 0.0, 0.2, 0.225, 0.1);
 		golem.setXP(50);
 		
+
 		allMonsters.add(golem);
 		
 		//goblin
@@ -62,7 +64,6 @@ public class MonsterList {
 		
 		//orc
 		
-
 	}
 	
 	/**
@@ -100,6 +101,15 @@ public class MonsterList {
 		System.out.println(name + " not found.");
 		return null;
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

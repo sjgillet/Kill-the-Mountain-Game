@@ -21,7 +21,6 @@ public class Player extends Entity{
 	Rectangle collisionBox;
 	int updatesInQue = 0;
 
-
 	public Item[] getEquipment()
 	{
 		Item[] items = new Item[5];
@@ -49,6 +48,7 @@ public class Player extends Entity{
 		}
 	}
 	public void setPosition(double x, double y, double speed){
+		boolean enteredADoor = false;
 		Rectangle collisionBoxAtNewXPosition = new Rectangle((int)x,(int)ypos,32,32);
 		Rectangle collisionBoxAtNewYPosition = new Rectangle((int)xpos,(int)y,32,32);
 		boolean collidedWithSomethingX = false;
@@ -60,16 +60,15 @@ public class Player extends Entity{
 						Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
 						for(int i = 0; i<temp.collisionBoxes.size();i++){
 							if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
-
+								temp.flagged=true;
 								//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 								collidedWithSomethingX = true;
 								if(temp.collisionType==2){
 									temp.currentHealth-=1;
 								}
 								else if(temp.collisionType==3){
-
+									enteredADoor=true;
 									collidedWithSomethingX = false;
-
 									temp.door.enterDoor();
 								}
 							}
@@ -94,9 +93,8 @@ public class Player extends Entity{
 									temp.currentHealth-=1;
 								}
 								else if(temp.collisionType==3){
-
+									enteredADoor=true;
 									collidedWithSomethingY = false;
-
 									temp.door.enterDoor();
 								}
 							}
@@ -108,27 +106,27 @@ public class Player extends Entity{
 				}
 			}
 		}
-		//if player is going to collide with the tile at their future position
-		if((collidedWithSomethingX==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
-			xpos = x;
+		if(!enteredADoor){
+			//if player is going to collide with the tile at their future position
+			if((collidedWithSomethingX==false||(GamePanel.godmode))&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
+				xpos = x;
+				collisionBox.x=(int)(double)((((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos));
 
-			collisionBox.x=(int)(double)((((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos));
-
-		}
-		else{
-			if(speed>1){
-				//moveTowardsDestination(1);
 			}
-		}
-		if((collidedWithSomethingY==false||GamePanel.godmode)&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
-			ypos = y;
+			else{
+				if(speed>1){
+					//moveTowardsDestination(1);
+				}
+			}
+			if((collidedWithSomethingY==false||(GamePanel.godmode))&&((!GamePanel.paused)&&(!GamePanel.inInventory))){
+				ypos = y;
+				collisionBox.y=(int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos));
 
-			collisionBox.y=(int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos));
-
-		}
-		else{
-			if(speed>1){
-				//moveTowardsDestination(1);
+			}
+			else{
+				if(speed>1){
+					//moveTowardsDestination(1);
+				}
 			}
 		}
 	}
@@ -159,12 +157,11 @@ public class Player extends Entity{
 
 	public void update(){
 
-
-		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel){
+		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel||true){
 			moveTowardsDestination(movementSpeed);
 		}
 		else{
-			updatesInQue++;
+			//updatesInQue++;
 
 		}
 

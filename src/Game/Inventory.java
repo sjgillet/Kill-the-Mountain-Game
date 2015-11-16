@@ -22,6 +22,7 @@ public class Inventory {
 	int xPosition;
 	int yPosition;
 	Item currentHeldItem = null;
+
 	
 	public ArrayList<Item> weapons;
 	public ArrayList<Item> armors;
@@ -42,7 +43,7 @@ public class Inventory {
 	public ArrayList<Item> weaponsT3; 
 	public ArrayList<Item> armorsT3;
 	public ArrayList<Item> consumablesT3;
-	
+
 
 	public Inventory(int x, int y) {
 
@@ -176,7 +177,6 @@ public class Inventory {
 				return i;	
 		return null;
 	}
-	
 
 	/*
 	 * Loops through the arrays of inventory slots and displays them
@@ -272,4 +272,3 @@ public class Inventory {
 	}
 
 }
-

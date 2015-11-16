@@ -12,7 +12,6 @@ public class Enemy extends CombatEntity{
 	*/
 	private double[] statWeights;
 	private int statTotal;
-
 	private String name;
 	private String description;
 	private double challenge;
@@ -30,18 +29,23 @@ public class Enemy extends CombatEntity{
 	{
 		this.currHP -= damage;
 		if(currHP <= 0)
+<<<<<<< HEAD
 		{
 			this.currHP = 0;
+=======
+>>>>>>> 86a2381c5b9f2c4cc094106e22e77cf7e259a79a
 			this.kill();
-		}	
-
+			
 	}
 	public void kill()
 	{
 		this.isDead = true;
+<<<<<<< HEAD
 		System.out.println(name + " died!");
 		GamePanel.player.playerCombatant.awardXP(this.getXP());
 
+=======
+>>>>>>> 86a2381c5b9f2c4cc094106e22e77cf7e259a79a
 		//TODO: Reload last save or Exit
 	}
 	
@@ -120,6 +124,7 @@ public class Enemy extends CombatEntity{
 	{
 		statTotal = GamePanel.bat.getPlayer().getStatTotal();
 
+
 		this.setAcc((int)(statTotal * statWeights[0]));			System.out.println(this.getName() + " ACC: " + this.getAcc());		//ACC	
 		this.setArmor((int)(statTotal * statWeights[1]));		System.out.println(this.getName() + " ARM: " + this.getArmor());	//ARM
 		this.setEvasion((int)(statTotal * statWeights[2]));		System.out.println(this.getName() + " EVA: " + this.getEvasion());	//EVA
@@ -130,7 +135,6 @@ public class Enemy extends CombatEntity{
 		this.setMagicRes((int)(statTotal * statWeights[7]));	System.out.println(this.getName() + " MRE: " + this.getMagicRes());	//MRE
 		this.setStrength((int)(statTotal * statWeights[8]));	System.out.println(this.getName() + " STR: " + this.getStrength());	//STR
 		this.setSP((int)(statTotal * statWeights[9]));			System.out.println(this.getName() + " SP: " + this.getSP());		//SP
-
 		
 		this.setCurrHP(this.getHP());	System.out.println(this.getName() + "CURHP: " + this.getCurrHP());//set hp to max on creation
 		this.setCurrSP(this.getSP());	System.out.println(this.getName() + "CURRSP: " + this.getCurrSP());//set sp to max on creation

@@ -13,13 +13,14 @@ public class ApplicationUI extends JFrame{
 	public Controller ctrl;
 	public static int windowWidth = 800;
 	public static int windowHeight = 600;
-	private int gameFPS = 60;
+	private int gameFPS = 200;
 	private long beginTime;
-	private long updatePeriod = 1000000000L/60;
+	private long updatePeriod = 1000000000L/gameFPS;
+	JPanel drawPanel;
 	public ApplicationUI(){
 		Container pane = getContentPane();
 		pane.setLayout(new BorderLayout());
-		JPanel drawPanel = new GamePanel(this);
+		drawPanel = new GamePanel(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		drawPanel.setBackground(Color.BLACK);
 		ctrl = new Controller();
@@ -63,8 +64,8 @@ public class ApplicationUI extends JFrame{
 	public void gameLoop(){
 		//GamePanel.createLevel();
 		while(true){
-			windowWidth = getWidth();
-			windowHeight = getHeight();
+			windowWidth = drawPanel.getWidth();
+			windowHeight = drawPanel.getHeight();
 			beginTime=System.nanoTime();
 			//check keys
 			Controller.checkKeys();

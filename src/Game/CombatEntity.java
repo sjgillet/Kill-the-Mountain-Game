@@ -36,7 +36,9 @@ public class CombatEntity {
 	protected double magDR;   //magical damage resistance; based on MRe
 	protected int totalArmor; //total armor; includes all armor items and natural
 
+
 	protected int totalMRE;	  //total magic resist; includes all items and natural
+
 
 	
 	/*Encounter Stats*/
@@ -142,10 +144,12 @@ public class CombatEntity {
 		return this.magDamage;
 	}
 	
+
 	public boolean isDead()
 	{
 		return isDead;
 	}
+
 
 	public int getStatTotal()
 	{
