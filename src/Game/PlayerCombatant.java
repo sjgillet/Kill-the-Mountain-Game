@@ -37,12 +37,7 @@ public class PlayerCombatant extends CombatEntity{
 	{
 		this.currHP -= damage;
 		if(currHP <= 0)
-
-		{
-			currHP = 0;
 			this.kill();
-		}
-
 			
 	}
 	public void kill()
@@ -437,40 +432,5 @@ public class PlayerCombatant extends CombatEntity{
 		}
 		updateStats();		
 	}
-	
-
-	public void updateStats()
-	{
-		Inventory inv = GamePanel.player.inventory;
-		
-		double wpn = inv.weapon.item.getDamage();
-		physDamage = (int)(Math.floor(str + (1/4)*acc)*wpn);	System.out.println(this.getName() + "'s Damage: " + physDamage);
-		magDamage = mag + (1/4)*intel;
-		
-		int totalArmor = getArmor();
-		int totalMR = getMagicRes();
-		if(inv.head != null)
-		{
-			totalArmor += inv.head.item.getArmor();
-			totalMR += inv.head.item.getMagicResist();
-		}
-		if(inv.torso != null)
-		{
-			totalArmor += inv.torso.item.getArmor();
-			totalMR += inv.torso.item.getMagicResist();
-		}
-		if(inv.legs != null)
-		{	
-			totalArmor += inv.legs.item.getArmor();
-			totalMR += inv.legs.item.getMagicResist();
-		}
-		if(inv.arms != null)
-		{
-			totalArmor += inv.arms.item.getArmor();
-			totalMR += inv.arms.item.getArmor();
-		}		
-		physDR = 100/(100 + totalArmor);			System.out.println(this.getName() + "'s DR: " + physDR);
-		magDR = 100/(100 + totalMR);
-	}	
 	
 }

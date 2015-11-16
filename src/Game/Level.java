@@ -49,7 +49,7 @@ public class Level {
 	int canyonMaxSteepness;
 	int canyonMinSteepness;
 	LevelMap map;
-	BufferedImage[][] tilesRankedByElevation = new BufferedImage[50][14];
+
 
 	boolean drawingLevel = false;
 
@@ -62,7 +62,6 @@ public class Level {
 	//weather variables
 	double windDirection = -100;//X distance from center of screen
 	int weatherID = -1;//-1 none, 0 rain, 1 ash,
-
 	Color fogColor = new Color(20,20,80,0);
 	double fogAlpha = 0;
 
@@ -80,9 +79,9 @@ public class Level {
 		tileMap = new Tile[width][height];
 		if(name.equals("Test")){
 			seed = 138;
-
 			width = 300;
 			height = 300;
+
 
 			minNumberOfMountains = ((width+height)/2)/80;
 			maxNumberOfMountains = ((width+height)/2)/80;
@@ -139,9 +138,13 @@ public class Level {
 			width = 40;
 			height = 25;
 		}
+		else if(name.equals("Noob Hut")){
+			seed = 333;
+			width = 40;
+			height = 30;
+		}
 		random = new Random(seed);
 		System.out.println("generating map");
-
 
 
 		//load the map
@@ -149,7 +152,6 @@ public class Level {
 		System.out.println(name+" did not exist, generating "+name);
 		//generate the map because the level did not have an existing file to represent it
 		generateMap();
-
 		//}
 		System.out.println("adding vegetation");
 
@@ -168,7 +170,9 @@ public class Level {
 		monstersList = new MonsterList();
 		System.out.println("Monsters Catologued!");
 
-		GamePanel.loading=false;
+		//GamePanel.loading=false;
+		updateTileMapArt();
+		map = new LevelMap(tileMap);
 		saveLevel(name);
 	}
 	/*
@@ -178,7 +182,7 @@ public class Level {
 		for(int i = 0; i<50;i++){
 			for(int j = 0; j<14;j++){
 				//initialize the tile
-				tilesRankedByElevation[i][j] = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
+				GamePanel.tilesRankedByElevation[i][j] = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
 				//color the lower elevation part of the tile
 				BufferedImage lowerElevationSection = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
 				BufferedImage upperElevationSection = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
@@ -214,7 +218,7 @@ public class Level {
 				cracks = FileIO.colorImage(cracks, clr);
 
 				//actual tile image
-				g = tilesRankedByElevation[i][j].getGraphics();
+				g = GamePanel.tilesRankedByElevation[i][j].getGraphics();
 				g.drawImage(lowerElevationSection,0,0,null);
 				g.drawImage(upperElevationSection,0,0,null);
 				g.drawImage(rocks,0,0,null);
@@ -232,7 +236,7 @@ public class Level {
 		for(int x = 0; x<width; x++){
 			for(int y = 0; y<height; y++){
 				if(tileMap[x][y]!=null){
-					tileMap[x][y].updateArt();
+					tileMap[x][y].updateArt(waterlevel);
 				}
 			}
 		}
@@ -305,10 +309,13 @@ public class Level {
 		for(int x = 0; x<width;x++){
 			for(int y = 0; y<height; y++){
 				if(name.equals("Dungeon")){
-					tileMap[x][y]=new Tile(x,y,7,10);//everything is abyss
+					tileMap[x][y]=new Tile(x,y,7,10,tileMap);//everything is abyss
+				}
+				else if(name.equals("Noob Hut")){
+					tileMap[x][y]=new Tile(x,y,8,10,tileMap);
 				}
 				else{
-					tileMap[x][y]=new Tile(x,y,0,1);//everything is grass
+					tileMap[x][y]=new Tile(x,y,0,1,tileMap);//everything is grass
 				}
 
 			}
@@ -413,7 +420,7 @@ public class Level {
 				Room temp = rooms.get(i);
 				for(int x = temp.area.x;x<temp.area.x+temp.area.width;x++){
 					for(int y = temp.area.y;y<temp.area.y+temp.area.height;y++){
-						tileMap[x][y]=new Tile(x,y,8,9);
+						tileMap[x][y]=new Tile(x,y,8,9,tileMap);
 					}
 				}
 				for(int j = 0; j<rooms.get(i).hallways.size();j++){
@@ -433,7 +440,7 @@ public class Level {
 				Hallway temp = hallways.get(i);
 				for(int x = temp.area.x;x<temp.area.x+temp.area.width;x++){
 					for(int y = temp.area.y;y<temp.area.y+temp.area.height;y++){
-						tileMap[x][y]=new Tile(x,y,8,9);
+						tileMap[x][y]=new Tile(x,y,8,9,tileMap);
 					}
 				}
 				if(temp.area.width<temp.area.height&&temp.area.height>5){//hallway is vertical
@@ -443,11 +450,11 @@ public class Level {
 						int randY = randomNumberForLevelGeneration(temp.area.y,temp.area.y+temp.area.height);
 						//set all the tiles to be brick at randY inside the hallway
 						for(int x = temp.area.x;x<temp.area.x+temp.area.width;x++){
-							tileMap[x][randY]=new Tile(x,randY,9,9);
+							tileMap[x][randY]=new Tile(x,randY,9,9,tileMap);
 						}
 						//set one of the tiles to be a floor tile with a door at randY
 						int randX = randomNumberForLevelGeneration(temp.area.x+1,temp.area.x+temp.area.width-2);
-						tileMap[randX][randY]=new Tile(randX,randY,8,9);
+						tileMap[randX][randY]=new Tile(randX,randY,8,9,tileMap);
 						tileMap[randX][randY].vegetationID=4;
 						//tileMap[randX][randY].flagged=true;
 					}
@@ -482,6 +489,15 @@ public class Level {
 			setElevationEdges(9,3);
 			removeAnySectionsOfCliffThatAreConnectedToCliffButTooSmallToWalkOn(9);
 		}
+		else if(name.equals("Noob Hut")){
+			for(int x = 0;x<width;x++){
+				for(int y = 0; y<height;y++){
+					if(x==0||y==0||x==width-1||y==height-1){
+						tileMap[x][y]=new Tile(x,y,9,11,tileMap);
+					}
+				}
+			}
+		}
 		else{
 			int numberOfMountains = randomNumberForLevelGeneration(minNumberOfMountains,maxNumberOfMountains);
 			//create mountains
@@ -508,9 +524,7 @@ public class Level {
 					//create a plateau at the elevation determined by f
 					//generatePlateauOrCanyon(f,mountainBaseSize/(f*steepness),true,tilesAtDesiredElevation);
 					generatePlateauOrCanyon(f,(int)((double)(mountainBaseSize*Math.pow(steepness, f))),true,tilesAtDesiredElevation);
-
 					GamePanel.drawLoadingMessage("Adding plateau's to overworld: "+(int)(total/(double)(mountainHeight*numberOfMountains)*100)+"%", true);
-
 				}			
 				//System.out.println("creating layer with base size: "+(mountainBaseSize/Math.pow(steepness, f))+", base of mountain is size: "+mountainBaseSize+", f = "+f);
 				//create the plateau edges
@@ -599,7 +613,6 @@ public class Level {
 
 				GamePanel.drawLoadingMessage("Generating Plateau's for the mountain... Progress: "+(int)(double)(((double)i/(double)volcanoHeight)*100.0)+"%",true);
 
-
 				generatePlateauOrCanyon(i,sizeOfThisLayer,true,volcanoTiles);
 				setElevationEdges(i+1,3);
 				//remove all weird outcrops that we don't have textures for
@@ -684,7 +697,7 @@ public class Level {
 				//					System.out.println("got here!----------");
 				//					newTileID=4;
 				//				}
-				tileMap[randomTile.xpos/32][randomTile.ypos/32] = new Tile(randomTile.xpos/32,randomTile.ypos/32,newTileID,buildElevation+elevationChange);
+				tileMap[randomTile.xpos/32][randomTile.ypos/32] = new Tile(randomTile.xpos/32,randomTile.ypos/32,newTileID,buildElevation+elevationChange,tileMap);
 				//System.out.println("1");
 				tilesAdded.add(randomTile);
 				int tries = 0;
@@ -710,7 +723,7 @@ public class Level {
 						if(randTile.tileID==0&&randTile.elevation==buildElevation){
 							//System.out.println("created a tile! "+tilesAtThisElevation.size()+","+tilesAdded.size());
 							//set the tile at this position to be a placeholder tile
-							tileMap[randTile.xpos/32][randTile.ypos/32]=new Tile(randTile.xpos/32,randTile.ypos/32,newTileID,buildElevation+elevationChange);
+							tileMap[randTile.xpos/32][randTile.ypos/32]=new Tile(randTile.xpos/32,randTile.ypos/32,newTileID,buildElevation+elevationChange,tileMap);
 							tileMap[randTile.xpos/32][randTile.ypos/32].oldElevation=buildElevation;
 							tilesAdded.add(tileMap[randTile.xpos/32][randTile.ypos/32]);
 							tilesAtThisElevation.remove(randTile);
@@ -742,7 +755,7 @@ public class Level {
 								}
 							}
 							if(tilesAtThisElevation.size()>0){
-								tileMap[randomTile.xpos/32][randomTile.ypos/32] = new Tile(randomTile.xpos/32,randomTile.ypos/32,0,buildElevation+elevationChange);
+								tileMap[randomTile.xpos/32][randomTile.ypos/32] = new Tile(randomTile.xpos/32,randomTile.ypos/32,0,buildElevation+elevationChange,tileMap);
 								//System.out.println("1");
 								tilesAdded.add(randomTile);
 								tilesAtThisElevation.remove(index);
@@ -817,35 +830,33 @@ public class Level {
 		//create top part of the roof
 		for(int x = startX; x<=endX;x++){
 			for(int y = startY; y<=startY+(roofHeight/3);y++){				
-				tileMap[x][y]= new Tile(x,y,4,elev+1);
+				tileMap[x][y]= new Tile(x,y,4,elev+1,tileMap);
 			}
 		}
 		//create the bottom part of the roof
 		for(int x = startX; x<=endX;x++){
 			for(int y = startY+(roofHeight/3);y<startY+roofHeight;y++){
-				tileMap[x][y]= new Tile(x,y,5,elev+1);
+				tileMap[x][y]= new Tile(x,y,5,elev+1,tileMap);
 				tileMap[x][y].flagged=true;
 			}
 		}
 		//create the walls
 		for(int x = startX; x<=endX;x++){
 			for(int y = startY+roofHeight;y<endY;y++){
-				tileMap[x][y]=new Tile(x,y,6,elev+1);
+				tileMap[x][y]=new Tile(x,y,6,elev+1,tileMap);
 			}
 		}
 
 		//add a door
 		int doorX = randomNumberForLevelGeneration(startX+1,endX-3);
-		Level theInsideOfThisHouse = new Level("id");
-		theInsideOfThisHouse.width = w*2;
-		theInsideOfThisHouse.height = h*2;
+		Level theInsideOfThisHouse = new Level(id);
+		theInsideOfThisHouse.updateTileMapArt();
+		theInsideOfThisHouse.map=new LevelMap(theInsideOfThisHouse.tileMap);
+		Door door = new Door(doorX, startY+roofHeight, theInsideOfThisHouse, 1, 5, 5);
 		houseLevels.add(theInsideOfThisHouse);
-		Door door = new Door(doorX, startY+roofHeight, theInsideOfThisHouse, 1, doorX*2, theInsideOfThisHouse.height-2);
-
-		//GamePanel.levels.add(theInsideOfThisHouse);
 		for(int x = doorX; x<doorX+3; x++){
 			for(int y = startY+roofHeight;y<endY;y++){
-				tileMap[x][y]= new Tile(x,y,10,elev+1);
+				tileMap[x][y]= new Tile(x,y,10,elev+1,tileMap);
 				tileMap[x][y].door = door;
 			}
 		}
@@ -855,8 +866,8 @@ public class Level {
 			while(tileMap[randX][startY+roofHeight].tileID!=6){
 				randX = randomNumberForLevelGeneration(startX+1,endX-1);
 			}
-			tileMap[randX][startY+roofHeight]=new Tile(randX,startY+roofHeight,11,elev+1);
-			tileMap[randX][startY+roofHeight+1]=new Tile(randX,startY+roofHeight+1,11,elev+1);
+			tileMap[randX][startY+roofHeight]=new Tile(randX,startY+roofHeight,11,elev+1,tileMap);
+			tileMap[randX][startY+roofHeight+1]=new Tile(randX,startY+roofHeight+1,11,elev+1,tileMap);
 		}
 
 		return true;
@@ -938,7 +949,7 @@ public class Level {
 					if(isEdge){
 						boolean wasFlagged = tileMap[x][y].flagged;
 						int oldElev = tileMap[x][y].oldElevation;
-						tileMap[x][y]= new Tile(x,y,id,elev);
+						tileMap[x][y]= new Tile(x,y,id,elev,tileMap);
 						tileMap[x][y].oldElevation=oldElev;
 						tileMap[x][y].flagged=wasFlagged;
 					}
@@ -1006,7 +1017,7 @@ public class Level {
 
 				int oldElev = tileMap[position.x][position.y].oldElevation;
 				//set this section to be grass
-				tileMap[position.x][position.y]=new Tile(position.x,position.y,0,oldElev);
+				tileMap[position.x][position.y]=new Tile(position.x,position.y,0,oldElev,tileMap);
 				//tileMap[position.x][position.y].flagged=true;
 				//call this method on the connected cliff sections
 				for(int i = 0; i<cliffTiles.size();i++){
@@ -1113,7 +1124,7 @@ public class Level {
 									}
 								}
 								//System.out.println("values: "+values);
-								tileMap[y][x]=new Tile(y,x,Integer.valueOf(values.get(0)),Integer.valueOf(values.get(1)));
+								tileMap[y][x]=new Tile(y,x,Integer.valueOf(values.get(0)),Integer.valueOf(values.get(1)),tileMap);
 								break;
 							}
 						}
@@ -1252,18 +1263,18 @@ public class Level {
 			//overworld = new Tile[width][height];
 			for(int x = 0; x<width;x++){
 				for(int y = 0; y<height; y++){
-					hardMap[x][y]=new Tile(x,y,7,2); //base tile is heavy dirt
+					hardMap[x][y]=new Tile(x,y,7,2,tileMap); //base tile is heavy dirt
 				}
 			}
 			for(int x = 0; x < width; x++)			//wall in with stone wall
 			{
-				hardMap[x][0] = new Tile(x,0,1,0);
-				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0);
+				hardMap[x][0] = new Tile(x,0,1,0,tileMap);
+				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0,tileMap);
 			}
 			for(int y = 0; y < height - 1; y++)
 			{
-				hardMap[0][y] = new Tile(0,y,1,1);
-				hardMap[width - 1][y] = new Tile(width - 1,y,1,1);
+				hardMap[0][y] = new Tile(0,y,1,1,tileMap);
+				hardMap[width - 1][y] = new Tile(width - 1,y,1,1,tileMap);
 			}
 			break;
 
@@ -1272,19 +1283,19 @@ public class Level {
 			//bossA = new Tile[width][height];
 			for(int x = 0; x<width;x++){
 				for(int y = 0; y<height; y++){
-					hardMap[x][y]=new Tile(x,y,6,0); //base tile grass
+					hardMap[x][y]=new Tile(x,y,6,0,tileMap); //base tile grass
 				}
 			}
 			addTallGrass(hardMap);
 			for(int x = 0; x < width; x++)			//wall in with tree cover
 			{
-				hardMap[x][0] = new Tile(x,0,8,1);
-				hardMap[x][height - 1] = new Tile(x, height - 1, 8, 1);
+				hardMap[x][0] = new Tile(x,0,8,1,tileMap);
+				hardMap[x][height - 1] = new Tile(x, height - 1, 8, 1,tileMap);
 			}
 			for(int y = 0; y < height - 1; y++)
 			{
-				hardMap[0][y] = new Tile(0,y,8,2);
-				hardMap[width - 1][y] = new Tile(width - 1,y,8,2);
+				hardMap[0][y] = new Tile(0,y,8,2,tileMap);
+				hardMap[width - 1][y] = new Tile(width - 1,y,8,2,tileMap);
 			}
 
 			break;
@@ -1294,18 +1305,18 @@ public class Level {
 			//bossB = new Tile[width][height];
 			for(int x = 0; x<width;x++){
 				for(int y = 0; y<height; y++){
-					hardMap[x][y]=new Tile(x,y,0,1); //base tile is heavy dirt
+					hardMap[x][y]=new Tile(x,y,0,1,tileMap); //base tile is heavy dirt
 				}
 			}
 			for(int x = 0; x < width; x++)			//wall in with stone wall
 			{
-				hardMap[x][0] = new Tile(x,0,1,0);
-				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0);
+				hardMap[x][0] = new Tile(x,0,1,0,tileMap);
+				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0,tileMap);
 			}
 			for(int y = 0; y < height - 1; y++)
 			{
-				hardMap[0][y] = new Tile(0,y,1,1);
-				hardMap[width - 1][y] = new Tile(width - 1,y,1,1);
+				hardMap[0][y] = new Tile(0,y,1,1,tileMap);
+				hardMap[width - 1][y] = new Tile(width - 1,y,1,1,tileMap);
 			}
 			break;
 
@@ -1314,18 +1325,18 @@ public class Level {
 			//bossC = new Tile[width][height];
 			for(int x = 0; x<width;x++){
 				for(int y = 0; y<height; y++){
-					hardMap[x][y]=new Tile(x,y,0,1); //base tile is heavy dirt
+					hardMap[x][y]=new Tile(x,y,0,1,tileMap); //base tile is heavy dirt
 				}
 			}
 			for(int x = 0; x < width; x++)
 			{
-				hardMap[x][0] = new Tile(x,0,1,0);
-				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0);
+				hardMap[x][0] = new Tile(x,0,1,0,tileMap);
+				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0,tileMap);
 			}
 			for(int y = 0; y < height - 1; y++)
 			{
-				hardMap[0][y] = new Tile(0,y,1,1);
-				hardMap[width - 1][y] = new Tile(width - 1,y,1,1);
+				hardMap[0][y] = new Tile(0,y,1,1,tileMap);
+				hardMap[width - 1][y] = new Tile(width - 1,y,1,1,tileMap);
 			}
 			break;
 
@@ -1334,18 +1345,18 @@ public class Level {
 			//safeRoom = new Tile[width][height];
 			for(int x = 0; x<width;x++){
 				for(int y = 0; y<height; y++){
-					hardMap[x][y]=new Tile(x,y,0,1); //base tile is heavy dirt
+					hardMap[x][y]=new Tile(x,y,0,1,tileMap); //base tile is heavy dirt
 				}
 			}
 			for(int x = 0; x < width; x++)
 			{
-				hardMap[x][0] = new Tile(x,0,1,0);
-				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0);
+				hardMap[x][0] = new Tile(x,0,1,0,tileMap);
+				hardMap[x][height - 1] = new Tile(x, height - 1, 1, 0,tileMap);
 			}
 			for(int y = 0; y < height - 1; y++)
 			{
-				hardMap[0][y] = new Tile(0,y,1,1);
-				hardMap[width - 1][y] = new Tile(width - 1,y,1,1);
+				hardMap[0][y] = new Tile(0,y,1,1,tileMap);
+				hardMap[width - 1][y] = new Tile(width - 1,y,1,1,tileMap);
 			}
 			break;		
 		}
@@ -1476,9 +1487,7 @@ public class Level {
 			for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
 				if(weatherID != -1)
 				{
-
 					if(randomNumber(1,2500/(int)(fogAlpha+1))==1){
-
 						//add weather particle
 						int tempX = (x*32)+randomNumber(0,31);
 						int tempY = (y*32)+randomNumber(0,31);
@@ -1506,7 +1515,6 @@ public class Level {
 			overlayTilesToDraw.get(i).DrawVegetation(g, 1.0, false);
 		}
 		//draw weather
-
 		if(weatherID==0){
 			if(fogAlpha<50){
 				fogAlpha+=.05;
@@ -1523,7 +1531,6 @@ public class Level {
 				}
 			}
 		}
-
 		for(int i = 0; i<weather.size();i++){
 			weather.get(i).update();
 			weather.get(i).Draw(g);

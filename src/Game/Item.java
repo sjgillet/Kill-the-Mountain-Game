@@ -8,91 +8,16 @@ import java.awt.image.BufferedImage;
 public class Item {
 
 	String name = "";
-
-	String description;
 	boolean onGround;
-	double damage;
-
+	int attack;
 	double speed;
 	int mana;
 	int health;
 	int armor;
-
-	int magicResist;
-
 	int xID;
 	int yID;
 	BufferedImage itemArtwork = null;
 	
-
-	public double getDamage()
-	{
-		return damage;
-	}
-	public void setDamage(double dmg)
-	{
-		damage = dmg;
-	}
-	public int getArmor()
-	{
-		return armor;
-	}
-	public void setArmor(int newArm)
-	{
-		armor = newArm;
-	}
-	public int getMagicResist()
-	{
-		return this.magicResist;
-	}
-	public void setMagicResist(int mre)
-	{
-		magicResist = mre;
-	}
-	
-	public void drop()
-	{
-		onGround = true;
-	}
-	
-	public Item(String name, String description, double damage, double speed)
-	{
-		this.name = name;
-		this.description = description;
-		this.damage = damage;
-		this.speed = speed;
-		this.armor = 0;
-		this.magicResist = 0;
-	}
-	
-	public Item(String name, String description, int armor, int magicResist)
-	{
-		this.name = name;
-		this.description = description;
-		this.armor = armor;
-		this.magicResist = magicResist;
-		this.damage = 0;
-		this.speed = 0;
-	}
-	
-	public Item(String name, String type, int stat)
-	{
-		this.name = name;
-		this.onGround = false;
-		this.type = type;
-		if(type.equals("Weapon"))
-		{
-			setDamage(stat);
-			setArmor(0);
-		}
-		else 
-			{
-				setArmor(stat);
-				setDamage(0);
-			}
-	}
-	
-
 	//item types
 	String type;
 

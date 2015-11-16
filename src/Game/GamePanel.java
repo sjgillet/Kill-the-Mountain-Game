@@ -24,6 +24,7 @@ public class GamePanel extends JPanel{
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
 	public static BufferedImage monsterImage = FileIO.loadImage("/Textures/Monster.png");
 	public static BufferedImage inventorySlotImage = FileIO.loadImage("/Textures/InventorySlot.png");
+	static BufferedImage[][] tilesRankedByElevation = new BufferedImage[50][14];
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static Menu menu = new Menu();
@@ -62,25 +63,24 @@ public class GamePanel extends JPanel{
 	public static void createLevel(){
 		atTitleScreen = false;
 		loading = true;
-
 		drawLoadingMessage("Generating overworld...",true);
 		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		Level testLevel = new Level("Test");
 		levels.add(testLevel);
-		drawLoadingMessage("Aligning Tiles...",true);
-		testLevel.updateTileMapArt();
-		drawLoadingMessage("Creating world map...",true);
 		//create the map
-		testLevel.map = new LevelMap(testLevel.tileMap);
 		drawLoadingMessage("Generating the dungeon...",true);
 		currentLevel++;
 		Level dungeon = new Level("Dungeon");
 		levels.add(dungeon);
-		drawLoadingMessage("Aligning Tiles...",true);
-		dungeon.updateTileMapArt();
-		drawLoadingMessage("Creating map of the dungeon...",true);
 
-		dungeon.map = new LevelMap(dungeon.tileMap);
+		//loop through all levels
+		for(int i = 0; i<levels.size();i++){
+			for(int j = 0;  j<levels.get(i).houseLevels.size();j++){
+				currentLevel++;
+				levels.add(levels.get(i).houseLevels.get(j));
+				
+			}
+		}
 //		//forest
 //		currentLevel++;
 //		Level forest = new Level("Forest");
@@ -90,16 +90,13 @@ public class GamePanel extends JPanel{
 //		System.out.println("Creating map of the forest...");
 //		forest.map = new LevelMap(forest.tileMap);
 		currentLevel=0;
-
 		System.out.println("Finished!");
-
 		loading = false;
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Draw((Graphics2D)g);
 	}
-
 	public static void drawLoadingMessage(String msg, boolean clearLoadingMessages){
 		loading = true;
 		if(clearLoadingMessages){
@@ -116,7 +113,7 @@ public class GamePanel extends JPanel{
 				return;
 			}
 		}
-		System.out.println("failed to set level");
+		System.out.println("failed to set level, lvl name was: "+lvl.name);
 	}
 	public void Draw(Graphics2D g){
 		
@@ -173,7 +170,7 @@ public class GamePanel extends JPanel{
 					g.fillRect(0, 0, widthOfMiniMap+2, widthOfMiniMap+2);
 					g.setColor(Color.black);
 					g.fillRect(1, 1, widthOfMiniMap, widthOfMiniMap);
-					if(w>0&&h>0){
+					if(w>0&&h>0&&w<temp.mapImage.getWidth()&&h<temp.mapImage.getHeight()){
 						BufferedImage tempImg = temp.mapImage.getSubimage(x, y, w, h);
 						g.drawImage(tempImg,1+drawX,1+drawY,w/(temp.pixelWidthPerTile/tileSize),h/(temp.pixelWidthPerTile/tileSize),null);
 					}
@@ -224,9 +221,7 @@ public class GamePanel extends JPanel{
 				player.inventory.drawInventory(g);
 				
 			}
-
 			dialog.Draw(g);
-
 			
 		}
 	}

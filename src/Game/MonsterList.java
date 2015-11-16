@@ -42,26 +42,17 @@ public class MonsterList {
 		this.weights = new ArrayList<Double[]>();
 		
 		//golem
-
-		golem.setWeights(0.1, 0.3, 0.05, 0.5, 0.05, 0.075, 0.0, 0.2, 0.225, 0.1);	
-		golem.setWeapon(new Item("Natural Weapon", "Weapon", 15));
-		golem.setXP(50);
-
+		golem.setWeights(0.1, 0.3, 0.05, 0.5, 0.05, 0.075, 0.0, 0.2, 0.225, 0.1);		
 		allMonsters.add(golem);
 		
 		//goblin
 		goblin.setWeights(0.15, 0.08, 0.12, 0.2, 0.075, 0.125, 0.0, 0.05, 0.05, 0.05);
-
-		goblin.setWeapon(new Item("Rusty Spear", "Weapon", 5));
-		goblin.setXP(10);
-
 		allMonsters.add(goblin);
 		
 		//kobold
 		
 		//orc
 		
-
 	}
 	
 	/**
@@ -99,6 +90,15 @@ public class MonsterList {
 		System.out.println(name + " not found.");
 		return null;
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
