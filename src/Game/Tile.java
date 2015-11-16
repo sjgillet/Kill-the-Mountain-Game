@@ -28,7 +28,9 @@ public class Tile {
 	double currentHealth = -1;
 	Door door;
 	ArrayList<Rectangle> collisionBoxes = new ArrayList<Rectangle>();
+	ArrayList<Item> itemsOnThisTile = new ArrayList<Item>();
 	Tile[][] tileMap;
+	
 	public Tile(int x, int y, int id, int elev, Tile[][] tMap){
 		tileMap = tMap;
 		xpos = x*32;
@@ -821,10 +823,16 @@ public class Tile {
 		if(vegetationID==5){//blood
 			g.drawImage(vegetationImage,x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
 		}
-		if(flagged){
+		for (int i = 0; i<itemsOnThisTile.size(); i++){
+			System.out.println("called draw method");
+			itemsOnThisTile.get(i).draw(g);
+		}
+		
+		//flags where items are placed in the dungeon and elsewhere
+		if(flagged||itemsOnThisTile.size()>0){
 			g.setColor(flagColor);
 			g.fillRect(x,y, 32, 32);
-			//flagged = false;
+			flagged = false;
 		}
 		Tile northernTile = getNorthTile();
 		if(northernTile!=null&&northernTile.artX==4&&northernTile.artY==1){

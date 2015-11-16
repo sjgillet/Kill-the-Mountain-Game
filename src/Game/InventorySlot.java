@@ -13,6 +13,7 @@ public class InventorySlot {
 	int width = 50;
 	int height = 50;
 	boolean holdingItem = false;
+	
 
 
 	public InventorySlot(int x, int y, Item i) {
@@ -45,6 +46,7 @@ public class InventorySlot {
 			item = GamePanel.player.inventory.currentHeldItem;
 			GamePanel.player.inventory.currentHeldItem = oldItem;
 			holdingItem = false;
+			
 		}
 		//holding item , nothing in slot (placing into empty slot)
 		else if (GamePanel.player.inventory.currentHeldItem!=null&&item==null){

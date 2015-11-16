@@ -46,6 +46,8 @@ public class GamePanel extends JPanel{
 	public GamePanel(JFrame frame){
 		jframe = frame;
 		random = new Random();
+		player.playerCombatant = new PlayerCombatant(player.race.BEAR, player.cls.TANK);
+		player.playerCombatant.updateStats();
 	}
 	public static int randomNumber(int min, int max){
 		if(min>max){
@@ -62,6 +64,7 @@ public class GamePanel extends JPanel{
 	}
 	public static void createLevel(){
 		atTitleScreen = false;
+		menu.currentMenu = menu.pauseMain;
 		loading = true;
 		drawLoadingMessage("Generating overworld...",true);
 		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);

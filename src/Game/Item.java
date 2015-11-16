@@ -8,16 +8,91 @@ import java.awt.image.BufferedImage;
 public class Item {
 
 	String name = "";
+
+	String description;
 	boolean onGround;
-	int attack;
+	double damage;
+
 	double speed;
 	int mana;
 	int health;
 	int armor;
-	int xID;
-	int yID;
+
+	int magicResist;
+	int xPosition;
+	int yPosition;
+
 	BufferedImage itemArtwork = null;
 	
+
+	public double getDamage()
+	{
+		return damage;
+	}
+	public void setDamage(double dmg)
+	{
+		damage = dmg;
+	}
+	public int getArmor()
+	{
+		return armor;
+	}
+	public void setArmor(int newArm)
+	{
+		armor = newArm;
+	}
+	public int getMagicResist()
+	{
+		return this.magicResist;
+	}
+	public void setMagicResist(int mre)
+	{
+		magicResist = mre;
+	}
+	
+	public void drop()
+	{
+		onGround = true;
+	}
+	
+	public Item(String name, String description, double damage, double speed)
+	{
+		this.name = name;
+		this.description = description;
+		this.damage = damage;
+		this.speed = speed;
+		this.armor = 0;
+		this.magicResist = 0;
+	}
+	
+	public Item(String name, String description, int armor, int magicResist)
+	{
+		this.name = name;
+		this.description = description;
+		this.armor = armor;
+		this.magicResist = magicResist;
+		this.damage = 0;
+		this.speed = 0;
+	}
+	
+	public Item(String name, String type, int stat)
+	{
+		this.name = name;
+		this.onGround = false;
+		this.type = type;
+		if(type.equals("Weapon"))
+		{
+			setDamage(stat);
+			setArmor(0);
+		}
+		else 
+			{
+				setArmor(stat);
+				setDamage(0);
+			}
+	}
+	
+
 	//item types
 	String type;
 
@@ -37,6 +112,15 @@ public class Item {
 
 	}
 
+	public void draw(Graphics2D g) {
+		
+		if (onGround) {
+			System.out.println("Drawing item on tile " );
+			g.drawImage(itemArtwork,(int)((ApplicationUI.windowWidth/2)-16)+xPosition+6-(int)GamePanel.player.xpos,(int)((ApplicationUI.windowHeight/2)-16)+yPosition+6-(int)GamePanel.player.ypos,20,20,null);
+		}
+		
+	}
+	
 	/*
 	 * Draw method for the info box when hovering over an inventorySlot
 	 * 

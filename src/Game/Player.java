@@ -10,8 +10,9 @@ import java.awt.Rectangle;
 public class Player extends Entity{
 
 	PlayerCombatant.playerRace race; PlayerCombatant.combatClass cls;
-	PlayerCombatant playerCombatant = new PlayerCombatant(race.BEAR, cls.TANK);
 	Inventory inventory = new Inventory(0,0);
+	PlayerCombatant playerCombatant = null;
+
 
 	Point destination = new Point(0,0);
 	double angleInRadians;
@@ -19,6 +20,16 @@ public class Player extends Entity{
 	double movementSpeed = 6;
 	Rectangle collisionBox;
 	int updatesInQue = 0;
+
+	public Item[] getEquipment()
+	{
+		Item[] items = new Item[5];
+		for(int i = 0; i < inventory.equipped.length; i++)
+			if(inventory.equipped[i] != null)
+				items[i] = inventory.equipped[i].item;
+		return items;
+	}
+
 	public Player(int x, int y){
 		this.xpos = x;
 		this.ypos = y;
