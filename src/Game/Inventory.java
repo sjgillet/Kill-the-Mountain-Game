@@ -35,21 +35,21 @@ public class Inventory {
 
 		for (int i = 0; i < equipped.length; i++) {
 
-			equipped[i] = new InventorySlot(i*50, 250, null);
+			equipped[i] = new InventorySlot(i*50, 250, null, null);
 		}
 
 		main = new InventorySlot[10][3];
 		for (int i = 0; i<main.length; i++) {
 			for (int j = 0; j<main[i].length; j++) {
-				main[i][j] = new InventorySlot(i*50,j*50,null);
+				main[i][j] = new InventorySlot(i*50,j*50,null,null);
 			}
 		}
 
-		main[1][1].item = new Item("test2", false, "whatever");
-		head = new InventorySlot(0, 0, new Item("sword", false, "physical"));
-		torso = new InventorySlot(0, 0, null);
-		arms = new InventorySlot(0, 0, null);
-		legs = new InventorySlot(0, 0, null);
+		main[1][1].item = new Item("test2", false, "test2");
+		head = new InventorySlot(0, 0, new Item("sword", false, "helmet"), "helmet");
+		torso = new InventorySlot(0, 0, null, "torso");
+		arms = new InventorySlot(0, 0, null, "arms");
+		legs = new InventorySlot(0, 0, null, "legs");
 
 
 		compileItems();		
@@ -76,6 +76,26 @@ public class Inventory {
 		}
 
 		return false;
+	}
+
+	public void dropFromInventory() {
+
+		if (GamePanel.levels.size()>GamePanel.currentLevel){
+
+			//Item temp = new Item("test2", true, "test2");
+			
+			int x = (int)(GamePanel.player.xpos/32);
+			int y = (int)(GamePanel.player.ypos/32);
+
+			if (x>=0&&y>=0&&x<GamePanel.levels.get(GamePanel.currentLevel).width&&y<GamePanel.levels.get(GamePanel.currentLevel).height){
+				currentHeldItem.xPosition = x*32;
+				currentHeldItem.yPosition = y*32;
+				GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.add(currentHeldItem);
+				GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.get(0).onGround = true;
+				
+				currentHeldItem = null;
+			}
+		}
 	}
 
 	private void compileItems()

@@ -13,14 +13,16 @@ public class InventorySlot {
 	int width = 50;
 	int height = 50;
 	boolean holdingItem = false;
-	
+	String type;
 
 
-	public InventorySlot(int x, int y, Item i) {
+
+	public InventorySlot(int x, int y, Item i, String type) {
 
 		xPosition = x;
 		yPosition = y;
 		item = i;
+		this.type = type;
 
 	}
 
@@ -40,6 +42,7 @@ public class InventorySlot {
 
 		//holding an item, somthing in the slot
 		if (GamePanel.player.inventory.currentHeldItem!=null&&item!=null) {
+			
 			//temporarily keep track of the item you're holding on to
 			Item oldItem = item;
 			//item = new Item (GamePanel.player.inventory.currentHeldItem.name,GamePanel.player.inventory.currentHeldItem.onGround, GamePanel.player.inventory.currentHeldItem.type);
@@ -50,9 +53,11 @@ public class InventorySlot {
 		}
 		//holding item , nothing in slot (placing into empty slot)
 		else if (GamePanel.player.inventory.currentHeldItem!=null&&item==null){
-			holdingItem = false;
-			item = GamePanel.player.inventory.currentHeldItem;
-			GamePanel.player.inventory.currentHeldItem = null;
+			
+				holdingItem = false;
+				item = GamePanel.player.inventory.currentHeldItem;
+				GamePanel.player.inventory.currentHeldItem = null;
+			
 		}
 		//not holding item, something in the slot
 		else if (GamePanel.player.inventory.currentHeldItem==null&&item!=null) {
