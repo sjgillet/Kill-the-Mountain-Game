@@ -442,11 +442,13 @@ public class PlayerCombatant extends CombatEntity{
 	public void updateStats()
 	{
 		Inventory inv = GamePanel.player.inventory;
+		double wpnDmg = 1.0;
+		double wpnSpd = 1.0;
 		
-		if (inv.weapon!=null){
-		double wpn = inv.weapon.item.getDamage();
-		physDamage = (int)(Math.floor(str + (1/4)*acc)*wpn);	System.out.println(this.getName() + "'s Damage: " + physDamage);
-		}
+		if (inv.weapon!=null)
+			wpnDmg = inv.weapon.item.getDamage();
+		physDamage = (int)(Math.floor(str + (1/4)*acc)*wpnDmg);	System.out.println(this.getName() + "'s Damage: " + physDamage);
+		
 		magDamage = mag + (1/4)*intel;
 		
 		int totalArmor = getArmor();
@@ -471,8 +473,12 @@ public class PlayerCombatant extends CombatEntity{
 			totalArmor += inv.arms.item.getArmor();
 			totalMR += inv.arms.item.getArmor();
 		}		
-		physDR = 100/(100 + totalArmor);			System.out.println(this.getName() + "'s DR: " + physDR);
+		physDR = 100/(100 + totalArmor);						System.out.println(this.getName() + "'s DR: " + physDR);
 		magDR = 100/(100 + totalMR);
+		
+		if(inv.weapon!=null)
+			wpnSpd = inv.weapon.item.getSpeed();
+		speed = (int)(this.getAcc()*wpnSpd);					System.out.println(this.getName() + "'s Speed: " + speed);
 	}	
 	
 }

@@ -206,6 +206,7 @@ public class GamePanel extends JPanel{
 						+ "VS! " 
 						+ e.getName() + " HP: " + e.getCurrHP() + " | DMG: " + e.getPDmg(),
 						5, ApplicationUI.windowHeight - 140);
+				
 			}
 
 			//			g.setColor(Color.yellow);

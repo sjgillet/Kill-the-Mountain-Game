@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class CombatEntity {
 	
+	protected String name;
+	
 	/* Character's combat class. Player only.
 	 * Affects character progression, 
 	 * statistics, and specific game conditions/effects*/
@@ -30,6 +32,7 @@ public class CombatEntity {
 	//damage variables
 	protected int physDamage;
 	protected int magDamage;
+	protected int speed;	//speed of attacks. Used to determine turn order in combat
 	
 	//damage reduction multipliers.
 	protected double physDR;  //physical damage resistance; based on armor
@@ -44,9 +47,13 @@ public class CombatEntity {
 	/*Encounter Stats*/
 	protected int statTotal;
 	
-	
 	protected ArrayList<Skill> skills = new ArrayList<Skill>();
 	
+	
+	public String getName()
+	{
+		return this.name;
+	}
 	public int getHP()
 	{
 		return this.hp;
@@ -143,6 +150,10 @@ public class CombatEntity {
 	{
 		return this.magDamage;
 	}
+	public int getSpeed()
+	{
+		return this.speed;
+	}
 	
 
 	public boolean isDead()
@@ -220,6 +231,7 @@ public class CombatEntity {
 		magDamage = mag + (1/4)*intel;
 		physDR = 100/(100 + arm);		System.out.println("DR: " + physDR);
 		magDR = 100/(100 + mre);
+		speed = this.getAcc();
 	}	
 	
 	public CombatEntity(){

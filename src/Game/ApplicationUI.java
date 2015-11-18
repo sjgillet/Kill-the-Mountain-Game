@@ -13,7 +13,7 @@ public class ApplicationUI extends JFrame{
 	public Controller ctrl;
 	public static int windowWidth = 800;
 	public static int windowHeight = 600;
-	private int gameFPS = 200;
+	private int gameFPS = 60;
 	private long beginTime;
 	private long updatePeriod = 1000000000L/gameFPS;
 	JPanel drawPanel;

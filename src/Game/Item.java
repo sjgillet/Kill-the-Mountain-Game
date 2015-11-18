@@ -45,6 +45,14 @@ public class Item {
 	{
 		damage = dmg;
 	}
+	public double getSpeed()
+	{
+		return speed;
+	}
+	public void setSpeed(double newSpeed)
+	{
+		this.speed = newSpeed;
+	}
 	public int getArmor()
 	{
 		return armor;

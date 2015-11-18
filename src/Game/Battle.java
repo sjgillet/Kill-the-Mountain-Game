@@ -14,7 +14,13 @@ public class Battle {
 	private int statTotal;					//total of the player's stats for setting the stats of enemies
 	private ArrayList<Item> lootDrop;
 	private Random rand = new Random();
-
+	
+	private int escapesAttempted = 0;
+	
+	private boolean playerTurn;
+	private CombatEntity[] turnOrder;
+	private int turnOrderIndex;
+	
 	public ArrayList<Enemy> getEnemies()
 	{
 		return this.enemies;
@@ -70,6 +76,19 @@ public class Battle {
 		{
 			e.Initialize();
 		}	
+		
+		/* Dialogue message to start battle	 */
+		GamePanel.dialog.addMessage("BATTLE START!");
+		String listOpponents = "";
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			if(i == enemies.size() - 1 && enemies.size() != 1)
+				listOpponents += " and ";
+			listOpponents += "a " + enemies.get(i).getName() + ", ";
+		}
+		GamePanel.dialog.addMessage(player.getName() + "VS! "  + listOpponents);
+		GamePanel.dialog.addMessage("FIGHT!");
+		
 	}
 
 	/**
@@ -95,6 +114,19 @@ public class Battle {
 		Enemy e = monsters.getMonster(name);
 		e.Initialize();
 		enemies.add(e);
+		
+		//dialog message on battle start
+		GamePanel.dialog.addMessage("BATTLE START!");
+		String listOpponents = "";
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			if(i == enemies.size() - 1 && enemies.size() != 1)
+				listOpponents += " and ";
+			listOpponents += "a " + enemies.get(i).getName() + ", ";
+		}
+		GamePanel.dialog.addMessage(player.getName() + "VS! "  + listOpponents);
+		GamePanel.dialog.addMessage("FIGHT!");
+
 	}
 
 	/*
@@ -102,7 +134,10 @@ public class Battle {
 	 * TODO: After attack, check if target is dead. If dead, award XP
 	 */
 
-
+	/**
+	 * Initializes the player, level, and monsters objects, nothing else. 
+	 * Do not input code to manipulate these objects
+	 */
 	private void initializeBattle()
 	{
 		player = GamePanel.player.playerCombatant;
@@ -159,12 +194,71 @@ public class Battle {
 			}
 		}
 	}
-
-	public void end()
+	
+	public void setTurnOrder()
+	{
+		int i = 0;
+		turnOrder = new CombatEntity[enemies.size() + 1];
+		ArrayList<Enemy> en = enemies;
+		
+		//add player and enemies to turn order list
+		for(	; i < enemies.size(); i++)
+			turnOrder[i] = enemies.get(i);
+		turnOrder[turnOrder.length - 1] = player;
+		
+		//sort turn order by speed
+		i = 0;
+		while(i < turnOrder.length - 1)
+		{
+			if(turnOrder[i].getSpeed() < turnOrder[i+1].getSpeed())
+			{
+				CombatEntity temp = turnOrder[i+1];
+				turnOrder[i+1] = turnOrder[i];
+				turnOrder[i] = temp;
+			}
+		}
+		System.out.print("Turn Order: "); for(i = 0; i < turnOrder.length; i++) System.out.print(turnOrder[i].getName() + ", ");
+		changeTurn(0);
+	}
+	
+	/** 
+	 * Changes the acting combat entity to the next in the turn order
+	 * At the end of each round, reassess turn order.
+	 */
+	public void changeTurn()
+	{
+		if(turnOrderIndex >= turnOrder.length)
+			changeTurn(0);
+		else changeTurn(turnOrderIndex + 1);
+	}
+	/**
+	 * To specified spot in the turn order. 
+	 * If it's now the player's turn, wait for user input.
+	 * If it's now an enemy's turn, the enemy will take an action
+	 * based on its situation
+	 * @param orderIndex	entity whose turn it is. 
+	 */
+	public void changeTurn(int orderIndex)
+	{
+		turnOrderIndex = orderIndex;
+		if(turnOrder[orderIndex] != player)
+		{
+			playerTurn = false;
+			//turnOrder[orderIndex].takeAction();
+		}
+		else playerTurn = true;
+	}
+	
+	/**
+	 * Ends the battle event, whether victory, defeat, or running
+	 * Awards XP and loot to the player
+	 * If the player had died, lose XP for current level.
+	 */
+	public void battleEnd()
 	{
 		if(player.isDead())
 		{
-
+			player.setXP(0);
 		}
 		for(Enemy e : enemies)
 		{
@@ -198,30 +292,49 @@ public class Battle {
 		if(target.getCurrHP() == 0)
 		{
 			target.kill();
-			end();
+			//battle end?
 		}
 	}
 
 
 	public void attemptRun()
 	{
-		boolean success;
+		GamePanel.dialog.addMessage("NOPE!");
 		int playerSpeed = player.getAcc();
 		int enemiesSpeed = 0;
 		int enemiesAlive = 0;
+		int enemiesQuicker = 0;
+		int enemiesSlower = 0;
+		
+		escapesAttempted++;
 		for(Enemy e : enemies)
 		{
 			if(!e.isDead())
 			{
 				enemiesSpeed += e.getAcc();
+				if(e.getAcc() > playerSpeed)
+					enemiesQuicker++;
+				else 
+					enemiesSlower++;
 				enemiesAlive++;
 			}				
 		}
-		double runChance = playerSpeed/((0.9 + 0.1*enemiesAlive)*(enemiesSpeed/enemiesAlive));
-		runChance = rand.nextDouble() - (0.1*enemiesAlive);
+		
+		//double runChance = playerSpeed/((0.9 + 0.1*enemiesAlive)*(enemiesSpeed/enemiesAlive));
+		double runChance = rand.nextDouble() - (0.1*enemiesQuicker) + (0.05*enemiesSlower) + (0.1* escapesAttempted);
+		//SUCCESSFUL ESCAPE
 		if(runChance > 0.5)
-			success = true;
-
+		{
+			GamePanel.dialog.addMessage("You got away!");
+			battleEnd();
+		}
+		//FAILED ESCAPE, NEXT TURN;
+		else
+		{
+			GamePanel.dialog.addMessage("You tripped on a rock and fell! They're still there!");
+			changeTurn();
+		}
+		
 	}
 
 

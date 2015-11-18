@@ -44,7 +44,7 @@ public class MessageBox {
 				}
 			}
 		}
-		if(framesSinceMouseOver<(3*60)){
+		if(framesSinceMouseOver<(5*60)){
 			g.setColor(new Color(150,0,0));
 			g.fillRect(x, y, width, height);
 			g.setColor(new Color(200,200,200));

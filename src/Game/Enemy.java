@@ -12,7 +12,7 @@ public class Enemy extends CombatEntity{
 	*/
 	private double[] statWeights;
 	private int statTotal;
-	private String name;
+	
 	private String description;
 	private double challenge;
 	private int xp;
@@ -29,23 +29,20 @@ public class Enemy extends CombatEntity{
 	{
 		this.currHP -= damage;
 		if(currHP <= 0)
-<<<<<<< HEAD
+
 		{
 			this.currHP = 0;
-=======
->>>>>>> 86a2381c5b9f2c4cc094106e22e77cf7e259a79a
+
 			this.kill();
+		}
 			
 	}
 	public void kill()
 	{
 		this.isDead = true;
-<<<<<<< HEAD
 		System.out.println(name + " died!");
 		GamePanel.player.playerCombatant.awardXP(this.getXP());
 
-=======
->>>>>>> 86a2381c5b9f2c4cc094106e22e77cf7e259a79a
 		//TODO: Reload last save or Exit
 	}
 	
