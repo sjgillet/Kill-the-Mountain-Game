@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class CombatEntity {
 	
+	protected String name;
+	
 	/* Character's combat class. Player only.
 	 * Affects character progression, 
 	 * statistics, and specific game conditions/effects*/
@@ -13,7 +15,7 @@ public class CombatEntity {
 	protected int hp;		//maxiumum hit points; measures the character's health
 	protected int sp;		//maximum skill points; measures the character's exhaustion
 	protected int str;		//strength; basis for physical damage
-	protected int acc;		//accuracy; basis for attack hit chance
+	protected int acc;		//accuracy; basis for attack hit chance and speed stat
 	protected int mag;		//magic; basis for magical damage
 	protected int intel;	//intelligence; basis for skill/spell hit chance
 	protected int eva;		//evasion; basis for avoiding attacks/skills; determines turn order
@@ -30,22 +32,28 @@ public class CombatEntity {
 	//damage variables
 	protected int physDamage;
 	protected int magDamage;
+	protected int speed;	//speed of attacks. Used to determine turn order in combat
 	
 	//damage reduction multipliers.
 	protected double physDR;  //physical damage resistance; based on armor
 	protected double magDR;   //magical damage resistance; based on MRe
 	protected int totalArmor; //total armor; includes all armor items and natural
 
+
 	protected int totalMRE;	  //total magic resist; includes all items and natural
-	protected Item weapon;	  //weapon used in combat; affects physical damage;
+
 
 	
 	/*Encounter Stats*/
 	protected int statTotal;
 	
-	
 	protected ArrayList<Skill> skills = new ArrayList<Skill>();
 	
+	
+	public String getName()
+	{
+		return this.name;
+	}
 	public int getHP()
 	{
 		return this.hp;
@@ -142,12 +150,17 @@ public class CombatEntity {
 	{
 		return this.magDamage;
 	}
+	public int getSpeed()
+	{
+		return this.speed;
+	}
 	
 
-	public void setWeapon(Item wpn)
+	public boolean isDead()
 	{
-		this.weapon = wpn;
+		return isDead;
 	}
+
 
 	public int getStatTotal()
 	{
@@ -162,6 +175,11 @@ public class CombatEntity {
 	public void setCurrHP(int newHP)
 	{
 		this.currHP = newHP;
+	}
+	
+	public void kill()
+	{
+		//to be overloaded in subclasses
 	}
 	
 		
@@ -213,6 +231,7 @@ public class CombatEntity {
 		magDamage = mag + (1/4)*intel;
 		physDR = 100/(100 + arm);		System.out.println("DR: " + physDR);
 		magDR = 100/(100 + mre);
+		speed = this.getAcc();
 	}	
 	
 	public CombatEntity(){

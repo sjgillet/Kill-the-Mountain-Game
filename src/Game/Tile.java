@@ -29,8 +29,10 @@ public class Tile {
 	Door door;
 	ArrayList<Rectangle> collisionBoxes = new ArrayList<Rectangle>();
 	ArrayList<Item> itemsOnThisTile = new ArrayList<Item>();
-
-	public Tile(int x, int y, int id, int elev){
+	Tile[][] tileMap;
+	
+	public Tile(int x, int y, int id, int elev, Tile[][] tMap){
+		tileMap = tMap;
 		xpos = x*32;
 		ypos = y*32;
 		elevation = elev;
@@ -155,7 +157,7 @@ public class Tile {
 	/*
 	 * Updates the artwork of the tile to make it match up with surrounding tiles
 	 */
-	public void updateArt(){
+	public void updateArt(int waterlevel){
 		Tile northernTile = getNorthTile();
 		Tile northEasternTile = getNorthEastTile();
 		Tile easternTile = getEastTile();
@@ -187,8 +189,8 @@ public class Tile {
 
 			}
 			if(vegetationID==2){//dungeon puddle
-				vegetationImage=GamePanel.overlayTiles[9][GamePanel.levels.get(GamePanel.currentLevel).randomNumber(1, 6)];
-				if(GamePanel.levels.get(GamePanel.currentLevel).randomNumber(1, 100)==1){//1% chance to be a puddle of piss
+				vegetationImage=GamePanel.overlayTiles[9][GamePanel.levels.get(0).randomNumber(1, 6)];
+				if(GamePanel.levels.get(0).randomNumber(1, 100)==1){//1% chance to be a puddle of piss
 					vegetationImage=GamePanel.overlayTiles[9][0];
 				}
 			}
@@ -199,7 +201,7 @@ public class Tile {
 				collisionType=2;
 			}
 			if(vegetationID==5){
-				vegetationImage = GamePanel.overlayTiles[8][GamePanel.levels.get(GamePanel.currentLevel).randomNumber(0, 7)];
+				vegetationImage = GamePanel.overlayTiles[8][GamePanel.levels.get(0).randomNumber(0, 7)];
 			}
 
 			if(vegetationID==6){//tall tree
@@ -207,7 +209,7 @@ public class Tile {
 			}
 
 			if(tileID==0){
-				if(elevation>=GamePanel.levels.get(GamePanel.currentLevel).waterlevel){
+				if(elevation>=waterlevel){
 					artX = 6;
 					artY = 0;
 				}
@@ -215,7 +217,7 @@ public class Tile {
 					artX = 11;
 					artY = 4;
 					overlayArtX = 0;
-					overlayArtY = GamePanel.levels.get(GamePanel.currentLevel).waterlevel-elevation;
+					overlayArtY = waterlevel-elevation;
 					if(overlayArtY>4){
 						overlayArtY=4;
 					}
@@ -314,7 +316,7 @@ public class Tile {
 				if(northernTile!=null&&northernTile.elevation>elevation){
 					artX = 4;
 					artY = 1;
-					if(GamePanel.levels.get(GamePanel.currentLevel).randomNumber(1,100)==1){//chance to have a shackled skeleton hanging from the wall
+					if(GamePanel.levels.get(0).randomNumber(1,100)==1){//chance to have a shackled skeleton hanging from the wall
 						vegetationID=3;
 						BufferedImage[][] imagesToCombine = new BufferedImage[1][2];
 						imagesToCombine[0][0]=GamePanel.overlayTiles[5][0];
@@ -705,10 +707,10 @@ public class Tile {
 				if(elevation>=30){
 					artX = 13;
 				}
-				else if(elevation>GamePanel.levels.get(GamePanel.currentLevel).waterlevel&&elevation<30){//above sea level and below lava lava level
+				else if(elevation>waterlevel&&elevation<30){//above sea level and below lava lava level
 					artX = 9;
 				}
-				else if(elevation==GamePanel.levels.get(GamePanel.currentLevel).waterlevel){//at sea level
+				else if(elevation==waterlevel){//at sea level
 					artX=10;
 					overlayArtX = 1;
 					overlayArtY = artY;
@@ -716,7 +718,7 @@ public class Tile {
 				else{//below sea level
 					artX=11;
 					overlayArtX = 0;
-					overlayArtY = GamePanel.levels.get(GamePanel.currentLevel).waterlevel-elevation;
+					overlayArtY = waterlevel-elevation;
 					if(overlayArtY>4){
 						overlayArtY=4;
 					}
@@ -726,49 +728,49 @@ public class Tile {
 	}
 	public Tile getNorthTile(){
 		if((ypos/32)-1>0){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)][(ypos/32)-1];
+			return tileMap[(xpos/32)][(ypos/32)-1];
 		}
 		return null;
 	}
 	public Tile getNorthEastTile(){
-		if((ypos/32)-1>=0&&(xpos/32)+1<GamePanel.levels.get(GamePanel.currentLevel).width){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)+1][(ypos/32)-1];
+		if((ypos/32)-1>=0&&(xpos/32)+1<tileMap.length){
+			return tileMap[(xpos/32)+1][(ypos/32)-1];
 		}
 		return null;
 	}
 	public Tile getSouthTile(){
-		if((ypos/32)+1<GamePanel.levels.get(GamePanel.currentLevel).height){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)][(ypos/32)+1];
+		if((ypos/32)+1<tileMap[0].length){
+			return tileMap[(xpos/32)][(ypos/32)+1];
 		}
 		return null;
 	}
 	public Tile getSouthEastTile(){
-		if((ypos/32)+1<GamePanel.levels.get(GamePanel.currentLevel).height&&(xpos/32)+1<GamePanel.levels.get(GamePanel.currentLevel).width){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)+1][(ypos/32)+1];
+		if((ypos/32)+1<tileMap[0].length&&(xpos/32)+1<tileMap.length){
+			return tileMap[(xpos/32)+1][(ypos/32)+1];
 		}
 		return null;
 	}
 	public Tile getWestTile(){
 		if((xpos/32)-1>0){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)-1][(ypos/32)];
+			return tileMap[(xpos/32)-1][(ypos/32)];
 		}
 		return null;
 	}
 	public Tile getNorthWestTile(){
 		if((ypos/32)-1>=0&&(xpos/32)-1>=0){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)-1][(ypos/32)-1];
+			return tileMap[(xpos/32)-1][(ypos/32)-1];
 		}
 		return null;
 	}
 	public Tile getEastTile(){
-		if((xpos/32)+1<GamePanel.levels.get(GamePanel.currentLevel).width){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)+1][(ypos/32)];
+		if((xpos/32)+1<tileMap.length){
+			return tileMap[(xpos/32)+1][(ypos/32)];
 		}
 		return null;
 	}
 	public Tile getSouthWestTile(){
-		if((ypos/32)+1<GamePanel.levels.get(GamePanel.currentLevel).height&&(xpos/32)-1>=0){
-			return GamePanel.levels.get(GamePanel.currentLevel).tileMap[(xpos/32)-1][(ypos/32)+1];
+		if((ypos/32)+1<tileMap[0].length&&(xpos/32)-1>=0){
+			return tileMap[(xpos/32)-1][(ypos/32)+1];
 		}
 		return null;
 	}
@@ -796,10 +798,10 @@ public class Tile {
 			}
 		}
 		else if(tileID==0){
-			g.drawImage(GamePanel.levels.get(GamePanel.currentLevel).tilesRankedByElevation[index][4],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
+			g.drawImage(GamePanel.tilesRankedByElevation[index][4],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
 		}
 		else{
-			g.drawImage(GamePanel.levels.get(GamePanel.currentLevel).tilesRankedByElevation[index][artY],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
+			g.drawImage(GamePanel.tilesRankedByElevation[index][artY],x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
 		}
 
 		//draw the overlay image
@@ -849,11 +851,9 @@ public class Tile {
 				vegetationImage = GamePanel.overlayTiles[6][2];
 			}
 		}
-
 		if(door!=null){
 			//door.Draw(g);
 		}
-
 		//Font font = new Font("Iwona Heavy",Font.BOLD,10);
 		//g.setFont(font);
 		//g.setColor(Color.WHITE);
