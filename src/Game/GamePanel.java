@@ -195,6 +195,7 @@ public class GamePanel extends JPanel{
 			//display for being in battle
 			if(inBattle)
 			{
+				menu.drawMenu(g, menu.combatmain);
 				Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 				g.setFont(font);
 				g.setColor(Color.WHITE);
