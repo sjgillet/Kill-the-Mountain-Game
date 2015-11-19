@@ -836,11 +836,13 @@ public class Tile {
 		}
 		for (int i = 0; i<itemsOnThisTile.size(); i++){
 			System.out.println("called draw method");
+			if (itemsOnThisTile.get(i)!=null){
 			itemsOnThisTile.get(i).draw(g);
+			}
 		}
 		
 		//flags where items are placed in the dungeon and elsewhere
-		if(flagged||itemsOnThisTile.size()>0){
+		if(flagged){
 			g.setColor(flagColor);
 			g.fillRect(x,y, 32, 32);
 			flagged = false;

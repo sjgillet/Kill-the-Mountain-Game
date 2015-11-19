@@ -21,6 +21,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	static boolean mousePressed = false;
 	static Point mousePosition = new Point(0,0);
 	static Point oldMousePosition = new Point(0,0);
+	boolean overSlot = false;
 
 	public void setGamePanel(JPanel panelRef) {
 		gamePanel = panelRef;
@@ -73,8 +74,11 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		mousePressed = true;
+		
 		mousePosition.x = (int) e.getPoint().getX();
 		mousePosition.y = (int) e.getPoint().getY();
+		
+		
 		if(e.getButton()==MouseEvent.BUTTON3&&GamePanel.showMap&&GamePanel.godmode){
 			LevelMap map = GamePanel.levels.get(GamePanel.currentLevel).map;
 			int x = (int)(double)(((mousePosition.x-(map.xpos*map.zoom))*(map.pixelWidthPerTile/map.zoom)/2));
@@ -90,17 +94,17 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			int y = 0;
 
 			if (GamePanel.levels.size()>GamePanel.currentLevel){
-				
+
 				//determines tile location based on player position and window width and height
 				x = (mousePosition.x + (int)(GamePanel.player.xpos+16) - (ApplicationUI.windowWidth/2))/32;
 				y = (mousePosition.y + (int)(GamePanel.player.ypos+16) - (ApplicationUI.windowHeight/2))/32;
 
 
 				if (x>=0&&y>=0&&x<GamePanel.levels.get(GamePanel.currentLevel).width&&y<GamePanel.levels.get(GamePanel.currentLevel).height){
-					
+
 					//if this tile item arraylist isnt empty
 					if (GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.size()>0){
-						
+
 						//get first item of the arraylist
 						Item temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.get(0);
 
@@ -121,16 +125,27 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		}
 
 		if (GamePanel.inInventory) {
+
+			overSlot = false;
+
 			//head slot
 			if (GamePanel.player.inventory.head.isOver()){
-				GamePanel.player.inventory.head.isPushed();
+				if (GamePanel.player.inventory.currentHeldItem==null||GamePanel.player.inventory.currentHeldItem.type.equals("helmet")){
+					overSlot = true;
+					GamePanel.player.inventory.head.isPushed();
+				}
 			}
+
+			
+
 
 			//equipped items
 			for (int i = 0; i < GamePanel.player.inventory.equipped.length; i++) {
 				if (GamePanel.player.inventory.equipped[i].isOver()) {
 					GamePanel.player.inventory.equipped[i].isPushed();
+					overSlot = true;
 				}
+				
 			}
 
 			//main inventory items
@@ -138,21 +153,41 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				for (int j = 0; j<GamePanel.player.inventory.main[i].length; j++){
 					if (GamePanel.player.inventory.main[i][j].isOver()) {
 						GamePanel.player.inventory.main[i][j].isPushed();
+						overSlot = true;
 					}
+					
 				}
 			}
 
-			
+
+
 			if (GamePanel.player.inventory.torso.isOver()) {
-				GamePanel.player.inventory.torso.isPushed();
+				if (GamePanel.player.inventory.currentHeldItem==null||GamePanel.player.inventory.currentHeldItem.type.equals("torso")){
+					GamePanel.player.inventory.torso.isPushed();
+					overSlot = true;
+				}
+				
 			}
 
 			if (GamePanel.player.inventory.arms.isOver()) {
-				GamePanel.player.inventory.arms.isPushed();
+				if (GamePanel.player.inventory.currentHeldItem==null||GamePanel.player.inventory.currentHeldItem.type.equals("arms")){
+					GamePanel.player.inventory.arms.isPushed();
+					overSlot = true;
+				}
+				
 			}
-			
+
 			if (GamePanel.player.inventory.legs.isOver()) {
-				GamePanel.player.inventory.legs.isPushed();
+				if (GamePanel.player.inventory.currentHeldItem==null||GamePanel.player.inventory.currentHeldItem.type.equals("legs")){
+					GamePanel.player.inventory.legs.isPushed();
+					overSlot = true;
+				}
+				
+			}
+
+
+			if (!overSlot) {
+				GamePanel.player.inventory.dropFromInventory();
 			}
 
 		}
@@ -285,7 +320,11 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			if(e.getKeyCode() == KeyEvent.VK_E)
 			{
 				System.out.println("Key Pressed: E");
-				GamePanel.bat.Attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+				GamePanel.bat.attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+			}
+			if(e.getKeyCode() == KeyEvent.VK_W)
+			{
+				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(0));
 			}
 		}
 
