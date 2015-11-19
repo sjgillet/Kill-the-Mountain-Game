@@ -99,6 +99,16 @@ public class Tile {
 			artY = 0;
 			collisionType = 3;
 		}
+		if(tileID==11){//house interior wall
+			artX = 0;
+			artY = 4;
+			collisionType=1;
+		}
+		if(tileID==12){//house floor
+			artX = 1;
+			artY = 5;
+			collisionType = 0;
+		}
 
 	}
 
@@ -223,6 +233,7 @@ public class Tile {
 					}
 				}
 			}
+			
 			if(tileID==11){//house window
 				if(southernTile!=null&&southernTile.tileID==11){
 					artX = 1;
@@ -316,7 +327,7 @@ public class Tile {
 				if(northernTile!=null&&northernTile.elevation>elevation){
 					artX = 4;
 					artY = 1;
-					if(GamePanel.levels.get(0).randomNumber(1,100)==1){//chance to have a shackled skeleton hanging from the wall
+					if(GamePanel.levels.size()>0&&GamePanel.levels.get(0).randomNumber(1,100)==1){//chance to have a shackled skeleton hanging from the wall
 						vegetationID=3;
 						BufferedImage[][] imagesToCombine = new BufferedImage[1][2];
 						imagesToCombine[0][0]=GamePanel.overlayTiles[5][0];

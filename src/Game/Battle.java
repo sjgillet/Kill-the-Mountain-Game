@@ -1,6 +1,9 @@
 package Game;
 
 import java.util.Random;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class Battle {
@@ -295,8 +298,112 @@ public class Battle {
 			//battle end?
 		}
 	}
+	
+	
+	//Run Away
+	
+	public void DrawEnemyNamePlate(Graphics2D g, int x, int y, Enemy enemy){
+		Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
+		g.setFont(font);
+		g.setColor(Color.BLACK);
+		
+		//draw player's nameplate
+		int namePlateWidth = 250;
+		int namePlateHeight = 85;
+		//draw background
+		g.setColor(Color.lightGray);
+		g.fillRect(x, y, namePlateWidth, namePlateHeight);
+		//draw outline
+		g.setColor(Color.green);
+		g.drawRect(x, y, namePlateWidth, namePlateHeight);
+		//draw player's name
+		g.setColor(Color.black);
+		g.drawString(enemy.getName(), x+20, y+20);
+		
+		
+		int hpBarLength = enemy.hp*2;
+		if(hpBarLength>200){
+			hpBarLength=200;
+		}
+		int spBarLength = enemy.sp*4;
+		if(spBarLength>200){
+			spBarLength=200;
+		}
+		
+		//draw player's health bar
+		g.setColor(new Color(255,0,0,200));
+		g.fillRect(x+20, y+30, hpBarLength, 30);//background of bar
+		g.setColor(new Color(0,193,22));
+		g.fillRect(x+20, y+30, (int)(double)((double)hpBarLength*((double)enemy.currHP/(double)enemy.hp)), 30);
+		
+		//draw player's sp bar
+		g.setColor(new Color(50,50,50,200));
+		g.fillRect(x+20, y+65, spBarLength, 15);//background of bar
+		g.setColor(Color.cyan);
+		g.fillRect(x+20, y+65, (int)(double)((double)spBarLength*((double)enemy.currSP/(double)enemy.sp)), 15);
+	}
+	
+	public void Draw(Graphics2D g){
+		int sceneWidth = 600;
+		int sceneHeight = 400;
+		
+		g.setColor(Color.green);
+		g.fillRect((ApplicationUI.windowWidth/2)-(sceneWidth/2)-1, (ApplicationUI.windowHeight/2)-(sceneHeight/2)-1, sceneWidth+2, sceneHeight+2);
+		g.setColor(Color.lightGray);
+		g.fillRect((ApplicationUI.windowWidth/2)-(sceneWidth/2), (ApplicationUI.windowHeight/2)-(sceneHeight/2), sceneWidth, sceneHeight);
+		Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
+		g.setFont(font);
+		g.setColor(Color.BLACK);
+		PlayerCombatant plr = getPlayer();
+		Enemy e = getEnemies().get(0);
+
+		//draw player's nameplate
+		int namePlateWidth = 250;
+		int namePlateHeight = 85;
+		//draw background
+		g.setColor(Color.lightGray);
+		g.fillRect(ApplicationUI.windowWidth-namePlateWidth, 0, namePlateWidth, namePlateHeight);
+		//draw outline
+		g.setColor(Color.green);
+		g.drawRect(ApplicationUI.windowWidth-namePlateWidth, 0, namePlateWidth, namePlateHeight);
+		//draw player's name
+		g.setColor(Color.black);
+		g.drawString(plr.getName(), (ApplicationUI.windowWidth-namePlateWidth)+20, 20);
 
 
+		int hpBarLength = plr.hp*2;
+		if(hpBarLength>200){
+			hpBarLength=200;
+		}
+		int spBarLength = plr.sp*4;
+		if(spBarLength>200){
+			spBarLength=200;
+		}
+
+		//draw player's health bar
+		g.setColor(new Color(255,0,0,200));
+		g.fillRect((ApplicationUI.windowWidth-namePlateWidth)+20, 30, hpBarLength, 30);//background of bar
+		g.setColor(new Color(0,193,22));
+		g.fillRect((ApplicationUI.windowWidth-namePlateWidth)+20, 30, (int)(double)((double)hpBarLength*((double)plr.currHP/(double)plr.hp)), 30);
+
+		//draw player's sp bar
+		g.setColor(new Color(50,50,50,200));
+		g.fillRect((ApplicationUI.windowWidth-namePlateWidth)+20, 65, spBarLength, 15);//background of bar
+		g.setColor(Color.cyan);
+		g.fillRect((ApplicationUI.windowWidth-namePlateWidth)+20, 65, (int)(double)((double)spBarLength*((double)plr.currSP/(double)plr.sp)), 15);
+
+		//draw enemy nameplates
+		for(int i = 0; i<getEnemies().size();i++){
+			DrawEnemyNamePlate(g, 0, i*100, getEnemies().get(i));
+		}
+		g.setColor(Color.white);
+		//				g.drawString(bat.getPlayer().getName(), 5, ApplicationUI.windowHeight - 170);
+		//				g.drawString(bat.getEnemies().get(0).getName(), 150, ApplicationUI.windowHeight - 170);
+		g.drawString(plr.getName() + " HP: " + plr.getCurrHP() + " | DMG: " + plr.getPDmg()
+		+ "VS! " 
+		+ e.getName() + " HP: " + e.getCurrHP() + " | DMG: " + e.getPDmg(),
+		5, ApplicationUI.windowHeight - 140);
+	}
 	public void attemptRun()
 	{
 		GamePanel.dialog.addMessage("NOPE!");
@@ -336,6 +443,5 @@ public class Battle {
 		}
 		
 	}
-
 
 }
