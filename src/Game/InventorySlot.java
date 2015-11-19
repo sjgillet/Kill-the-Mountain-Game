@@ -5,6 +5,11 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
+/**
+ * 
+ * @author Ryan Brendel, Matt Finzel
+ *
+ */
 public class InventorySlot {
 
 	Item item;
@@ -66,12 +71,13 @@ public class InventorySlot {
 			holdingItem = true;
 		}
 
-
-
-
-
 	}
 
+	/*
+	 * Determines if the mouse is over an inventory slot or not
+	 * 
+	 * @return boolean, true when the mouse is over an inventory slot, false otherwise
+	 */
 	public boolean isOver() {
 		if (((Controller.mousePosition.x >= this.xPosition) && 
 				(Controller.mousePosition.x<=this.xPosition + this.width) &&
@@ -83,6 +89,11 @@ public class InventorySlot {
 		return false;
 	}
 
+	/*
+	 * Draw the inventory slot, and the item contained
+	 * 
+	 * @param Graphics2D g
+	 */
 	public void drawInventorySlot(Graphics2D g) {
 
 		g.drawImage(GamePanel.inventorySlotImage,(int)xPosition,(int)yPosition,50,50,null);
