@@ -7,7 +7,12 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
+/**
+ * Defines the monsters of the game
+ * 
+ * @author Matthew Finzel
+ *
+ */
 public class Monster extends Entity{
 
 	Point destination = new Point(0,0);
@@ -34,7 +39,9 @@ public class Monster extends Entity{
 		collisionBox = new Rectangle(xpos,ypos,monsterImage.getWidth(),monsterImage.getHeight());
 		changeDirection();
 	}
-
+	/*
+	 * move towards destination
+	 */
 	public void moveTowardsDestination(){
 		double desiredAngle = getAngleToDestination();
 
@@ -164,6 +171,11 @@ public class Monster extends Entity{
 			changeDirection();
 		}
 	}
+	/*
+	 * Draws the monster's vision cone to the screen
+	 * 
+	 * @param g - The Graphics2D object to use for drawing
+	 */
 	public void drawVisionCone(Graphics2D g){
 		int [] xpositions = new int[3];
 		int [] ypositions = new int[3];
@@ -214,7 +226,11 @@ public class Monster extends Entity{
 			movementSpeed = baseMovementSpeed;
 		}
 	}
-
+	/*
+	 * Draws the monster to the screen
+	 * 
+	 * @param g - The Graphics2D object to use for drawing
+	 */
 	public void Draw(Graphics2D g){
 		int x = (int)(double)((((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos));
 		int y = (int)(double)((((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos));

@@ -6,7 +6,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-
+/**
+ * 
+ * @author Matthew Finzel, Ryan Brendel, Stuart Gillete
+ *
+ */
 public class Player extends Entity{
 
 	PlayerCombatant.playerRace race; PlayerCombatant.combatClass cls;
@@ -20,7 +24,7 @@ public class Player extends Entity{
 	double movementSpeed = 6;
 	Rectangle collisionBox;
 	int updatesInQue = 0;
-
+	
 	public Item[] getEquipment()
 	{
 		Item[] items = new Item[5];
@@ -29,14 +33,13 @@ public class Player extends Entity{
 				items[i] = inventory.equipped[i].item;
 		return items;
 	}
-
+	
 	public Player(int x, int y){
 		this.xpos = x;
 		this.ypos = y;
 		collisionBox = new Rectangle(x,y,32,32);
 	}
 	public void moveTowardsDestination(double speed){
-
 		if(!atDestination()){
 			//find angle between current position and destination
 			angleInDegrees = getAngleToDestination();
@@ -47,6 +50,14 @@ public class Player extends Entity{
 
 		}
 	}
+	/*
+	 * Sets the player's position to the desired position as long as they don't collide 
+	 * with any collidable tiles or they're in godmode
+	 * 
+	 * @param x - the desired x position
+	 * @param y - the desired y position
+	 * @param speed - the speed of the player(used to determine which tiles to check for collision)
+	 */
 	public void setPosition(double x, double y, double speed){
 		boolean enteredADoor = false;
 		Rectangle collisionBoxAtNewXPosition = new Rectangle((int)x,(int)ypos,32,32);
@@ -154,7 +165,9 @@ public class Player extends Entity{
 		}
 		return angle;
 	}
-
+	/*
+	 * Called by the game's loop, updates the player every frame
+	 */
 	public void update(){
 
 		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel||true){
@@ -166,7 +179,11 @@ public class Player extends Entity{
 		}
 
 	}
-
+	/*
+	 * Draws the player to the screen
+	 * 
+	 * @param g - The Graphics2D object to use for drawing
+	 */
 	public void Draw(Graphics2D g){
 		g.drawImage(GamePanel.playerImage,(ApplicationUI.windowWidth/2)-16,(ApplicationUI.windowHeight/2)-16,32,32,null);
 

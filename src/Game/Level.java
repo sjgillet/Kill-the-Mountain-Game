@@ -501,12 +501,24 @@ public class Level {
 
 					x = rooms.get(i).area.x + (rooms.get(i).area.width/2);
 					y = rooms.get(i).area.y + (rooms.get(i).area.height/2);
+					String type = "";
+					int roll = randomNumber(1,100);
+					if(roll>80){//20%
+						type = "weapon";
+					}
+					else if(roll>60&&roll<=80){//20%
+						type = "armor";
+					}
+					else{//60%
+						type = "consumable";
+					}
+					Item temp = GamePanel.player.inventory.randomItem(type);
+					if(temp!=null){
+						temp.xPosition = x*32;
+						temp.yPosition = y*32;
 
-					Item temp = new Item("sword",true,"physical");
-					temp.xPosition = x*32;
-					temp.yPosition = y*32;
-
-					tileMap[x][y].itemsOnThisTile.add(temp);
+						tileMap[x][y].itemsOnThisTile.add(temp);
+					}
 
 				}
 
@@ -546,7 +558,7 @@ public class Level {
 				removeAnySectionsOfCliffThatAreConnectedToCliffButTooSmallToWalkOn(i);
 
 			}
-			
+
 		}
 		else{
 			int numberOfMountains = randomNumberForLevelGeneration(minNumberOfMountains,maxNumberOfMountains);
@@ -651,6 +663,9 @@ public class Level {
 		path.remove(current);
 
 	}
+	/*
+	 * Generates a volcano
+	 */
 	public void generateVolcano(){
 
 		int baseSize = (width*height)/2;
@@ -734,7 +749,7 @@ public class Level {
 
 		if(tilesAtThisElevation.size()>0){
 			Tile randomTile = tilesAtThisElevation.get(randomNumberForLevelGeneration(0,tilesAtThisElevation.size()-1));
-			
+
 			while(randomTile.tileID!=0&&tilesAtThisElevation.size()>0){//while random tile is not grass
 				//remove the random tile
 				tilesAtThisElevation.remove(randomTile);
@@ -742,10 +757,10 @@ public class Level {
 				if(tilesAtThisElevation.size()>0){
 					//set randomTile to equal one of those tiles
 					randomTile = tilesAtThisElevation.get(randomNumberForLevelGeneration(0,tilesAtThisElevation.size()-1));
-					
+
 				}
 			}
-			
+
 			if(tilesAtThisElevation.size()>0){
 				//set the first tile at this elevation
 				tileMap[randomTile.xpos/32][randomTile.ypos/32] = new Tile(randomTile.xpos/32,randomTile.ypos/32,newTileID,buildElevation+elevationChange,tileMap);
@@ -754,7 +769,7 @@ public class Level {
 				//while we've added less tiles than desired, there is a tile to -
 				//build off of, and there are untouched tiles at this elevation
 				while(count<size&&tilesAdded.size()>0&&tilesAtThisElevation.size()>0){//for the desired amount of tiles
-					
+
 					//pick a random tile which has already been created for this terrain feature
 					Tile randTile = tilesAdded.get(randomNumberForLevelGeneration(0,tilesAdded.size()-1));
 
@@ -763,10 +778,10 @@ public class Level {
 					boolean addedATile = false;
 					//make sure there are adjacent tiles that can be modified
 					if(adjacentTiles.size()>0){
-						
+
 						//pick a random one of these tiles
 						randTile = adjacentTiles.get(randomNumberForLevelGeneration(0,adjacentTiles.size()-1));					
-						
+
 						//make sure this tile is a grass tile and is at the desired elevation
 						if(randTile.tileID==0&&randTile.elevation==buildElevation){
 
@@ -807,9 +822,9 @@ public class Level {
 								tilesAdded.add(randomTile);
 								tilesAtThisElevation.remove(index);
 							}
-							
+
 						}
-						
+
 					}
 
 					if(addedATile==false){
@@ -984,7 +999,7 @@ public class Level {
 					//check for any adjacent tiles that are not at the same elevation as this tile
 					boolean isEdge = false;
 					for(int i = 0; i<adjacentTiles.size();i++){
-						if(adjacentTiles.get(i).elevation!=elev&&adjacentTiles.get(i).elevation<=tileMap[x][y].elevation){
+						if(adjacentTiles.get(i).elevation!=elev){//&&adjacentTiles.get(i).elevation<=tileMap[x][y].elevation
 							isEdge = true;
 						}
 					}

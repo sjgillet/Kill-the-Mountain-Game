@@ -53,7 +53,6 @@ public class InventorySlot {
 		}
 		//holding item , nothing in slot (placing into empty slot)
 		else if (GamePanel.player.inventory.currentHeldItem!=null&&item==null){
-			
 				holdingItem = false;
 				item = GamePanel.player.inventory.currentHeldItem;
 				GamePanel.player.inventory.currentHeldItem = null;
@@ -61,7 +60,7 @@ public class InventorySlot {
 		}
 		//not holding item, something in the slot
 		else if (GamePanel.player.inventory.currentHeldItem==null&&item!=null) {
-			GamePanel.player.inventory.currentHeldItem = new Item(item.name, item.onGround, item.type);
+			GamePanel.player.inventory.currentHeldItem = item;
 			item = null;
 			holdingItem = true;
 		}

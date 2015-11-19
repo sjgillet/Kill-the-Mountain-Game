@@ -11,7 +11,11 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.synth.SynthSeparatorUI;
-
+/**
+ * The panel which is drawn on and variables shared by all classes
+ * 
+ * @author Matthew Finzel, Ryan brendel, Stuart Gillete
+ */
 public class GamePanel extends JPanel{
 	private static final long serialVersionUID = 496501089018037548L;
 	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/overlappedTiles.png", 32, 32);
@@ -43,12 +47,21 @@ public class GamePanel extends JPanel{
 	public static MessageBox dialog = new MessageBox();
 	static Random random;
 	static JFrame jframe;
+	
 	public GamePanel(JFrame frame){
 		jframe = frame;
 		random = new Random();
 		player.playerCombatant = new PlayerCombatant(player.race.BEAR, player.cls.TANK);
 		player.playerCombatant.updateStats();
 	}
+	/*
+	 * used to get a random number between two values
+	 * 
+	 * @param min - the minimum value to output
+	 * @param max - the maximum value to output
+	 * 
+	 * @return - a random integer between min and max
+	 */
 	public static int randomNumber(int min, int max){
 		if(min>max){
 			int temp = min;
@@ -62,6 +75,9 @@ public class GamePanel extends JPanel{
 		return randNum;
 
 	}
+	/*
+	 * initializes all of the game's levels
+	 */
 	public static void createLevel(){
 		atTitleScreen = false;
 		menu.currentMenu = menu.pauseMain;
@@ -104,6 +120,12 @@ public class GamePanel extends JPanel{
 		super.paintComponent(g);
 		Draw((Graphics2D)g);
 	}
+	/*
+	 * Draws the specified message to the loading screen
+	 * 
+	 * @param msg - the message to draw
+	 * @param clearLoadingMessages - whether or not to clear all the previous messeges from the loading screen
+	 */
 	public static void drawLoadingMessage(String msg, boolean clearLoadingMessages){
 		loading = true;
 		if(clearLoadingMessages){
@@ -112,6 +134,9 @@ public class GamePanel extends JPanel{
 		loadingMessages.add(msg);
 		jframe.paint(jframe.getGraphics());		
 	}
+	/*
+	 * Sets the current level to be the one specified
+	 */
 	public static void setCurrentLevel(Level lvl){
 		for(int i = 0; i<levels.size();i++){
 			if(levels.get(i).name.equals(lvl.name)){
@@ -122,6 +147,11 @@ public class GamePanel extends JPanel{
 		}
 		System.out.println("failed to set level, lvl name was: "+lvl.name);
 	}
+	/*
+	 * Draws the game
+	 * 
+	 * @param g - the graphics2D object to use for drawing
+	 */
 	public void Draw(Graphics2D g){
 
 		if (atTitleScreen&&!loading){
