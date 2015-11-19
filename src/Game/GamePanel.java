@@ -231,8 +231,11 @@ public class GamePanel extends JPanel{
 
 			//display for being in battle
 			if(inBattle)
+
 			{
+				menu.drawMenu(g, menu.combatmain);
 				bat.Draw(g);
+
 			}
 
 			//			g.setColor(Color.yellow);
