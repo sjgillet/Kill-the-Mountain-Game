@@ -7,7 +7,12 @@ import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+/**
+ * The window for the game
+ * 
+ * @author Matthew Finzel
+ *
+ */
 public class ApplicationUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	public Controller ctrl;

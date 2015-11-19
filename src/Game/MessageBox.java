@@ -6,7 +6,12 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-
+/**
+ * A dialog box which shows up at the bottom of the screen
+ * 
+ * @author Matthew Finzel
+ *
+ */
 public class MessageBox {
 	ArrayList<String> messages = new ArrayList<String>();
 	int currentMessage = 0;
@@ -22,6 +27,11 @@ public class MessageBox {
 		width = 700;
 		height = 200;
 	}
+	/*
+	 * Adds a message to the list of messages
+	 * 
+	 * @param msg - The message to add
+	 */
 	public void addMessage(String msg){
 		messages.add(msg);
 		framesSinceMouseOver=0;
@@ -29,7 +39,11 @@ public class MessageBox {
 		//			messages.remove(0);
 		//		}
 	}
-
+	/*
+	 * Draws the message box to the screen
+	 * 
+	 * @param g - The Graphics2D object to use for drawing
+	 */
 	public void Draw(Graphics2D g){
 
 		y = ApplicationUI.windowHeight-height;

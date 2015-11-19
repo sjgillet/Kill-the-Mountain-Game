@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
+/**
+ * The world map for the game's levels
+ * 
+ * @author Matthew Finzel
+ */
 public class LevelMap {
 	int xpos = 0;
 	int ypos = 0;
@@ -12,6 +16,11 @@ public class LevelMap {
 	double zoom = 1.0;
 	int borderWidth = 2;
 	public BufferedImage mapImage;
+	/*
+	 * instantiate the map
+	 * 
+	 * @param map - the 2d array of tiles to generate the map from
+	 */
 	public LevelMap(Tile[][] map){
 		mapImage = new BufferedImage( (map.length*pixelWidthPerTile),(map[0].length*pixelWidthPerTile), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = mapImage.getGraphics();
@@ -31,6 +40,11 @@ public class LevelMap {
 		}
 		g.dispose();
 	}
+	/*
+	 * Draws the map
+	 * 
+	 * @param g - The Graphics object to use for drawing
+	 */
 	public void Draw(Graphics g){
 		g.setColor(Color.black);
 		g.fillRect(0, 0, ApplicationUI.windowWidth, ApplicationUI.windowHeight);
