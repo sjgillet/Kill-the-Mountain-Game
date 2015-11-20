@@ -130,15 +130,9 @@ public class Battle {
 		GamePanel.dialog.addMessage(player.getName() + " VS! "  + listOpponents);
 		GamePanel.dialog.addMessage("FIGHT!");
 
-		//infinite loop here
 		setTurnOrder();
 
 	}
-
-	/*
-	 * TODO: Implement attacks/skills/etc.
-	 * TODO: After attack, check if target is dead. If dead, award XP
-	 */
 
 	/**
 	 * Initializes the player, level, and monsters objects, nothing else. 
@@ -211,9 +205,6 @@ public class Battle {
 		for(Enemy e : enemies)
 			turnOrder.add(e);
 		turnOrder.add(player);
-		//		for(	; i < enemies.size(); i++)
-		//			turnOrder[i] = enemies.get(i);
-		//		turnOrder[turnOrder.length - 1] = player;
 
 		//sort turn order by speed
 		for(i = 0; i < turnOrder.size() - 1; i++)
@@ -221,12 +212,11 @@ public class Battle {
 			boolean sorted = true;
 			if(turnOrder.get(i).getSpeed() < turnOrder.get(i+1).getSpeed())
 			{
+				System.out.println("Swap");
 				CombatEntity temp = turnOrder.get(i+1);
 				turnOrder.set(i+1, turnOrder.get(i));
+				turnOrder.set(i, temp);
 				sorted = false;
-				//				turnOrder.set(i, temp);
-				//				turnOrder[i+1] = turnOrder[i];
-				//				turnOrder[i] = temp;
 			}
 			if(!sorted) i = -1;
 		}
@@ -322,18 +312,20 @@ public class Battle {
 			System.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh);
 
 			double pick = rand.nextDouble();
+			pick = (attackCh + skillCh)/2;
 			if(pick > skillCh)
 				attemptRun(e);
 			else if(pick > attackCh)
 			{
-				int normStr = e.getStrength();
-				int normAcc = e.getAcc();
-				e.setStrength((int)(normStr*1.5));
-				e.setAcc((int)(normAcc*0.8));
-				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy!");
+				double normStr = e.getStrength();
+				double normAcc = e.getAcc();
+				e.setStrength((int)(double)(normStr*1.5d));
+				e.setAcc((int)(double)(normAcc*0.8));
+				e.updateStats();
+				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy! " + e.getStrength());
 				attack(e,player);
-				e.setStrength(normStr);
-				e.setAcc(normAcc);				
+				e.setStrength((int)normStr);
+				e.setAcc((int)normAcc);				
 			}
 			else 
 				attack(e,player);
@@ -344,19 +336,18 @@ public class Battle {
 	//Attack Normally
 	public void attack(CombatEntity attacker, CombatEntity target)
 	{
-		if(attacker == player)
-			player.setAcc(1);
+		
 		double accuracy = (attacker.getAcc() + rand.nextInt(attacker.getLuck()))*(attacker.getSpeed()/attacker.getEvasion());
 		double evade = target.getEvasion() + rand.nextInt(target.getLuck());
 		System.out.println(attacker.getAcc() + " " + target.getEvasion() + " " + accuracy + " " + evade + " " + attacker.getSpeed()/attacker.getAcc());
 		double hitChance = 0.5 + (accuracy-evade)/50.0;
-		//hitChance = Math.sqrt(hitChance);
 		if(hitChance > 1.0)
 			hitChance = 1.0;
 		else if (hitChance < 0.35)
 			hitChance = 0.35;		
 		if(rand.nextDouble() < hitChance)
 		{
+			System.out.println("Strength = " + attacker.getStrength());
 			int aAttack = attacker.getPDmg();
 			double tDR = target.getPDR();
 			int attackDamage = (int)(aAttack * (1 - tDR));
@@ -454,7 +445,6 @@ public class Battle {
 		//draw the enemies
 		for(int i = 0; i<enemies.size();i++){
 			Enemy currentEnemy = enemies.get(i);
-			System.out.println(currentEnemy.getXP());
 			int yDifference = sceneWidth/(enemies.size()+1);
 			g.drawImage(currentEnemy.battleArt, sceneX, sceneY+(yDifference*i), sceneWidth/3, sceneHeight/2, null);
 		}
