@@ -231,7 +231,7 @@ public class CombatEntity {
 		magDamage = mag + (1/4)*intel;
 		physDR = 100/(100 + arm);		System.out.println("DR: " + physDR);
 		magDR = 100/(100 + mre);
-		speed = this.getAcc();
+		speed = this.getEvasion();
 	}	
 	
 	public CombatEntity(){

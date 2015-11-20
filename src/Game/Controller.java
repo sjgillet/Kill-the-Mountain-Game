@@ -347,7 +347,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		//check if mouse was pressed
 		if(mousePressed){
 			//Point temp = MouseEvent.getPoint();
-			if(mousePressed){
+			if(mousePressed && !GamePanel.inBattle){
 				if(GamePanel.showMap==false){
 					if (!GamePanel.paused&&!GamePanel.inInventory){
 						GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);

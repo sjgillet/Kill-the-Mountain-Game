@@ -35,6 +35,10 @@ public class MessageBox {
 	public void addMessage(String msg){
 		messages.add(msg);
 		framesSinceMouseOver=0;
+		if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
+			GamePanel.dialog.currentMessage+=1;
+			GamePanel.dialog.currentIndex=0;
+		}
 		//		if(messages.size()>50){
 		//			messages.remove(0);
 		//		}
@@ -51,7 +55,7 @@ public class MessageBox {
 		currentMessage = messages.size()-1;
 		if(messages.size()>0){
 			if(currentIndex<messages.get(currentMessage).length()){
-				if(frames>=framesPerUpdate||messages.get(currentMessage).charAt(currentIndex)==' '){
+				if(frames>=framesPerUpdate||messages.get(currentMessage).charAt(currentIndex)==' ' && currentIndex < messages.get(currentMessage).length()-1){
 
 					currentIndex++;
 					frames = 0;

@@ -11,11 +11,7 @@ public class Enemy extends CombatEntity{
 	*/
 	private double[] statWeights;
 	private int statTotal;
-	
-	private int currAcc; 			//creature's current acc. Lowered in power attacks
-	
-	
-	
+		
 	private String description;
 	private double challenge;
 	private int xp;
@@ -35,7 +31,6 @@ public class Enemy extends CombatEntity{
 
 		{
 			this.currHP = 0;
-
 			this.kill();
 		}
 			
@@ -47,6 +42,11 @@ public class Enemy extends CombatEntity{
 		GamePanel.player.playerCombatant.awardXP(this.getXP());
 
 		//TODO: Reload last save or Exit
+	}
+	public void run()
+	{
+		this.isDead = true;
+		this.currHP = hp;
 	}
 	
 	
@@ -138,36 +138,10 @@ public class Enemy extends CombatEntity{
 		
 		this.setCurrHP(this.getHP());	System.out.println(this.getName() + "CURHP: " + this.getCurrHP());//set hp to max on creation
 		this.setCurrSP(this.getSP());	System.out.println(this.getName() + "CURRSP: " + this.getCurrSP());//set sp to max on creation
-		this.updateStats();				//update damage and damage resistance
+		this.updateStats();				//update damage and damage resistance and speed
 	}
 	
-	public String takeAction(double pick)
-	{
-		//determine action by weight of decision
-		int attackWt = 100;										//monster attacks normally
-		int skillWt = 10*currSP;								//monster makes special attack. Less likely for 'tired' opponents
-		int runWt = (int)( (double)((hp - currHP)/hp) *100);	//monster runs. More likely for injured opponents
-		
-		int totalWt = attackWt + skillWt + runWt;
-		double attackCh = attackWt/totalWt;
-		double skillCh = skillWt/totalWt + attackCh;
-		double runCh = runWt/totalWt + skillCh;
-
-		if(pick > runCh)
-		{
-			
-		}
-		else if(pick > skillCh)
-		{
-			
-		}
-		else 
-		{
-			
-		}
-		
-		return "";
-	}
+	
 	
 	
 	

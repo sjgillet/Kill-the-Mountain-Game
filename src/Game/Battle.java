@@ -264,7 +264,10 @@ public class Battle {
 		if(turnOrder.get(orderIndex) != player)
 		{
 			playerTurn = false;
-			//turnOrder[orderIndex].takeAction();
+			//get enemy, pass to take action
+			for(Enemy e : enemies)
+				if(e == turnOrder.get(orderIndex))
+					takeAction(e);
 		}
 		else playerTurn = true;
 	}
@@ -302,19 +305,56 @@ public class Battle {
 		return null;
 	}
 
+	public void takeAction(Enemy e)
+	{
+		if(!e.isDead())
+		{
+			//determine action by weight of decision
+			double attackWt = 100;						//monster attacks normally
+			double skillWt = 10*e.getCurrSP();			//monster makes special attack. Less likely for 'tired' opponents
+			double runWt = 0;							//monster runs. More likely for injured opponents
+			if(e.getCurrHP() < e.getHP()/2)
+				runWt = (int)( (double)((e.getHP() - e.getCurrHP())/e.getHP()) *100);	
+			double totalWt = attackWt + skillWt + runWt;
+			double attackCh = (double)(attackWt/totalWt);
+			double skillCh = (double)(skillWt/totalWt + attackCh);
+			double runCh = (double)(runWt/totalWt + skillCh);
+			System.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh);
+
+			double pick = rand.nextDouble();
+			if(pick > skillCh)
+				attemptRun(e);
+			else if(pick > attackCh)
+			{
+				int normStr = e.getStrength();
+				int normAcc = e.getAcc();
+				e.setStrength((int)(normStr*1.5));
+				e.setAcc((int)(normAcc*0.8));
+				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy!");
+				attack(e,player);
+				e.setStrength(normStr);
+				e.setAcc(normAcc);				
+			}
+			else 
+				attack(e,player);
+		}
+		changeTurn();
+	}
 
 	//Attack Normally
 	public void attack(CombatEntity attacker, CombatEntity target)
 	{
-		double accuracy = (attacker.getAcc() + rand.nextInt(attacker.getLuck()))*(attacker.getSpeed()/attacker.getAcc());
+		if(attacker == player)
+			player.setAcc(1);
+		double accuracy = (attacker.getAcc() + rand.nextInt(attacker.getLuck()))*(attacker.getSpeed()/attacker.getEvasion());
 		double evade = target.getEvasion() + rand.nextInt(target.getLuck());
+		System.out.println(attacker.getAcc() + " " + target.getEvasion() + " " + accuracy + " " + evade + " " + attacker.getSpeed()/attacker.getAcc());
 		double hitChance = 0.5 + (accuracy-evade)/50.0;
-		hitChance = Math.sqrt(hitChance);
+		//hitChance = Math.sqrt(hitChance);
 		if(hitChance > 1.0)
 			hitChance = 1.0;
 		else if (hitChance < 0.35)
-			hitChance = 0.35;
-		System.out.println(attacker.getName() + " attacking " + target.getName() + "; acc = " + attacker.getAcc() + "; eva = " + target.getEvasion() + "; hitChance = " + hitChance);		
+			hitChance = 0.35;		
 		if(rand.nextDouble() < hitChance)
 		{
 			int aAttack = attacker.getPDmg();
@@ -322,33 +362,41 @@ public class Battle {
 			int attackDamage = (int)(aAttack * (1 - tDR));
 			target.applyDamage(attackDamage);
 
-//			GamePanel.dialog.addMessage(attacker.getName() + " dealt "
-//					+ attackDamage + " to " + target.getName() + "!");
+			GamePanel.dialog.addMessage(attacker.getName() + " dealt "
+					+ attackDamage + " to " + target.getName() + "!");
+			if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
+				GamePanel.dialog.currentMessage+=1;
+				GamePanel.dialog.currentIndex=0;
+			}
 			System.out.println(attacker.getName() + " dealt "
 					+ attackDamage + " to " + target.getName() + "!");
 			if(target.getCurrHP() == 0)
 			{
-				//GamePanel.dialog.addMessage(target.getName() + " died!");
-				target.kill();
+				GamePanel.dialog.addMessage(target.getName() + " died!");
 				//battle end?
 			}
 		}
 		else 
 		{
-			//GamePanel.dialog.addMessage(attacker.getName() + " missed!");
+			GamePanel.dialog.addMessage(attacker.getName() + " missed!");
+			//			if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
+			//				GamePanel.dialog.currentMessage+=1;
+			//				GamePanel.dialog.currentIndex=0;
+			//			}
 			System.out.println(attacker.getName() + " missed!");
 		}
-		changeTurn();
+		if(attacker == player)
+			changeTurn();
 	}
-	
-	
+
+
 	//Run Away
-	
+
 	public void DrawEnemyNamePlate(Graphics2D g, int x, int y, Enemy enemy){
 		Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 		g.setFont(font);
 		g.setColor(Color.BLACK);
-		
+
 		//draw player's nameplate
 		int namePlateWidth = 250;
 		int namePlateHeight = 85;
@@ -361,8 +409,8 @@ public class Battle {
 		//draw player's name
 		g.setColor(Color.black);
 		g.drawString(enemy.getName(), x+20, y+20);
-		
-		
+
+
 		int hpBarLength = enemy.hp*2;
 		if(hpBarLength>200){
 			hpBarLength=200;
@@ -371,24 +419,24 @@ public class Battle {
 		if(spBarLength>200){
 			spBarLength=200;
 		}
-		
+
 		//draw player's health bar
 		g.setColor(new Color(255,0,0,200));
 		g.fillRect(x+20, y+30, hpBarLength, 30);//background of bar
 		g.setColor(new Color(0,193,22));
 		g.fillRect(x+20, y+30, (int)(double)((double)hpBarLength*((double)enemy.currHP/(double)enemy.hp)), 30);
-		
+
 		//draw player's sp bar
 		g.setColor(new Color(50,50,50,200));
 		g.fillRect(x+20, y+65, spBarLength, 15);//background of bar
 		g.setColor(Color.cyan);
 		g.fillRect(x+20, y+65, (int)(double)((double)spBarLength*((double)enemy.currSP/(double)enemy.sp)), 15);
 	}
-	
+
 	public void Draw(Graphics2D g){
 		int sceneWidth = 600;
 		int sceneHeight = 400;
-		
+
 		g.setColor(Color.green);
 		g.fillRect((ApplicationUI.windowWidth/2)-(sceneWidth/2)-1, (ApplicationUI.windowHeight/2)-(sceneHeight/2)-1, sceneWidth+2, sceneHeight+2);
 		g.setColor(Color.lightGray);
@@ -449,7 +497,7 @@ public class Battle {
 	public void attemptRun()
 	{
 		GamePanel.dialog.addMessage("NOPE!");
-		int playerSpeed = player.getAcc();
+		int playerSpeed = player.getSpeed();
 		int enemiesSpeed = 0;
 		int enemiesAlive = 0;
 		int enemiesQuicker = 0;
@@ -460,8 +508,8 @@ public class Battle {
 		{
 			if(!e.isDead())
 			{
-				enemiesSpeed += e.getAcc();
-				if(e.getAcc() > playerSpeed)
+				enemiesSpeed += e.getSpeed();
+				if(e.getSpeed() > playerSpeed)
 					enemiesQuicker++;
 				else 
 					enemiesSlower++;
@@ -499,14 +547,12 @@ public class Battle {
 		if(rand.nextDouble() < runChance)
 		{
 			GamePanel.dialog.addMessage(e.getName() + " got away!");
-			//remove from lists, award xp
+			//remove from active participation, award xp
 			player.awardXP(e.getXP()/2);
-			enemies.remove(e);
+			e.run();
 
 		}
-		else GamePanel.dialog.addMessage("Oh, no you don't!" + e.getName() + " didn't get away.");
-
-		changeTurn();
+		else GamePanel.dialog.addMessage("Oh, no you don't! " + e.getName() + " didn't get away.");
 	}
 
 }

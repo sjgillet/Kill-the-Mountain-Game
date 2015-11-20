@@ -478,7 +478,7 @@ public class PlayerCombatant extends CombatEntity{
 		
 		if(inv.weapon!=null)
 			wpnSpd = inv.weapon.item.getSpeed();
-		speed = (int)(this.getAcc()*wpnSpd);					System.out.println(this.getName() + "'s Speed: " + speed);
+		speed = (int)(this.getEvasion()*wpnSpd);				System.out.println(this.getName() + "'s Speed: " + speed);
 	}	
 	
 }
