@@ -1,8 +1,10 @@
 package Game;
 
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class PlayerCombatant extends CombatEntity{
+	BufferedImage battleArt;
 	public enum playerRace
 	{
 		HUMAN, DWARF, ELF, MUNCHKIN, BEAR
@@ -119,6 +121,7 @@ public class PlayerCombatant extends CombatEntity{
 		switch(race)
 		{
 		case HUMAN:	//average statistics
+			battleArt = GamePanel.human;
 			hp  = 10;
 			sp = 0;
 			str = 10;
@@ -132,6 +135,7 @@ public class PlayerCombatant extends CombatEntity{
 			break;
 			
 		case DWARF:	//high natural resistances and hp, but clumsy
+			battleArt = GamePanel.dwarf;
 			hp  = 15;
 			sp = 0;
 			str = 12;
@@ -145,6 +149,7 @@ public class PlayerCombatant extends CombatEntity{
 			break;
 			
 		case ELF:	//high magic, low natural resistances
+			battleArt = GamePanel.elf;
 			hp  = 8;
 			sp = 10;
 			str = 6;
@@ -158,6 +163,7 @@ public class PlayerCombatant extends CombatEntity{
 			break;
 			
 		case MUNCHKIN: //high accuracy/evasion, low hp/resistance
+			battleArt = GamePanel.munchkin;
 			hp  = 10;
 			sp = 0;
 			str = 7;
@@ -171,6 +177,7 @@ public class PlayerCombatant extends CombatEntity{
 			break;
 			
 		case BEAR:	//very high damage, but clumsy and little magic
+			battleArt = GamePanel.bear;
 			hp  = 20;
 			sp = 5;
 			str = 20;

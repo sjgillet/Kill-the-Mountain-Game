@@ -344,18 +344,33 @@ public class Battle {
 	}
 	
 	public void Draw(Graphics2D g){
-		int sceneWidth = 600;
-		int sceneHeight = 400;
-		
+		PlayerCombatant plr = getPlayer();
+		ArrayList<Enemy> enemies = getEnemies();
+		Enemy e = enemies.get(0);
+		int sceneWidth = ApplicationUI.windowWidth/2;
+		int sceneHeight = ApplicationUI.windowHeight/2;
+		int sceneX = (ApplicationUI.windowWidth/2)-(sceneWidth/2);
+		int sceneY = (ApplicationUI.windowHeight/2)-(sceneHeight/2);
+		//draw the background for the scene
 		g.setColor(Color.green);
-		g.fillRect((ApplicationUI.windowWidth/2)-(sceneWidth/2)-1, (ApplicationUI.windowHeight/2)-(sceneHeight/2)-1, sceneWidth+2, sceneHeight+2);
+		g.fillRect(sceneX-1, sceneY-1, sceneWidth+2, sceneHeight+2);
 		g.setColor(Color.lightGray);
-		g.fillRect((ApplicationUI.windowWidth/2)-(sceneWidth/2), (ApplicationUI.windowHeight/2)-(sceneHeight/2), sceneWidth, sceneHeight);
+		g.fillRect(sceneX, sceneY, sceneWidth, sceneHeight);
+		
+		//draw the player
+		g.drawImage(plr.battleArt,sceneX+sceneWidth-(sceneWidth/3),sceneY+sceneHeight-(sceneHeight/2),sceneWidth/3,sceneHeight/2,null);
+		//draw the enemies
+		for(int i = 0; i<enemies.size();i++){
+			Enemy currentEnemy = enemies.get(i);
+			System.out.println(currentEnemy.getXP());
+			int yDifference = sceneWidth/(enemies.size()+1);
+			g.drawImage(currentEnemy.battleArt, sceneX, sceneY+(yDifference*i), sceneWidth/3, sceneHeight/2, null);
+		}
+		
 		Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 		g.setFont(font);
 		g.setColor(Color.BLACK);
-		PlayerCombatant plr = getPlayer();
-		Enemy e = getEnemies().get(0);
+		
 
 		//draw player's nameplate
 		int namePlateWidth = 250;
@@ -393,8 +408,8 @@ public class Battle {
 		g.fillRect((ApplicationUI.windowWidth-namePlateWidth)+20, 65, (int)(double)((double)spBarLength*((double)plr.currSP/(double)plr.sp)), 15);
 
 		//draw enemy nameplates
-		for(int i = 0; i<getEnemies().size();i++){
-			DrawEnemyNamePlate(g, 0, i*100, getEnemies().get(i));
+		for(int i = 0; i<enemies.size();i++){
+			DrawEnemyNamePlate(g, 0, i*100, enemies.get(i));
 		}
 		g.setColor(Color.white);
 		//				g.drawString(bat.getPlayer().getName(), 5, ApplicationUI.windowHeight - 170);

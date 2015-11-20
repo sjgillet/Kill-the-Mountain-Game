@@ -893,10 +893,10 @@ public class Tile {
 		if(door!=null){
 			//door.Draw(g);
 		}
-		Font font = new Font("Iwona Heavy",Font.BOLD,10);
-		g.setFont(font);
-		g.setColor(Color.WHITE);
-		g.drawString(this.tileID+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+10);
+		//Font font = new Font("Iwona Heavy",Font.BOLD,10);
+		//g.setFont(font);
+		//g.setColor(Color.WHITE);
+		//g.drawString(this.tileID+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+10);
 		//g.setColor(Color.pink);
 		//g.drawString(oldElevation+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+25);
 	}

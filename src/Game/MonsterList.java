@@ -39,17 +39,17 @@ public class MonsterList {
 	private final Enemy goblin = new Enemy("Goblin", "Ugly little thing. Doesn't look that threatening.", 0.3, 10);
 	
 	public MonsterList()
-	{
+	{	
 		this.allMonsters = new ArrayList<Enemy>();
 		this.weights = new ArrayList<Double[]>();
 		
 		//golem
 
 
+		System.out.println("Generating Monster List");
 		golem.setWeights(0.1, 0.3, 0.05, 0.5, 0.05, 0.075, 0.0, 0.2, 0.225, 0.1);
 		golem.setXP(50);
-		
-
+		golem.setArt(GamePanel.golem);
 		allMonsters.add(golem);
 		
 		//goblin
@@ -58,6 +58,7 @@ public class MonsterList {
 		goblin.lootList.add(GamePanel.player.inventory.getItem("Rusty Spear"));
 		goblin.lootList.add(GamePanel.player.inventory.getItem("Potion of Healing 10"));
 		goblin.lootRates = new double[]{0.50, 0.75};
+		goblin.setArt(GamePanel.goblin);
 		allMonsters.add(goblin);
 		
 		//kobold

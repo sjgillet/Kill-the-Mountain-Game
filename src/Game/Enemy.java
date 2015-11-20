@@ -1,5 +1,6 @@
 package Game;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class Enemy extends CombatEntity{
 	private int xp;
 	public ArrayList<Item> lootList;
 	public double[] lootRates;
+	public BufferedImage battleArt = null;
 	
 	/**
 	 * Applies a given amount of damage to the monster's hp
@@ -62,6 +64,10 @@ public class Enemy extends CombatEntity{
 	public void setDescription(String newDescript)
 	{
 		description = newDescript;
+	}
+	public void setArt(BufferedImage art)
+	{
+		this.battleArt = art;
 	}
 	
 	public double getChallenge()

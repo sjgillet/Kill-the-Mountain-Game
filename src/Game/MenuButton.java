@@ -62,12 +62,6 @@ public class MenuButton {
 			System.out.println("here");
 			GamePanel.createLevel();
 		}
-		
-		else if (GamePanel.inBattle){
-			
-			
-			
-		}
 
 
 	}
@@ -96,6 +90,11 @@ public class MenuButton {
 		g.fillRect(xPosition, yPosition, buttonWidth, buttonHeight);
 		g.setColor(Color.white);
 		g.drawRect(xPosition, yPosition, buttonWidth, buttonHeight);
+		//if the mouse is over this button
+		if(isOver()){
+			g.setColor(new Color(20,200,20));;
+			g.drawRect(xPosition, yPosition, buttonWidth, buttonHeight-1);
+		}
 		Font font = new Font("Iwona Heavy",Font.BOLD,18);
 		g.setFont(font);
 		FontMetrics m = g.getFontMetrics(font);

@@ -23,6 +23,15 @@ public class GamePanel extends JPanel{
 	public static BufferedImage[][] overlayTiles = FileIO.loadSpriteSheet("/Textures/TileOverlays.png", 32, 32);
 	public static BufferedImage sword = FileIO.loadImage("/Textures/Sword.png");
 	public static BufferedImage titleScreen = FileIO.loadImage("/Textures/TitleScreen.png");
+	
+	//battle participant textures
+	public static BufferedImage bear = FileIO.loadImage("/Textures/bear.png");
+	public static BufferedImage dwarf = FileIO.loadImage("/Textures/dwarf.png");
+	public static BufferedImage elf = FileIO.loadImage("/Textures/elf.png");
+	public static BufferedImage goblin = FileIO.loadImage("/Textures/goblin.png");
+	public static BufferedImage golem = FileIO.loadImage("/Textures/golem.png");
+	public static BufferedImage human = FileIO.loadImage("/Textures/human.png");
+	public static BufferedImage munchkin = FileIO.loadImage("/Textures/munchkin.png");
 
 
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
@@ -231,11 +240,8 @@ public class GamePanel extends JPanel{
 
 			//display for being in battle
 			if(inBattle)
-
 			{
-				menu.drawMenu(g, menu.combatmain);
 				bat.Draw(g);
-
 			}
 
 			//			g.setColor(Color.yellow);
