@@ -15,7 +15,7 @@ public class CombatEntity {
 	protected int hp;		//maxiumum hit points; measures the character's health
 	protected int sp;		//maximum skill points; measures the character's exhaustion
 	protected int str;		//strength; basis for physical damage
-	protected int acc;		//accuracy; basis for attack hit chance and speed stat
+	protected int acc;		//accuracy; basis for attack hit chance
 	protected int mag;		//magic; basis for magical damage
 	protected int intel;	//intelligence; basis for skill/spell hit chance
 	protected int eva;		//evasion; basis for avoiding attacks/skills; determines turn order
