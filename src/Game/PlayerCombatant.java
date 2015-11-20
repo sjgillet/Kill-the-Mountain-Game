@@ -172,7 +172,7 @@ public class PlayerCombatant extends CombatEntity{
 			
 		case BEAR:	//very high damage, but clumsy and little magic
 			hp  = 20;
-			sp = 0;
+			sp = 5;
 			str = 20;
 			acc = 6;
 			eva = 6;

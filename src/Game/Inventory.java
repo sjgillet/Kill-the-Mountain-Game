@@ -64,8 +64,7 @@ public class Inventory {
 			}
 		}
 
-		main[1][1].item = new Item("test2", false, "test2");
-		head = new InventorySlot(0, 0, new Item("sword", false, "helmet"), "helmet");
+		head = new InventorySlot(0, 0, null, "helmet");
 		torso = new InventorySlot(0, 0, null, "torso");
 		arms = new InventorySlot(0, 0, null, "arms");
 		legs = new InventorySlot(0, 0, null, "legs");
@@ -97,6 +96,9 @@ public class Inventory {
 		return false;
 	}
 
+	/*
+	 * Drops an item from the inventory and places it where the player is standing
+	 */
 	public void dropFromInventory() {
 
 		if (GamePanel.levels.size()>GamePanel.currentLevel){
@@ -110,7 +112,6 @@ public class Inventory {
 				currentHeldItem.xPosition = x*32;
 				currentHeldItem.yPosition = y*32;
 				GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.add(currentHeldItem);
-				GamePanel.levels.get(GamePanel.currentLevel).tileMap[x][y].itemsOnThisTile.get(0).onGround = true;
 				
 				currentHeldItem = null;
 			}
@@ -135,8 +136,7 @@ public class Inventory {
 		allItems = new ArrayList<Item>();
 		
 		Item longsword = new Item("Longsword", 
-				"A plain but well-crafted blade of steel. Stick 'em with the pointy end.", 
-				"weapon", 1.10d, 1.00d);
+				"A plain but well-crafted blade of steel. Stick 'em with the pointy end.", 1.10d, 1.00d);
 		
 		Item plateMail = new Item("Plate Mail", 
 				"Heavy, durable, and only mildy uncomfortable armor fashioned from plates of steel.",
@@ -152,14 +152,11 @@ public class Inventory {
 				"legs", 10,5);
 		
 		Item potHeal10 = new Item("Potion of Healing 10",
-				"A vial of a thin red liquid that gleams in the light.",
-				"consumable", 10, 0, false);
+				"A vial of a thin red liquid that gleams in the light.", 10, 0, false);
 		Item potHeal50 = new Item("Potion of Healing 50",
-				"A large jug of a familiar red potion.",
-				"consumable", 50, 0, false);
+				"A large jug of a familiar red potion.", 50, 0, false);
 		Item antidote = new Item("Antidote",
-				"A vial of a thin red liquid that gleams in the light.",
-				"consumable", 0, 0, true);
+				"A vial of a thin red liquid that gleams in the light.", 0, 0, true);
 		/* Compile all items into one list for referencing for loot drops
 		 * Organized by quality into tiers for ease of access*/
 		allItems = new ArrayList<Item>();
@@ -175,6 +172,62 @@ public class Inventory {
 		
 		//end tier 3 items
 		
+	}
+	public Item randomItem(String type){
+		Item tempItem = null;
+		if(type.equals("consumable")){
+			int tier = 0;
+			int roll = GamePanel.randomNumber(1, 100);
+			ArrayList<Item> consumables1 = new ArrayList<Item>();
+			if(roll>=95){//5%
+				consumables1 = consumablesT3;
+			}
+			else if(roll<95&&roll>=80){//15%
+				consumables1 = consumablesT2;
+			}
+			else{//80%
+				consumables1 = consumablesT1;
+			}
+			if(consumables.size()>0){
+				tempItem=consumables.get(GamePanel.randomNumber(0, consumables1.size()-1));
+			}
+		}
+		else if(type.equals("weapon")){
+			int tier = 0;
+			int roll = GamePanel.randomNumber(1, 100);
+			ArrayList<Item> damageItems = new ArrayList<Item>();
+			if(roll>=95){//5%
+				damageItems = consumablesT3;
+			}
+			else if(roll<95&&roll>=80){//15%
+				damageItems = consumablesT2;
+			}
+			else{//80%
+				damageItems = consumablesT1;
+			}	
+			if(damageItems.size()>0){
+				tempItem=damageItems.get(GamePanel.randomNumber(0, damageItems.size()-1));
+			}
+		}
+		else if(type.equals("armor")){
+			int tier = 0;
+			int roll = GamePanel.randomNumber(1, 100);
+			ArrayList<Item> armors1 = new ArrayList<Item>();
+			if(roll>=95){//5%
+				armors1 = consumablesT3;
+			}
+			else if(roll<95&&roll>=80){//15%
+				armors1 = consumablesT2;
+			}
+			else{//80%
+				armors1 = consumablesT1;
+			}	
+			if(armors1.size()>0){
+				tempItem=armors1.get(GamePanel.randomNumber(0, armors1.size()-1));
+			}
+		}
+		return tempItem;//will cause null pointer exceptions in the future!(needs to return a clone of the item instead of
+		//returning that item in specific
 	}
 	/**
 	 * Retrieves an item from the item lists with the given name

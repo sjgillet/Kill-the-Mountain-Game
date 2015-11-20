@@ -32,6 +32,9 @@ public class weatherParticle {
 
 		id = ID;
 	}
+	/*
+	 * updates the particle every frame
+	 */
 	public void update(){
 		if(ypos<startY){
 			if(id==0){//rain
@@ -48,6 +51,11 @@ public class weatherParticle {
 
 		}
 	}
+	/*
+	 * Draws this to the screen
+	 * 
+	 * @param g - The Graphics2D object to use for drawing
+	 */
 	public void Draw(Graphics2D g){
 		if(id==0){
 			if(splashWidth==0){

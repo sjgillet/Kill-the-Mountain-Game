@@ -6,7 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
+/**
+ * A 32x32 pixel area of the game's world
+ * 
+ * @author Matthew Finzel, Ryan Brendel, Stuart Gillete
+ *
+ */
 public class Tile {
 	int xpos;
 	int ypos;
@@ -30,7 +35,15 @@ public class Tile {
 	ArrayList<Rectangle> collisionBoxes = new ArrayList<Rectangle>();
 	ArrayList<Item> itemsOnThisTile = new ArrayList<Item>();
 	Tile[][] tileMap;
-	
+	/*
+	 * Instantiate the tile
+	 * 
+	 * @param x - the x position of this tile within the array that contains it 
+	 * @param y - the y position of this tile within the array that contains it
+	 * @param id - the id of this tile(determines how it looks and what collides with it)
+	 * @param elev - the elevation of this tile (determines the color of the tile and how it looks)
+	 * @param tMap - the 2D array that contains this tile
+	 */
 	public Tile(int x, int y, int id, int elev, Tile[][] tMap){
 		tileMap = tMap;
 		xpos = x*32;
@@ -99,6 +112,16 @@ public class Tile {
 			artY = 0;
 			collisionType = 3;
 		}
+		if(tileID==11){//house interior wall
+			artX = 0;
+			artY = 4;
+			collisionType=1;
+		}
+		if(tileID==12){//house floor
+			artX = 1;
+			artY = 5;
+			collisionType = 0;
+		}
 
 	}
 
@@ -156,6 +179,8 @@ public class Tile {
 	//	}
 	/*
 	 * Updates the artwork of the tile to make it match up with surrounding tiles
+	 * 
+	 * @param waterlevel - the waterlevel of the level this tile is in
 	 */
 	public void updateArt(int waterlevel){
 		Tile northernTile = getNorthTile();
@@ -223,6 +248,7 @@ public class Tile {
 					}
 				}
 			}
+			
 			if(tileID==11){//house window
 				if(southernTile!=null&&southernTile.tileID==11){
 					artX = 1;
@@ -316,7 +342,7 @@ public class Tile {
 				if(northernTile!=null&&northernTile.elevation>elevation){
 					artX = 4;
 					artY = 1;
-					if(GamePanel.levels.get(0).randomNumber(1,100)==1){//chance to have a shackled skeleton hanging from the wall
+					if(GamePanel.levels.size()>0&&GamePanel.levels.get(0).randomNumber(1,100)==1){//chance to have a shackled skeleton hanging from the wall
 						vegetationID=3;
 						BufferedImage[][] imagesToCombine = new BufferedImage[1][2];
 						imagesToCombine[0][0]=GamePanel.overlayTiles[5][0];
@@ -774,6 +800,13 @@ public class Tile {
 		}
 		return null;
 	}
+	/*
+	 * Draws the tile to the screen
+	 * 
+	 * @param g - The Graphics2D object to use for drawing
+	 * @param scale - The scale to draw at
+	 * @param forWorldMap - true if this is being called to create the world map, false if not
+	 */
 	public void Draw(Graphics2D g, double scale, boolean forWorldMap){
 		int x=(int)(double)(xpos*scale);
 		int y=(int)(double)(ypos*scale);
@@ -826,7 +859,13 @@ public class Tile {
 		for (int i = 0; i<itemsOnThisTile.size(); i++){
 			System.out.println("called draw method");
 			if (itemsOnThisTile.get(i)!=null){
-			itemsOnThisTile.get(i).draw(g);
+				itemsOnThisTile.get(i).draw(g);
+			}
+			else{
+				itemsOnThisTile.remove(i);
+				if(i>0){
+					i--;
+				}
 			}
 		}
 		
@@ -854,13 +893,20 @@ public class Tile {
 		if(door!=null){
 			//door.Draw(g);
 		}
-		//Font font = new Font("Iwona Heavy",Font.BOLD,10);
-		//g.setFont(font);
-		//g.setColor(Color.WHITE);
-		//g.drawString(elevation+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+10);
+		Font font = new Font("Iwona Heavy",Font.BOLD,10);
+		g.setFont(font);
+		g.setColor(Color.WHITE);
+		g.drawString(this.tileID+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+10);
 		//g.setColor(Color.pink);
 		//g.drawString(oldElevation+"", ((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos+10,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos+25);
 	}
+	/*
+	 * Used to draw any terrain feature that should be drawn on top of the tile and the player
+	 * 
+	 * @param g - The Graphics2D object used to draw the feature
+	 * @param scale - the scale to draw at
+	 * @param forWorldMap - true if this is being called to draw the world map, false if not
+	 */
 	public void DrawVegetation(Graphics2D g, double scale, boolean forWorldMap){
 		int x=(int)(double)(xpos*scale);
 		int y=(int)(double)(ypos*scale);

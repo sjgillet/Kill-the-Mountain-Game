@@ -5,24 +5,29 @@ import java.util.ArrayList;
 
 public class Menu {
 
-
+	//Create ArrayLists for different menu states
 	ArrayList<MenuButton> title = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> main = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> pauseMain = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> options = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> load = new ArrayList<MenuButton>();
+	
+	ArrayList<MenuButton> combatmain = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> currentMenu = title;
 
 	int menuxPos;
 	int menuyPos;
 	int buttonWidth = 250;
 	int buttonHeight = 40;
-
+	
+	/*
+	 * Add Menu Buttons to each menu state
+	 */
 	public Menu() {
 		title.add(new MenuButton(buttonWidth, buttonHeight,"New Game"));
 		title.add(new MenuButton(buttonWidth, buttonHeight,"Load Game"));
 		title.add(new MenuButton(buttonWidth, buttonHeight,"Exit"));
-		
+
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Game"));
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Inventory"));
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Display Stats"));
@@ -41,8 +46,21 @@ public class Menu {
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Back to Save/Load"));
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Load Last Checkpoint"));
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Load Last Save"));
+		
+		//combat menus
+		combatmain.add(new MenuButton(buttonWidth, buttonHeight, "Attack"));
+		combatmain.add(new MenuButton(buttonWidth, buttonHeight, "Items"));
+		combatmain.add(new MenuButton(buttonWidth, buttonHeight, "Skills"));
+		combatmain.add(new MenuButton(buttonWidth, buttonHeight, "Run"));
 	}
 
+	/*
+	 * Switches the menu state so the game will display the correct
+	 * set of buttons at the right times
+	 * 
+	 * @param String, name of menu state to change to
+	 * 
+	 */
 	public void menuState(String current) {
 
 		switch(current.toLowerCase())
@@ -151,11 +169,24 @@ public class Menu {
 	}
 
 	 */
+	
+	/*
+	 * Draw current menu state
+	 * 
+	 * @param Graphics2D g
+	 * @param ArrayList of buttons (menu) to draw
+	 */
 	public void drawMenu(Graphics2D g, ArrayList<MenuButton> a){
 
-		menuxPos = (ApplicationUI.windowWidth/2 - (buttonWidth/2));
-		menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
-
+		if (GamePanel.inBattle){
+			menuxPos = (ApplicationUI.windowWidth - (buttonWidth));
+			menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
+		}
+		else {
+			menuxPos = (ApplicationUI.windowWidth/2 - (buttonWidth/2));
+			menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
+		}
+		
 		for (int i = 0; i<a.size(); i++) {
 			a.get(i).xPosition=menuxPos;
 			a.get(i).yPosition = menuyPos+(i*buttonHeight);

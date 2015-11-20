@@ -62,6 +62,12 @@ public class MenuButton {
 			System.out.println("here");
 			GamePanel.createLevel();
 		}
+		
+		else if (GamePanel.inBattle){
+			
+			
+			
+		}
 
 
 	}

@@ -50,6 +50,11 @@ public class Door {
 		toggleDoor(false);
 		return false;
 	}
+	/*
+	 * Toggles whether or not the door is open
+	 * 
+	 * @param isOpen - a boolean which is true if the door should be set to an open state
+	 */
 	public void toggleDoor(boolean isOpen){
 		if(id==1){//house door
 			for(int x = 0; x<3;x++){
@@ -64,6 +69,9 @@ public class Door {
 			}
 		}
 	}
+	/*
+	 * Moves the player to a new position and changes the current level
+	 */
 	public void enterDoor(){
 		if(updatesSinceEntered>=0){
 			System.out.println("spawn point: "+spawnPointB);
@@ -81,8 +89,5 @@ public class Door {
 			updatesSinceEntered++;
 		}
 	}
-	public void Draw(Graphics2D g){
-		g.setColor(Color.red);
-		g.fillRect(((ApplicationUI.windowWidth/2)-16)+xposA-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+yposA-(int)GamePanel.player.ypos,96,64);
-	}
+	
 }

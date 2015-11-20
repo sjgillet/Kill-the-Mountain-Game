@@ -7,7 +7,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
+/**
+ * 
+ * @author Matthew Finzel
+ *
+ */
 public class FileIO {
 	/*
 	 * Loads an image from an image file
@@ -20,7 +24,7 @@ public class FileIO {
 		BufferedImage image;
 		try
 		{
-			image = ImageIO.read(Images.class.getResourceAsStream(imageName));
+			image = ImageIO.read(FileIO.class.getResourceAsStream(imageName));
 			BufferedImage img = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = img.getGraphics();
 			g.drawImage(image, 0, 0, null);
@@ -34,6 +38,11 @@ public class FileIO {
 		}
 		return image;
 	}
+	/*
+	 * Combines a 2d array of images into one larger image
+	 * 
+	 * @return The result of combining the images
+	 */
 	public static BufferedImage combineImages(BufferedImage[][] imgs){
 		BufferedImage result = new BufferedImage( (imgs.length)*imgs[0][0].getWidth(),(imgs[0].length)*imgs[0][0].getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = result.getGraphics();
@@ -45,6 +54,15 @@ public class FileIO {
 		g.dispose();
 		return result;
 	}
+	/*
+	 * finds all of the black-and-white pixels in an image and sets them to the specified color
+	 * minus their original color(for shading)
+	 * 
+	 * @param img - The image to be modified.
+	 * @param color - The desired color.
+	 * 
+	 * @return The modified image.
+	 */
 	public static BufferedImage colorImage(BufferedImage img, Color color){
 		BufferedImage result = new BufferedImage(img.getWidth(),img.getHeight(),BufferedImage.TYPE_INT_ARGB);
 		for(int x = 0; x<img.getWidth();x++){
@@ -95,7 +113,7 @@ public class FileIO {
 				BufferedImage sheet;
 				try
 				{
-					sheet = ImageIO.read(Images.class.getResourceAsStream(imageName));
+					sheet = ImageIO.read(FileIO.class.getResourceAsStream(imageName));
 				}
 				catch (IOException e)
 				{
