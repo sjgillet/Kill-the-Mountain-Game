@@ -364,10 +364,6 @@ public class Battle {
 
 			GamePanel.dialog.addMessage(attacker.getName() + " dealt "
 					+ attackDamage + " to " + target.getName() + "!");
-			if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
-				GamePanel.dialog.currentMessage+=1;
-				GamePanel.dialog.currentIndex=0;
-			}
 			System.out.println(attacker.getName() + " dealt "
 					+ attackDamage + " to " + target.getName() + "!");
 			if(target.getCurrHP() == 0)
@@ -454,7 +450,7 @@ public class Battle {
 		//draw the enemies
 		for(int i = 0; i<enemies.size();i++){
 			Enemy currentEnemy = enemies.get(i);
-			System.out.println(currentEnemy.getXP());
+			//System.out.println(currentEnemy.getXP());
 			int yDifference = sceneWidth/(enemies.size()+1);
 			g.drawImage(currentEnemy.battleArt, sceneX, sceneY+(yDifference*i), sceneWidth/3, sceneHeight/2, null);
 		}

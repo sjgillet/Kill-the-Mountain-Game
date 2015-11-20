@@ -35,10 +35,6 @@ public class MessageBox {
 	public void addMessage(String msg){
 		messages.add(msg);
 		framesSinceMouseOver=0;
-		if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
-			GamePanel.dialog.currentMessage+=1;
-			GamePanel.dialog.currentIndex=0;
-		}
 		//		if(messages.size()>50){
 		//			messages.remove(0);
 		//		}
@@ -52,13 +48,20 @@ public class MessageBox {
 
 		y = ApplicationUI.windowHeight-height;
 		x = (ApplicationUI.windowWidth/2)-(width/2);
-		currentMessage = messages.size()-1;
+		//currentMessage = messages.size()-1;
 		if(messages.size()>0){
 			if(currentIndex<messages.get(currentMessage).length()){
 				if(frames>=framesPerUpdate||messages.get(currentMessage).charAt(currentIndex)==' ' && currentIndex < messages.get(currentMessage).length()-1){
 
 					currentIndex++;
 					frames = 0;
+					if(currentIndex==messages.get(currentMessage).length()-1){
+						if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
+							GamePanel.dialog.currentMessage+=1;
+							GamePanel.dialog.currentIndex=0;
+							framesSinceMouseOver=0;
+						}
+					}
 				}
 			}
 		}
@@ -75,9 +78,9 @@ public class MessageBox {
 			Rectangle clipArea = new Rectangle(x,y,width,height);
 			//g.setClip(clipArea);
 			//draw the previous 2 messages
-			for(int i = messages.size()-5; i<messages.size()-1;i++){
+			for(int i = currentMessage-5; i<currentMessage-1;i++){
 				if(i>=0){
-					g.drawString(messages.get(i), x+50, y+height-150+((i-(messages.size()-5))*30));
+					g.drawString(messages.get(i), x+50, y+height-150+((i-(currentMessage-5))*30));
 				}
 			}
 			//draw all the characters up to index

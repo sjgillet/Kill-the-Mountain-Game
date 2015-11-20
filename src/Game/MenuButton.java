@@ -50,7 +50,9 @@ public class MenuButton {
 
 			GamePanel.menu.menuState("Main");
 		}
-
+		else if(this.text.equals("Exit")){
+			System.exit(0);
+		}
 		else if (this.text.equals("Options")){
 
 			GamePanel.menu.menuState("Options");

@@ -79,8 +79,8 @@ public class Level {
 		tileMap = new Tile[width][height];
 		if(name.equals("Test")){
 			seed = 138;
-			width = 300;
-			height = 300;
+			width = 500;
+			height = 500;
 
 
 			minNumberOfMountains = ((width+height)/2)/80;

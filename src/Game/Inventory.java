@@ -161,7 +161,15 @@ public class Inventory {
 		 * Organized by quality into tiers for ease of access*/
 		allItems = new ArrayList<Item>();
 		//begin tier 1 items
-		
+		weaponsT1.add(longsword);
+		weaponsT2.add(longsword);
+		weaponsT3.add(longsword);
+		armorsT1.add(steelHelm);
+		armorsT2.add(steelHelm);
+		armorsT3.add(steelHelm);
+		consumablesT1.add(potHeal10);
+		consumablesT2.add(potHeal10);
+		consumablesT3.add(potHeal10);
 		//end tier 1 items
 		
 		//begin tier 2 items

@@ -241,10 +241,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 			if(e.getKeyCode()==KeyEvent.VK_5){
 				GamePanel.dialog.addMessage("Added a message to dialog! Does it work?"+System.currentTimeMillis());
-				if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
-					GamePanel.dialog.currentMessage+=1;
-					GamePanel.dialog.currentIndex=0;
-				}
+				
 			}
 			if(e.getKeyCode()==KeyEvent.VK_UP){
 
