@@ -2,7 +2,6 @@ package Game;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Enemy extends CombatEntity{
 	
@@ -13,7 +12,7 @@ public class Enemy extends CombatEntity{
 	*/
 	private double[] statWeights;
 	private int statTotal;
-	
+		
 	private String description;
 	private double challenge;
 	private int xp;
@@ -34,7 +33,6 @@ public class Enemy extends CombatEntity{
 
 		{
 			this.currHP = 0;
-
 			this.kill();
 		}
 			
@@ -46,6 +44,11 @@ public class Enemy extends CombatEntity{
 		GamePanel.player.playerCombatant.awardXP(this.getXP());
 
 		//TODO: Reload last save or Exit
+	}
+	public void run()
+	{
+		this.isDead = true;
+		this.currHP = hp;
 	}
 	
 	
@@ -141,9 +144,11 @@ public class Enemy extends CombatEntity{
 		
 		this.setCurrHP(this.getHP());	System.out.println(this.getName() + "CURHP: " + this.getCurrHP());//set hp to max on creation
 		this.setCurrSP(this.getSP());	System.out.println(this.getName() + "CURRSP: " + this.getCurrSP());//set sp to max on creation
-		this.updateStats();				//update damage and damage resistance
-		
+		this.updateStats();				//update damage and damage resistance and speed
 	}
+	
+	
+	
 	
 	
 	

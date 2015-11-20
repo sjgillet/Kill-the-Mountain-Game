@@ -96,6 +96,9 @@ public class Inventory {
 		return false;
 	}
 
+	/*
+	 * Drops an item from the inventory and places it where the player is standing
+	 */
 	public void dropFromInventory() {
 
 		if (GamePanel.levels.size()>GamePanel.currentLevel){

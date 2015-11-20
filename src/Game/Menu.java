@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Menu {
 
-
+	//Create ArrayLists for different menu states
 	ArrayList<MenuButton> title = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> main = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> pauseMain = new ArrayList<MenuButton>();
@@ -17,7 +17,10 @@ public class Menu {
 	int menuyPos;
 	int buttonWidth = 250;
 	int buttonHeight = 40;
-
+	
+	/*
+	 * Add Menu Buttons to each menu state
+	 */
 	public Menu() {
 		title.add(new MenuButton(buttonWidth, buttonHeight,"New Game"));
 		title.add(new MenuButton(buttonWidth, buttonHeight,"Load Game"));
@@ -43,6 +46,13 @@ public class Menu {
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Load Last Save"));
 	}
 
+	/*
+	 * Switches the menu state so the game will display the correct
+	 * set of buttons at the right times
+	 * 
+	 * @param String, name of menu state to change to
+	 * 
+	 */
 	public void menuState(String current) {
 
 		switch(current.toLowerCase())
@@ -150,6 +160,13 @@ public class Menu {
 
 	}
 
+	 */
+	
+	/*
+	 * Draw current menu state
+	 * 
+	 * @param Graphics2D g
+	 * @param ArrayList of buttons (menu) to draw
 	 */
 	public void drawMenu(Graphics2D g, ArrayList<MenuButton> a){
 
