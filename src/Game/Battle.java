@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Battle {
 
 	private boolean inBattle;
-	
+
 	private PlayerCombatant player = new PlayerCombatant();
 	private Enemy targetEnemy;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -39,8 +39,8 @@ public class Battle {
 		statTotal = stats;
 	}
 
-	
-	
+
+
 	public Battle()
 	{
 
@@ -71,7 +71,7 @@ public class Battle {
 			System.out.print(" CR: " + challengeRating + "\n");
 			enemies.add(opp);
 		}
-		
+
 		/* Dialogue message to start battle	 */
 		GamePanel.dialog.addMessage("BATTLE START!");
 		String listOpponents = "";
@@ -85,7 +85,7 @@ public class Battle {
 		GamePanel.dialog.addMessage("FIGHT!");
 
 		setTurnOrder();
-		
+
 	}
 
 	/**
@@ -202,11 +202,11 @@ public class Battle {
 	public void setTurnOrder()
 	{
 		turnOrder = new ArrayList<CombatEntity>();
-		ArrayList<Enemy> en = enemies;
 
 		//add player and enemies to turn order list
 		for(Enemy e : enemies)
-			turnOrder.add(e);
+			if(!e.isDead())
+				turnOrder.add(e);
 		turnOrder.add(player);
 		//sort turn order by speed
 		for(int i = 1; i < turnOrder.size(); i++){
@@ -222,11 +222,11 @@ public class Battle {
 		}
 		
 		//print turn order to terminal		
-		System.out.print("Turn Order: "); 
+		System.out.print("\nTurn Order: "); 
 		for(int i = 0; i < turnOrder.size(); i++) 
 			System.out.print(turnOrder.get(i).getName() + ": " + turnOrder.get(i).getSpeed() + ", ");
-		
-		changeTurn(0);
+		turnOrderIndex = -1;
+		changeTurn();
 	}
 
 	/** 
@@ -249,34 +249,13 @@ public class Battle {
 			for(Enemy e : enemies)
 				if(e == turnOrder.get(turnOrderIndex))
 					if(!e.isDead)					
-						{System.out.println("Monster's Turn; Turn Index: " + turnOrderIndex); takeAction(e);}
-					
+					{System.out.println("Monster's Turn; Turn Index: " + turnOrderIndex); takeAction(e); changeTurn();}
+
 					else {System.out.println("Monster is Dead, pass."); changeTurn(); }
 		}
 		else {System.out.println("Player's Turn; Turn Index: " + turnOrderIndex); return;}
 	}
-	
-	/**
-	 * To specified spot in the turn order. 
-	 * If it's now the player's turn, wait for user input.
-	 * If it's now an enemy's turn, the enemy will take an action
-	 * based on its situation
-	 * @param orderIndex	entity whose turn it is. 
-	 */
-	public void changeTurn(int orderIndex)
-	{
-		if(turnOrder.get(orderIndex) != player)
-		{
-			//get enemy, pass to take action
-			for(Enemy e : enemies)
-				if(e == turnOrder.get(orderIndex))
-					if(!e.isDead)					
-						{System.out.println("Monster's Turn; Turn Index: " + turnOrderIndex + "  | arg Index: " + orderIndex); takeAction(e);}
-					
-					else {System.out.println("Monster is Dead, pass."); changeTurn(); }
-		}
-		else System.out.println("Player's Turn; Turn Index: " + turnOrderIndex + "  | arg Index: " + orderIndex);
-	}
+
 
 	/**
 	 * Ends the battle event, whether victory, defeat, or running
@@ -383,7 +362,8 @@ public class Battle {
 				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy!");
 				attack(e,player);
 				e.setStrength((int)normStr);
-				e.setAcc((int)normAcc);				
+				e.setAcc((int)normAcc);			
+				e.updateStats();
 			}
 			else 
 				attack(e,player);
@@ -412,7 +392,7 @@ public class Battle {
 			System.out.println(attacker.getName() + " dealt "
 					+ totalDamage + " to " + target.getName() + "!");
 			target.applyDamage(totalDamage);
-			
+
 			if(target.getCurrHP() == 0)
 			{
 				GamePanel.dialog.addMessage(target.getName() + " died!");
@@ -423,24 +403,24 @@ public class Battle {
 		else 
 		{
 			GamePanel.dialog.addMessage(attacker.getName() + " missed!");
-			//			if(GamePanel.dialog.currentMessage<GamePanel.dialog.messages.size()-1){
-			//				GamePanel.dialog.currentMessage+=1;
-			//				GamePanel.dialog.currentIndex=0;
-			//			}
 			System.out.println(attacker.getName() + " missed!");
 		}
 		if(attacker == player)
 			changeTurn();
 	}
-	
+
 	public boolean enemiesLeft()
 	{
-		boolean end = true;
+		boolean enemiesRemaining = false;
 		for(Enemy e : enemies)
-		if(!e.isDead())
-			end = false;
+			if(!e.isDead())
+			{
+				System.out.println(e.getName() + ": " + e.isDead() + "\t");
+				enemiesRemaining = true;
+			}
 
-		return end;
+		System.out.println("Enemies left? " + enemiesRemaining);
+		return enemiesRemaining;
 	}
 
 
