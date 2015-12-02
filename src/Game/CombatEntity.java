@@ -175,6 +175,10 @@ public class CombatEntity {
 	public void setCurrHP(int newHP)
 	{
 		this.currHP = newHP;
+		if(currHP > hp)
+			currHP = hp;
+		if(currHP < 0)
+			currHP = 0;
 	}
 	
 	public void kill()
@@ -227,9 +231,9 @@ public class CombatEntity {
 	 */
 	public void updateStats()
 	{
-		physDamage = str + (1/4)*acc;	System.out.println("Damage: " + physDamage);
+		physDamage = str + (1/4)*acc;	//System.out.println("Damage: " + physDamage);
 		magDamage = mag + (1/4)*intel;
-		physDR = 100/(100 + arm);		System.out.println("DR: " + physDR);
+		physDR = 100/(100 + arm);		//System.out.println("DR: " + physDR);
 		magDR = 100/(100 + mre);
 		speed = this.getEvasion();
 	}	

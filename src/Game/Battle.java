@@ -23,7 +23,7 @@ public class Battle {
 	private int escapesAttempted = 0;
 
 	private boolean playerTurn;
-	private ArrayList<CombatEntity> turnOrder;
+	private ArrayList<CombatEntity> turnOrder = new ArrayList<CombatEntity>();
 	private int turnOrderIndex;
 
 	public ArrayList<Enemy> getEnemies()
@@ -62,15 +62,16 @@ public class Battle {
 		getAvailableMonsters();
 
 		/* Choose opponents */
+		System.out.println("Lowest CR Available: " + monsters.getLowestCR(availableMonsters));
 		while(challengeRating > monsters.getLowestCR(availableMonsters))
-			enemies.add(getOpponent(challengeRating)); 
-
-		/* Initialize opponents */
-		for(Enemy e : enemies)
 		{
-			e.Initialize();
-		}	
-
+			Enemy opp = getOpponent(challengeRating);
+			System.out.print("CR: " + challengeRating);
+			challengeRating -= opp.getChallenge();
+			System.out.print(" CR: " + challengeRating + "\n");
+			enemies.add(opp);
+		}
+		
 		/* Dialogue message to start battle	 */
 		GamePanel.dialog.addMessage("BATTLE START!");
 		String listOpponents = "";
@@ -83,6 +84,8 @@ public class Battle {
 		GamePanel.dialog.addMessage(player.getName() + "VS! "  + listOpponents);
 		GamePanel.dialog.addMessage("FIGHT!");
 
+		setTurnOrder();
+		
 	}
 
 	/**
@@ -138,6 +141,7 @@ public class Battle {
 	}
 	private void getAvailableMonsters()
 	{
+		//System.out.println("Fetching Monsters...");
 		if(lvl.name.equals("overworld"))	//gets a list of monsters that only spawn in the overworld
 		{
 			availableMonsters = monsters.getOverworldMonsters();
@@ -173,15 +177,17 @@ public class Battle {
 	 */
 	private Enemy getOpponent(double challengeRating)
 	{
+		System.out.print("Fetching monster... ");
 		Enemy opponent;
 		//retrieve a random monster from possible opponents
 		while(true)
 		{
 			opponent = availableMonsters.get(rand.nextInt(monsters.getAllMonsters().size() - 1));
-			if(opponent.getChallenge() >= challengeRating)
+			if(opponent.getChallenge() <= challengeRating)
 			{
-				opponent.Initialize();
-				challengeRating -= opponent.getChallenge();
+				opponent = new Enemy(opponent);
+				System.out.print(opponent.getName() + ", ");
+				System.out.print(opponent.toString() + "\n");
 				return opponent;
 			}
 		}
@@ -195,7 +201,6 @@ public class Battle {
 	 */
 	public void setTurnOrder()
 	{
-		int i = 0;
 		turnOrder = new ArrayList<CombatEntity>();
 		ArrayList<Enemy> en = enemies;
 
@@ -203,24 +208,22 @@ public class Battle {
 		for(Enemy e : enemies)
 			turnOrder.add(e);
 		turnOrder.add(player);
-
 		//sort turn order by speed
-		for(i = 0; i < turnOrder.size() - 1; i++)
-		{
-			boolean sorted = true;
-			if(turnOrder.get(i).getSpeed() < turnOrder.get(i+1).getSpeed())
+		for(int i = 1; i < turnOrder.size(); i++){
+			for(int k = i; k > 0 && 
+					turnOrder.get(k).getSpeed() > turnOrder.get(k - 1).getSpeed();
+					k--)
 			{
-				System.out.println("Swap");
-				CombatEntity temp = turnOrder.get(i+1);
-				turnOrder.set(i+1, turnOrder.get(i));
-				turnOrder.set(i, temp);
-				sorted = false;
+				System.out.println("Swapping " + turnOrder.get(k).getName() + " and " + turnOrder.get(k-1).getName());
+				CombatEntity temp = turnOrder.get(k);
+				turnOrder.set(k, turnOrder.get(k - 1));
+				turnOrder.set(k - 1, temp);
 			}
-			if(!sorted) i = -1;
 		}
-		//print turn order to terminal
+		
+		//print turn order to terminal		
 		System.out.print("Turn Order: "); 
-		for(i = 0; i < turnOrder.size(); i++) 
+		for(int i = 0; i < turnOrder.size(); i++) 
 			System.out.print(turnOrder.get(i).getName() + ": " + turnOrder.get(i).getSpeed() + ", ");
 		
 		changeTurn(0);
@@ -233,14 +236,26 @@ public class Battle {
 	public void changeTurn()
 	{
 		if(!this.inBattle) return;
-		System.out.println("combatants: " + turnOrder.size() + "\tturnIndex: "  + turnOrderIndex);
 		if(turnOrderIndex >= turnOrder.size() - 1)
 		{
 			setTurnOrder();
-			changeTurn(0);
+			turnOrderIndex = -1;
 		}
-		else changeTurn(turnOrderIndex + 1);
+		turnOrderIndex++;
+		System.out.println("Combatants: " + turnOrder.size() + "\tturnIndex: "  + turnOrderIndex);
+		if(turnOrder.get(turnOrderIndex) != player)
+		{
+			//get enemy, pass to take action
+			for(Enemy e : enemies)
+				if(e == turnOrder.get(turnOrderIndex))
+					if(!e.isDead)					
+						{System.out.println("Monster's Turn; Turn Index: " + turnOrderIndex); takeAction(e);}
+					
+					else {System.out.println("Monster is Dead, pass."); changeTurn(); }
+		}
+		else {System.out.println("Player's Turn; Turn Index: " + turnOrderIndex); return;}
 	}
+	
 	/**
 	 * To specified spot in the turn order. 
 	 * If it's now the player's turn, wait for user input.
@@ -250,19 +265,17 @@ public class Battle {
 	 */
 	public void changeTurn(int orderIndex)
 	{
-		System.out.println("New Order Index: " + orderIndex);
-		turnOrderIndex = orderIndex;
 		if(turnOrder.get(orderIndex) != player)
 		{
-			playerTurn = false;
 			//get enemy, pass to take action
 			for(Enemy e : enemies)
 				if(e == turnOrder.get(orderIndex))
-					if(!e.isDead)
-						takeAction(e);
-					else changeTurn();
+					if(!e.isDead)					
+						{System.out.println("Monster's Turn; Turn Index: " + turnOrderIndex + "  | arg Index: " + orderIndex); takeAction(e);}
+					
+					else {System.out.println("Monster is Dead, pass."); changeTurn(); }
 		}
-		else playerTurn = true;
+		else System.out.println("Player's Turn; Turn Index: " + turnOrderIndex + "  | arg Index: " + orderIndex);
 	}
 
 	/**
@@ -315,10 +328,7 @@ public class Battle {
 		}
 		//end battle
 		GamePanel.inBattle = false;
-		this.inBattle = false;
-		
-		
-		
+		this.inBattle = false;		
 	}
 
 	/**
@@ -357,7 +367,7 @@ public class Battle {
 			double attackCh = (double)(attackWt/totalWt);
 			double skillCh = (double)(skillWt/totalWt + attackCh);
 			double runCh = (double)(runWt/totalWt + skillCh);
-			System.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh);
+			//system.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh);
 
 			double pick = rand.nextDouble();
 			pick = (attackCh + skillCh)/2;
@@ -370,7 +380,7 @@ public class Battle {
 				e.setStrength((int)(double)(normStr*1.5d));
 				e.setAcc((int)(double)(normAcc*0.8));
 				e.updateStats();
-				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy! " + e.getStrength());
+				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy!");
 				attack(e,player);
 				e.setStrength((int)normStr);
 				e.setAcc((int)normAcc);				
@@ -378,7 +388,6 @@ public class Battle {
 			else 
 				attack(e,player);
 		}
-		changeTurn();
 	}
 
 	//Attack Normally
@@ -386,7 +395,7 @@ public class Battle {
 	{
 		double accuracy = (attacker.getAcc() + rand.nextInt(attacker.getLuck()))*(attacker.getSpeed()/attacker.getEvasion());
 		double evade = target.getEvasion() + rand.nextInt(target.getLuck());
-		System.out.println(attacker.getAcc() + " " + target.getEvasion() + " " + accuracy + " " + evade + " " + attacker.getSpeed()/attacker.getAcc());
+		//system.out.println(attacker.getAcc() + " " + target.getEvasion() + " " + accuracy + " " + evade + " " + attacker.getSpeed()/attacker.getAcc());
 		double hitChance = 0.5 + (accuracy-evade)/50.0;
 		if(hitChance > 1.0)
 			hitChance = 1.0;
@@ -394,16 +403,16 @@ public class Battle {
 			hitChance = 0.35;		
 		if(rand.nextDouble() < hitChance)
 		{
-			System.out.println("Strength = " + attacker.getStrength());
+			//system.out.println("Strength = " + attacker.getStrength());
 			int aAttack = attacker.getPDmg();
 			double tDR = target.getPDR();
-			int attackDamage = (int)(aAttack * (1 - tDR));
-			target.applyDamage(attackDamage);
-
+			int totalDamage = (int)(aAttack * (1 - tDR));
 			GamePanel.dialog.addMessage(attacker.getName() + " dealt "
-					+ attackDamage + " to " + target.getName() + "!");
+					+ totalDamage + " to " + target.getName() + "!");
 			System.out.println(attacker.getName() + " dealt "
-					+ attackDamage + " to " + target.getName() + "!");
+					+ totalDamage + " to " + target.getName() + "!");
+			target.applyDamage(totalDamage);
+			
 			if(target.getCurrHP() == 0)
 			{
 				GamePanel.dialog.addMessage(target.getName() + " died!");
@@ -423,7 +432,6 @@ public class Battle {
 		if(attacker == player)
 			changeTurn();
 	}
-
 	
 	public boolean enemiesLeft()
 	{

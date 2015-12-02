@@ -72,6 +72,10 @@ public class Enemy extends CombatEntity{
 	{
 		this.battleArt = art;
 	}
+	public BufferedImage getArt()
+	{
+		return this.battleArt;
+	}
 	
 	public double getChallenge()
 	{
@@ -84,6 +88,22 @@ public class Enemy extends CombatEntity{
 	public int getXP()
 	{
 		return xp;
+	}
+	public double[] getLootRates()
+	{
+		return this.lootRates;
+	}
+	public void setLootRates(double[] newLootRates)
+	{
+		this.lootRates = newLootRates;
+	}
+	public ArrayList<Item> getLootList()
+	{
+		return this.lootList;
+	}
+	public void setLootList(ArrayList<Item> newLootList)
+	{
+		this.lootList = newLootList;
 	}
 	
 	/**
@@ -117,7 +137,19 @@ public class Enemy extends CombatEntity{
 		statWeights[8] = STR;
 		statWeights[9] = SP;
 	}
+	public void setWeights(double[] newWeights)
+	{
+		this.statWeights = newWeights;
+	}
+	public double[] getStatWeights()
+	{
+		return this.statWeights;
+	}
 	
+	public Enemy()
+	{
+		
+	}
 	public Enemy(String newName, String descript /*Texture*/, double challengeRating, int experiencePoints){
 		this.setName(newName);
 		this.setDescription(descript);
@@ -125,23 +157,38 @@ public class Enemy extends CombatEntity{
 		this.xp = experiencePoints;	
 		this.lootList = new ArrayList<Item>();
 	}
+	public Enemy(Enemy master)
+	{
+		System.out.println("Master: " + master.getName());
+		//Enemy e = new Enemy(master.getName(), master.getDescription(), master.getChallenge(), master.getXP());
+		name = master.getName();
+		description = master.getDescription();
+		challenge = master.getChallenge();
+		xp = master.getXP();
+		battleArt = master.getArt();
+		statWeights = master.getStatWeights();
+		this.Initialize();
+		lootRates = master.getLootRates();
+		lootList = master.getLootList();		
+		System.out.println("New Monster: " + this.getName() + ", CR: " + this.getChallenge());
+	}
 	
 	public void Initialize()
 	{
 		statTotal = GamePanel.bat.getPlayer().getStatTotal();
-		this.setAcc((int)(statTotal * statWeights[0]));			System.out.println(this.getName() + " ACC: " + this.getAcc());		//ACC	
-		this.setArmor((int)(statTotal * statWeights[1]));		System.out.println(this.getName() + " ARM: " + this.getArmor());	//ARM
-		this.setEvasion((int)(statTotal * statWeights[2]));		System.out.println(this.getName() + " EVA: " + this.getEvasion());	//EVA
-		this.setHP((int)(statTotal * statWeights[3]));			System.out.println(this.getName() + " HP: " + this.getHP());		//HP
-		this.setIntel((int)(statTotal * statWeights[4]));		System.out.println(this.getName() + " INT: " + this.getIntel());	//INT
-		this.setLuck((int)(statTotal * statWeights[5]));		System.out.println(this.getName() + " LCK: " + this.getLuck());		//LCK
-		this.setMagic((int)(statTotal * statWeights[6]));		System.out.println(this.getName() + " MAG: " + this.getMagic());	//MAG
-		this.setMagicRes((int)(statTotal * statWeights[7]));	System.out.println(this.getName() + " MRE: " + this.getMagicRes());	//MRE
-		this.setStrength((int)(statTotal * statWeights[8]));	System.out.println(this.getName() + " STR: " + this.getStrength());	//STR
-		this.setSP((int)(statTotal * statWeights[9]));			System.out.println(this.getName() + " SP: " + this.getSP());		//SP
+		this.setAcc((int)(statTotal * statWeights[0]));			//System.out.println(this.getName() + " ACC: " + this.getAcc());		//ACC	
+		this.setArmor((int)(statTotal * statWeights[1]));		//System.out.println(this.getName() + " ARM: " + this.getArmor());	//ARM
+		this.setEvasion((int)(statTotal * statWeights[2]));		//System.out.println(this.getName() + " EVA: " + this.getEvasion());	//EVA
+		this.setHP((int)(statTotal * statWeights[3]));			//System.out.println(this.getName() + " HP: " + this.getHP());		//HP
+		this.setIntel((int)(statTotal * statWeights[4]));		//System.out.println(this.getName() + " INT: " + this.getIntel());	//INT
+		this.setLuck((int)(statTotal * statWeights[5]));		//System.out.println(this.getName() + " LCK: " + this.getLuck());		//LCK
+		this.setMagic((int)(statTotal * statWeights[6]));		//System.out.println(this.getName() + " MAG: " + this.getMagic());	//MAG
+		this.setMagicRes((int)(statTotal * statWeights[7]));	//System.out.println(this.getName() + " MRE: " + this.getMagicRes());	//MRE
+		this.setStrength((int)(statTotal * statWeights[8]));	//System.out.println(this.getName() + " STR: " + this.getStrength());	//STR
+		this.setSP((int)(statTotal * statWeights[9]));			//System.out.println(this.getName() + " SP: " + this.getSP());		//SP
 		
-		this.setCurrHP(this.getHP());	System.out.println(this.getName() + "CURHP: " + this.getCurrHP());//set hp to max on creation
-		this.setCurrSP(this.getSP());	System.out.println(this.getName() + "CURRSP: " + this.getCurrSP());//set sp to max on creation
+		this.setCurrHP(this.getHP());	//System.out.println(this.getName() + " CURHP: " + this.getCurrHP());//set hp to max on creation
+		this.setCurrSP(this.getSP());	//System.out.println(this.getName() + " CURRSP: " + this.getCurrSP());//set sp to max on creation
 		this.updateStats();				//update damage and damage resistance and speed
 	}
 	

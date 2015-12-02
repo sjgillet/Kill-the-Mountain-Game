@@ -105,6 +105,7 @@ public class PlayerCombatant extends CombatEntity{
 		xp = 0;
 		if(temp > 0)
 			awardXP(temp);
+		System.out.println("XP: " + xp);
 	}
 	public void setXP(int newTotal)
 	{
@@ -347,15 +348,20 @@ public class PlayerCombatant extends CombatEntity{
 			break;
 		
 		case TANK:
-			setHP(getHP() + 			0);
-			setSP(getSP() + 			0);
-			setStrength(getStrength() + 0);
-			setAcc(getAcc() + 			0);
-			setEvasion(getEvasion() + 	0);
-			setMagic(getMagic() + 		0);
-			setIntel(getIntel() + 		0);
-			setMagicRes(getMagicRes() + 0);
-			setLuck(getLuck() + 		0);
+			temp = rand.nextInt(6);	setStrength(getStrength() + temp);	//Increase STR
+			System.out.println("STR +" + temp + "!");
+			temp = rand.nextInt(3);	setAcc(getAcc() + temp);			//Increase ACC
+			System.out.println("ACC +" + temp + "!");
+			temp = rand.nextInt(3);	setEvasion(getEvasion() + temp);	//Increase EVA
+			System.out.println("EVA +" + temp + "!");
+			temp = 0;				setMagic(getMagic() + temp);		//Increase MAG
+			System.out.println("MAG +" + temp + "!...");
+			temp = rand.nextInt(1);	setIntel(getIntel() + temp);		//Increase INT
+			System.out.println("INT +" + temp + "!");
+			temp = rand.nextInt(2);	setMagicRes(getMagicRes() + temp);	//Increase MAG
+			System.out.println("MRE +" + temp + "!");
+			temp = rand.nextInt(3);	setLuck(getLuck() + temp);			//Increase LCK
+			System.out.println("LCK +" + temp + "!");
 			break;
 		
 		case ROGUE:

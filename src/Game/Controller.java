@@ -74,11 +74,11 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		mousePressed = true;
-		
+
 		mousePosition.x = (int) e.getPoint().getX();
 		mousePosition.y = (int) e.getPoint().getY();
-		
-		
+
+
 		if(e.getButton()==MouseEvent.BUTTON3&&GamePanel.showMap&&GamePanel.godmode){
 			LevelMap map = GamePanel.levels.get(GamePanel.currentLevel).map;
 			int x = (int)(double)(((mousePosition.x-(map.xpos*map.zoom))*(map.pixelWidthPerTile/map.zoom)/2));
@@ -136,7 +136,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 				}
 			}
 
-			
+
 
 
 			//equipped items
@@ -145,7 +145,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.player.inventory.equipped[i].isPushed();
 					overSlot = true;
 				}
-				
+
 			}
 
 			//main inventory items
@@ -155,7 +155,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 						GamePanel.player.inventory.main[i][j].isPushed();
 						overSlot = true;
 					}
-					
+
 				}
 			}
 
@@ -166,7 +166,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.player.inventory.torso.isPushed();
 					overSlot = true;
 				}
-				
+
 			}
 
 			if (GamePanel.player.inventory.arms.isOver()) {
@@ -174,7 +174,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.player.inventory.arms.isPushed();
 					overSlot = true;
 				}
-				
+
 			}
 
 			if (GamePanel.player.inventory.legs.isOver()) {
@@ -182,7 +182,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 					GamePanel.player.inventory.legs.isPushed();
 					overSlot = true;
 				}
-				
+
 			}
 
 
@@ -241,7 +241,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 			if(e.getKeyCode()==KeyEvent.VK_5){
 				GamePanel.dialog.addMessage("Added a message to dialog! Does it work?"+System.currentTimeMillis());
-				
+
 			}
 			if(e.getKeyCode()==KeyEvent.VK_UP){
 
@@ -272,6 +272,11 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 
 
 			}
+			if(e.getKeyCode() == KeyEvent.VK_H)
+			{
+				GamePanel.bat.getPlayer().setCurrHP(1000);
+			}
+
 			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				System.exit(0);
 		}
@@ -307,22 +312,36 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			else
 			{
 				GamePanel.inBattle = true;
-				GamePanel.bat = new Battle("Goblin");
+				GamePanel.bat = new Battle(1.0);
 			}
 		}
 
 
 		if(GamePanel.inBattle)
 		{
-			if(e.getKeyCode() == KeyEvent.VK_E)
-			{
-				System.out.println("Key Pressed: E");
-				GamePanel.bat.attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
-			}
-			if(e.getKeyCode() == KeyEvent.VK_W)
+			//			if(e.getKeyCode() == KeyEvent.VK_E)
+			//			{
+			//				GamePanel.bat.attack(GamePanel.bat.getEnemies().get(0), GamePanel.bat.getPlayer());
+			//			}
+			if(e.getKeyCode() == KeyEvent.VK_1)
 			{
 				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(0));
 			}
+			if(e.getKeyCode() == KeyEvent.VK_2)
+			{
+				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(1));
+			}
+			if(e.getKeyCode() == KeyEvent.VK_3)
+			{
+				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(2));
+			}
+			if(e.getKeyCode() == KeyEvent.VK_D)
+			{
+				GamePanel.bat.getEnemies().get(0).setCurrHP(GamePanel.bat.getEnemies().get(0).getCurrHP() - 2);
+			}
+
+
+
 		}
 
 	}
