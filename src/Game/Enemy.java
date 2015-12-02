@@ -129,8 +129,6 @@ public class Enemy extends CombatEntity{
 	public void Initialize()
 	{
 		statTotal = GamePanel.bat.getPlayer().getStatTotal();
-
-
 		this.setAcc((int)(statTotal * statWeights[0]));			System.out.println(this.getName() + " ACC: " + this.getAcc());		//ACC	
 		this.setArmor((int)(statTotal * statWeights[1]));		System.out.println(this.getName() + " ARM: " + this.getArmor());	//ARM
 		this.setEvasion((int)(statTotal * statWeights[2]));		System.out.println(this.getName() + " EVA: " + this.getEvasion());	//EVA

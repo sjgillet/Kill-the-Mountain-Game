@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class Battle {
 
+	private boolean inBattle;
+	
 	private PlayerCombatant player = new PlayerCombatant();
 	private Enemy targetEnemy;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -37,23 +39,12 @@ public class Battle {
 		statTotal = stats;
 	}
 
-
-
-
-	//	public void addMonster(String name)
-	//	{
-	//		enemies.add(monsters.getMonster(name));
-	//	}
-
-
-
-
-
+	
+	
 	public Battle()
 	{
 
 	}
-
 
 	/**
 	 * Creates a random encounter with monsters to fight.
@@ -143,6 +134,7 @@ public class Battle {
 		player = GamePanel.player.playerCombatant;
 		lvl = GamePanel.levels.get(GamePanel.currentLevel);
 		monsters = lvl.monstersList;
+		this.inBattle = true;
 	}
 	private void getAvailableMonsters()
 	{
@@ -195,6 +187,12 @@ public class Battle {
 		}
 	}
 
+	/**
+	 * Determines which combatants are still able to fight,
+	 * and sets the turn order based on speed.
+	 * Begins the sequence of turns with the fastest,
+	 * even if that is an enemy.
+	 */
 	public void setTurnOrder()
 	{
 		int i = 0;
@@ -220,9 +218,11 @@ public class Battle {
 			}
 			if(!sorted) i = -1;
 		}
+		//print turn order to terminal
 		System.out.print("Turn Order: "); 
 		for(i = 0; i < turnOrder.size(); i++) 
 			System.out.print(turnOrder.get(i).getName() + ": " + turnOrder.get(i).getSpeed() + ", ");
+		
 		changeTurn(0);
 	}
 
@@ -232,6 +232,7 @@ public class Battle {
 	 */
 	public void changeTurn()
 	{
+		if(!this.inBattle) return;
 		System.out.println("combatants: " + turnOrder.size() + "\tturnIndex: "  + turnOrderIndex);
 		if(turnOrderIndex >= turnOrder.size() - 1)
 		{
@@ -257,7 +258,9 @@ public class Battle {
 			//get enemy, pass to take action
 			for(Enemy e : enemies)
 				if(e == turnOrder.get(orderIndex))
-					takeAction(e);
+					if(!e.isDead)
+						takeAction(e);
+					else changeTurn();
 		}
 		else playerTurn = true;
 	}
@@ -267,40 +270,85 @@ public class Battle {
 	 * Awards XP and loot to the player
 	 * If the player had died, lose XP for current level.
 	 */
-	public void battleEnd()
+	public void battleEnd(int result)
 	{
-		if(player.isDead())
+		System.out.println("BATTLE ENDED: " + result);
+		//player was defeated
+		if(result == 0)
 		{
 			player.setXP(0);
+			GamePanel.dialog.addMessage(player.getName() + " was defeated.");
+			GamePanel.dialog.addMessage("Lost " + player.getXP() + " XP.");
+			GamePanel.dialog.addMessage(player.getName() + " came to sometime later."
+					+ " It seems they didn't have a taste for " + player.getRaceString(false) + " meat.");
 		}
-		for(Enemy e : enemies)
+		//player ran away
+		else if(result == 1)
 		{
-			if(e.isDead()){
-				player.awardXP(e.getXP());
-				Item loot = getLoot(e);
-				System.out.println("Got a " + loot.getName() + "!");
+
+		}
+		//all enemies defeated or ran
+		else if(result == 2)
+		{
+			GamePanel.dialog.addMessage(player.getName() + " was victorious!");
+			for(Enemy e : enemies)
+			{
+				//get XP for defeated enemies
+				if(e.isDead() && e.currHP <= 0)
+				{
+					GamePanel.dialog.addMessage("Gained " + e.getXP() + " for the " + e.getName());
+					System.out.println("Gained " + e.getXP() + " for the " + e.getName());
+					player.awardXP(e.getXP());
+					Item loot = getLoot(e);
+					if(loot != null)
+					{
+						GamePanel.dialog.addMessage(player.getName() + " found a " + loot.getName() + "!");
+						System.out.println("Got a " + loot.getName() + "!");
+						if(GamePanel.player.inventory.pickUpItem(loot))
+							GamePanel.dialog.addMessage("Added " + loot.getName() + " to your pack.");
+						else
+							GamePanel.dialog.addMessage(
+									"...But there's no room in your pack. Dropped " + loot.getName());	
+					}									
+				}
 			}
 		}
+		//end battle
+		GamePanel.inBattle = false;
+		this.inBattle = false;
+		
+		
+		
 	}
 
+	/**
+	 * Chooses an item from the enemy's list of potential loot randomly.
+	 * May be nothing.
+	 * @param e	Enemy who is dropping an item
+	 * @return	Item found, or nothing.
+	 */
 	public Item getLoot(Enemy e)
 	{
-		for(int i = 0; i < e.lootRates.length; i ++)
+		for(int i = 0; i < e.lootRates.length; i++)
 		{
 			double l = rand.nextDouble();
 			if(e.lootRates[i] <= l)
-				lootDrop.add(e.lootList.get(i));
-			else return null;
+				return e.lootList.get(i);
 		}		
 		return null;
 	}
 
+	/**
+	 * An enemy's basic AI function, determines what action the enemy takes on its turn.
+	 * May attack normally, power attack, or attempt to run away, based on the situation
+	 * @param e	The enemy taking action
+	 */
 	public void takeAction(Enemy e)
 	{
 		if(!e.isDead())
 		{
 			//determine action by weight of decision
-			double attackWt = 100;						//monster attacks normally
+			double attackWt = 100;						//monster attacks normally. Static weight
 			double skillWt = 10*e.getCurrSP();			//monster makes special attack. Less likely for 'tired' opponents
 			double runWt = 0;							//monster runs. More likely for injured opponents
 			if(e.getCurrHP() < e.getHP()/2)
@@ -336,7 +384,6 @@ public class Battle {
 	//Attack Normally
 	public void attack(CombatEntity attacker, CombatEntity target)
 	{
-		
 		double accuracy = (attacker.getAcc() + rand.nextInt(attacker.getLuck()))*(attacker.getSpeed()/attacker.getEvasion());
 		double evade = target.getEvasion() + rand.nextInt(target.getLuck());
 		System.out.println(attacker.getAcc() + " " + target.getEvasion() + " " + accuracy + " " + evade + " " + attacker.getSpeed()/attacker.getAcc());
@@ -360,7 +407,8 @@ public class Battle {
 			if(target.getCurrHP() == 0)
 			{
 				GamePanel.dialog.addMessage(target.getName() + " died!");
-				//battle end?
+				if(!enemiesLeft())
+					battleEnd(2);
 			}
 		}
 		else 
@@ -376,8 +424,92 @@ public class Battle {
 			changeTurn();
 	}
 
+	
+	public boolean enemiesLeft()
+	{
+		boolean end = true;
+		for(Enemy e : enemies)
+		if(!e.isDead())
+			end = false;
 
-	//Run Away
+		return end;
+	}
+
+
+	/**
+	 * Player's run away function. 
+	 * If successful, the player runs from battle, and the battle ends 
+	 */
+	public void attemptRun()
+	{
+		GamePanel.dialog.addMessage("NOPE!");
+		int playerSpeed = player.getSpeed();
+		int enemiesSpeed = 0;
+		int enemiesAlive = 0;
+		int enemiesQuicker = 0;
+		int enemiesSlower = 0;
+
+		escapesAttempted++;
+		for(Enemy e : enemies)
+		{
+			if(!e.isDead())
+			{
+				enemiesSpeed += e.getSpeed();
+				if(e.getSpeed() > playerSpeed)
+					enemiesQuicker++;
+				else 
+					enemiesSlower++;
+				enemiesAlive++;
+			}				
+		}
+
+		//double runChance = playerSpeed/((0.9 + 0.1*enemiesAlive)*(enemiesSpeed/enemiesAlive));
+		double runChance = rand.nextDouble() - (0.1*enemiesQuicker) + (0.05*enemiesSlower) + (0.1* escapesAttempted);
+		//SUCCESSFUL ESCAPE
+		if(runChance > 0.5)
+		{
+			GamePanel.dialog.addMessage("You got away!");
+			battleEnd(1);
+		}
+		//FAILED ESCAPE, NEXT TURN;
+		else
+		{
+			GamePanel.dialog.addMessage("You tripped on a rock and fell! They're still there!");
+			changeTurn();
+		}
+
+	}
+
+	/**
+	 * The enemy's own running method. A specified enemy attempts to run away from battle
+	 * If successful, player is awarded half XP, and the enemy is removed from combat
+	 * If the last enemy standing runs, the battle ends
+	 * @param e	Enemy that will attempt to run away
+	 */
+	public void attemptRun(Enemy e)
+	{
+		GamePanel.dialog.addMessage(e.getName() + " is making a break for it...");
+		double speedDifference = (e.getSpeed()/player.getSpeed()) - 1.0;
+		speedDifference *= speedDifference;
+		if(speedDifference > 0.3) 	speedDifference = 0.3;
+		if(speedDifference < -0.3) 	speedDifference = -0.3;
+		double runChance = 0.5 + speedDifference;
+		//enemy successfully escaped
+		if(rand.nextDouble() < runChance)
+		{
+			GamePanel.dialog.addMessage(e.getName() + " got away!");
+			GamePanel.dialog.addMessage("Gained " + (e.getXP()/2) + " XP.");
+			//remove from active participation, award xp
+			player.awardXP(e.getXP()/2);
+			e.run();
+
+			//check if any enemies remaining; if none, end battle	
+			if(!enemiesLeft())
+				battleEnd(2);
+
+		}
+		else GamePanel.dialog.addMessage("Oh, no you don't! " + e.getName() + " didn't get away.");
+	}
 
 	public void DrawEnemyNamePlate(Graphics2D g, int x, int y, Enemy enemy){
 		Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
@@ -435,7 +567,7 @@ public class Battle {
 		g.fillRect(sceneX-1, sceneY-1, sceneWidth+2, sceneHeight+2);
 		g.setColor(Color.lightGray);
 		g.fillRect(sceneX, sceneY, sceneWidth, sceneHeight);
-		
+
 		//draw the player
 		g.drawImage(plr.battleArt,sceneX+sceneWidth-(sceneWidth/3),sceneY+sceneHeight-(sceneHeight/2),sceneWidth/3,sceneHeight/2,null);
 		//draw the enemies
@@ -444,11 +576,11 @@ public class Battle {
 			int yDifference = sceneWidth/(enemies.size()+1);
 			g.drawImage(currentEnemy.battleArt, sceneX, sceneY+(yDifference*i), sceneWidth/3, sceneHeight/2, null);
 		}
-		
+
 		Font font = new Font("Iwona Heavy",Font.PLAIN, 20);
 		g.setFont(font);
 		g.setColor(Color.BLACK);
-		
+
 
 		//draw player's nameplate
 		int namePlateWidth = 250;
@@ -489,73 +621,7 @@ public class Battle {
 		for(int i = 0; i<enemies.size();i++){
 			DrawEnemyNamePlate(g, 0, i*100, enemies.get(i));
 		}
-		g.setColor(Color.white);
-		//				g.drawString(bat.getPlayer().getName(), 5, ApplicationUI.windowHeight - 170);
-		//				g.drawString(bat.getEnemies().get(0).getName(), 150, ApplicationUI.windowHeight - 170);
-		g.drawString(plr.getName() + " HP: " + plr.getCurrHP() + " | DMG: " + plr.getPDmg()
-		+ "VS! " 
-		+ e.getName() + " HP: " + e.getCurrHP() + " | DMG: " + e.getPDmg(),
-		5, ApplicationUI.windowHeight - 140);
-	}
-	public void attemptRun()
-	{
-		GamePanel.dialog.addMessage("NOPE!");
-		int playerSpeed = player.getSpeed();
-		int enemiesSpeed = 0;
-		int enemiesAlive = 0;
-		int enemiesQuicker = 0;
-		int enemiesSlower = 0;
-
-		escapesAttempted++;
-		for(Enemy e : enemies)
-		{
-			if(!e.isDead())
-			{
-				enemiesSpeed += e.getSpeed();
-				if(e.getSpeed() > playerSpeed)
-					enemiesQuicker++;
-				else 
-					enemiesSlower++;
-				enemiesAlive++;
-			}				
-		}
-
-		//double runChance = playerSpeed/((0.9 + 0.1*enemiesAlive)*(enemiesSpeed/enemiesAlive));
-		double runChance = rand.nextDouble() - (0.1*enemiesQuicker) + (0.05*enemiesSlower) + (0.1* escapesAttempted);
-		//SUCCESSFUL ESCAPE
-		if(runChance > 0.5)
-		{
-			GamePanel.dialog.addMessage("You got away!");
-			battleEnd();
-		}
-		//FAILED ESCAPE, NEXT TURN;
-		else
-		{
-			GamePanel.dialog.addMessage("You tripped on a rock and fell! They're still there!");
-			changeTurn();
-		}
-
 	}
 
-	public void attemptRun(Enemy e)
-	{
-		GamePanel.dialog.addMessage(e.getName() + " is making a break for it...");
-		int enemySpeed = e.getSpeed();
-		double speedDifference = (e.getSpeed()/player.getSpeed()) - 1.0;
-		speedDifference *= speedDifference;
-		if(speedDifference > 0.3) 	speedDifference = 0.3;
-		if(speedDifference < -0.3) 	speedDifference = -0.3;
-		double runChance = 0.5 + speedDifference;
-		//enemy successfully escaped
-		if(rand.nextDouble() < runChance)
-		{
-			GamePanel.dialog.addMessage(e.getName() + " got away!");
-			//remove from active participation, award xp
-			player.awardXP(e.getXP()/2);
-			e.run();
-
-		}
-		else GamePanel.dialog.addMessage("Oh, no you don't! " + e.getName() + " didn't get away.");
-	}
 
 }

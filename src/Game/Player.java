@@ -170,11 +170,11 @@ public class Player extends Entity{
 	 */
 	public void update(){
 
-		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel||true){
+		if(!GamePanel.levels.get(GamePanel.currentLevel).drawingLevel){
 			moveTowardsDestination(movementSpeed);
 		}
 		else{
-			//updatesInQue++;
+			updatesInQue++;
 
 		}
 

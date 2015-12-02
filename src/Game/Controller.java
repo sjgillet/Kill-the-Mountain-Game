@@ -307,7 +307,7 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			else
 			{
 				GamePanel.inBattle = true;
-				GamePanel.bat = new Battle("Golem");
+				GamePanel.bat = new Battle("Goblin");
 			}
 		}
 

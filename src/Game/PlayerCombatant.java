@@ -28,6 +28,32 @@ public class PlayerCombatant extends CombatEntity{
 	{
 		return race;
 	}
+	public String getRaceString(boolean upper)
+	{
+		String str = this.getRace().toString();
+		System.out.println(str);
+		if(str.equals("HUMAN"))
+			if(upper)
+				return "Human";
+			else return "human";
+		else if(str.equals("DWARF"))
+			if(upper)
+				return "Dwarf";
+			else return "dwarf";
+		else if(str.equals("ELF"))
+			if(upper)
+				return "Elf";
+			else return "elf";
+		else if(str.equals("MUNCHKIN"))
+			if(upper)
+				return "Munchkin";
+			else return "munchkin";
+		else if(str.equals("BEAR"))
+			if(upper)
+				return "Bear";
+			else return "bear";
+		else return "";
+	}
 	
 	/**
 	 * Applies a given amount of damage to the player's hp
@@ -73,7 +99,7 @@ public class PlayerCombatant extends CombatEntity{
 	public void awardXP(int award)
 	{
 		this.xp += award;
-		if(xp < 100)
+		if(xp >= 100)
 			this.levelUp();
 		int temp = xp - 100;
 		xp = 0;

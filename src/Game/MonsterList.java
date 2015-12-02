@@ -35,12 +35,16 @@ public class MonsterList {
 	}
 	
 	
-	private final Enemy golem = new Enemy("Golem", "A big rock with legs.", 1.0, 50);
-	private final Enemy goblin = new Enemy("Goblin", "Ugly little thing. Doesn't look that threatening.", 0.3, 10);
+	private Enemy golem = new Enemy("Golem", "A big rock with legs.", 1.0, 50);
+	private Enemy goblin = new Enemy("Goblin", "Ugly little thing. Doesn't look that threatening.", 0.3, 10);
 	
 	public MonsterList()
 	{	
 		this.allMonsters = new ArrayList<Enemy>();
+		this.overworldMonsters = new ArrayList<Enemy>();
+		this.lowLevelMonsters = new ArrayList<Enemy>();
+		this.midLevelMonsters = new ArrayList<Enemy>();
+		this.highLevelMonsters = new ArrayList<Enemy>();
 		this.weights = new ArrayList<Double[]>();
 		
 		//golem
@@ -51,6 +55,7 @@ public class MonsterList {
 		golem.setXP(50);
 		golem.setArt(GamePanel.golem);
 		allMonsters.add(golem);
+		midLevelMonsters.add(golem);
 		
 		//goblin
 		goblin.setWeights(0.15, 0.08, 0.12, 0.2, 0.075, 0.125, 0.0, 0.05, 0.05, 0.05);
@@ -60,6 +65,8 @@ public class MonsterList {
 		goblin.lootRates = new double[]{0.50, 0.75};
 		goblin.setArt(GamePanel.goblin);
 		allMonsters.add(goblin);
+		lowLevelMonsters.add(goblin);
+		overworldMonsters.add(goblin);
 		
 		//kobold
 		
