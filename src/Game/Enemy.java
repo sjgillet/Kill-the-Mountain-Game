@@ -41,7 +41,7 @@ public class Enemy extends CombatEntity{
 	{
 		this.isDead = true;
 		System.out.println(name + " died!");
-		GamePanel.player.playerCombatant.awardXP(this.getXP());
+		//GamePanel.player.playerCombatant.awardXP(this.getXP());
 
 		//TODO: Reload last save or Exit
 	}
