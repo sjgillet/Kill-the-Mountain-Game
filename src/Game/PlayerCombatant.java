@@ -235,72 +235,73 @@ public class PlayerCombatant extends CombatEntity{
 		{
 		/* Template for leveling characters based on class */
 		case FIGHTER:
+			System.out.println("level = " + level);
 			temp = rand.nextInt(10);	setHP(getHP() + temp);			//Increase HP and heal
-			GamePanel.dialog.addMessage("HP + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("HP + " + temp + "!");
 			heal(temp);
 
 			temp = rand.nextInt(3);	setSP(getSP() + temp);				//Increase SP and rest
-			GamePanel.dialog.addMessage("SP + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("SP + " + temp + "!");
 			restSP(temp);
 
 			temp = rand.nextInt(6);	setStrength(getStrength() + temp);	//Increase STR
-			GamePanel.dialog.addMessage("STR + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("STR + " + temp + "!");
 
 			temp = rand.nextInt(3);	setAcc(getAcc() + temp);			//Increase ACC
-			GamePanel.dialog.addMessage("ACC + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("ACC + " + temp + "!");
 
 			temp = rand.nextInt(3);	setEvasion(getEvasion() + temp);	//Increase EVA
-			GamePanel.dialog.addMessage("EVA + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("EVA + " + temp + "!");
 
 			temp = rand.nextInt(1);	setMagic(getMagic() + temp);		//Increase MAG
-			GamePanel.dialog.addMessage("MAG + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("MAG + " + temp + "!");
 
 			temp = rand.nextInt(1);	setIntel(getIntel() + temp);		//Increase INT
-			GamePanel.dialog.addMessage("INT + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("INT + " + temp + "!");
 
 			temp = rand.nextInt(3); setArmor(getArmor() + temp);		//Increase ARM
-			GamePanel.dialog.addMessage("ARM + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("ARM + " + temp + "!");
 
 			temp = rand.nextInt(2);	setMagicRes(getMagicRes() + temp);	//Increase MRE
-			GamePanel.dialog.addMessage("MRE + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("MRE + " + temp + "!");
 
 			temp = rand.nextInt(3);	setLuck(getLuck() + temp);			//Increase LCK
-			GamePanel.dialog.addMessage("LCK + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("LCK + " + temp + "!");
 
 			break;
 
 		case TANK:
 			temp = rand.nextInt(12);	setHP(getHP() + temp);			//Increase HP and heal
-			GamePanel.dialog.addMessage("HP + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("HP + " + temp + "!");
 			heal(temp);
 
 			temp = rand.nextInt(2);	setSP(getSP() + temp);				//Increase SP and rest
-			GamePanel.dialog.addMessage("SP + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("SP + " + temp + "!");
 			restSP(temp);
 
 			temp = rand.nextInt(6);	setStrength(getStrength() + temp);	//Increase STR
-			GamePanel.dialog.addMessage("STR + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("STR + " + temp + "!");
 
 			temp = rand.nextInt(2);	setAcc(getAcc() + temp);			//Increase ACC
-			GamePanel.dialog.addMessage("ACC + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("ACC + " + temp + "!");
 
 			temp = rand.nextInt(2);	setEvasion(getEvasion() + temp);	//Increase EVA
-			GamePanel.dialog.addMessage("EVA + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("EVA + " + temp + "!");
 
 			temp = rand.nextInt(1);	setMagic(getMagic() + temp);		//Increase MAG
-			GamePanel.dialog.addMessage("MAG + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("MAG + " + temp + "!");
 
 			temp = rand.nextInt(1);	setIntel(getIntel() + temp);		//Increase INT
-			GamePanel.dialog.addMessage("INT + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("INT + " + temp + "!");
 
 			temp = rand.nextInt(6); setArmor(getArmor() + temp);		//Increase ARM
-			GamePanel.dialog.addMessage("ARM + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("ARM + " + temp + "!");
 
 			temp = rand.nextInt(4);	setMagicRes(getMagicRes() + temp);	//Increase MRE
-			GamePanel.dialog.addMessage("MRE + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("MRE + " + temp + "!");
 
 			temp = rand.nextInt(2);	setLuck(getLuck() + temp);			//Increase LCK
-			GamePanel.dialog.addMessage("LCK + " + temp + "!");
+			if (level!=1) GamePanel.dialog.addMessage("LCK + " + temp + "!");
 
 			break;
 

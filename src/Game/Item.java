@@ -43,6 +43,7 @@ public class Item {
 		this.speed = speed;
 		this.armor = 0;
 		this.magicResist = 0;
+		this.itemArtwork = GamePanel.sword;
 	}
 
 	public Item(String name, String description, String type, int armor, int magicResist)//armor
@@ -129,9 +130,10 @@ public class Item {
 
 	public void draw(Graphics2D g) {
 
-
-		System.out.println("Drawing item on tile " );
-		g.drawImage(itemArtwork,(int)((ApplicationUI.windowWidth/2)-16)+xPosition+6-(int)GamePanel.player.xpos,(int)((ApplicationUI.windowHeight/2)-16)+yPosition+6-(int)GamePanel.player.ypos,20,20,null);
+		int x = (int)((ApplicationUI.windowWidth/2)-16)+xPosition+6-(int)GamePanel.player.xpos;
+		int y = (int)((ApplicationUI.windowHeight/2)-16)+yPosition+6-(int)GamePanel.player.ypos;
+		System.out.println("Drawing item on tile " + itemArtwork);
+		g.drawImage(itemArtwork,x,y,2000,2000,null);
 
 
 	}

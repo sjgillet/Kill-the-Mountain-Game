@@ -71,7 +71,7 @@ public class Player extends Entity{
 						Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
 						for(int i = 0; i<temp.collisionBoxes.size();i++){
 							if(collisionBoxAtNewXPosition.intersects(temp.collisionBoxes.get(i))&&temp.collisionType>=1){
-								temp.flagged=true;
+								//temp.flagged=true;
 								//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 								collidedWithSomethingX = true;
 								if(temp.collisionType==2){

@@ -51,6 +51,7 @@ public class Inventory {
 		yPosition = y;
 
 		equipped = new InventorySlot[4];
+		
 
 		for (int i = 0; i < equipped.length; i++) {
 
@@ -164,12 +165,12 @@ public class Inventory {
 		weaponsT1.add(longsword);
 		weaponsT2.add(longsword);
 		weaponsT3.add(longsword);
-		armorsT1.add(steelHelm);
-		armorsT2.add(steelHelm);
-		armorsT3.add(steelHelm);
-		consumablesT1.add(potHeal10);
-		consumablesT2.add(potHeal10);
-		consumablesT3.add(potHeal10);
+		armorsT1.add(longsword);
+		armorsT2.add(longsword);
+		armorsT3.add(longsword);
+		consumablesT1.add(longsword);
+		consumablesT2.add(longsword);
+		consumablesT3.add(longsword);
 		//end tier 1 items
 		
 		//begin tier 2 items
@@ -180,7 +181,6 @@ public class Inventory {
 		
 		//end tier 3 items
 		
-		longsword.itemArtwork = GamePanel.sword;
 		equipped[0].item = longsword;
 		
 		
@@ -238,7 +238,7 @@ public class Inventory {
 				tempItem=armors1.get(GamePanel.randomNumber(0, armors1.size()-1));
 			}
 		}
-		return tempItem;//will cause null pointer exceptions in the future!(needs to return a clone of the item instead of
+		return weaponsT1.get(0);//will cause null pointer exceptions in the future!(needs to return a clone of the item instead of
 		//returning that item in specific
 	}
 	/**

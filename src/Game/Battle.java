@@ -19,6 +19,7 @@ public class Battle {
 	private int statTotal;					//total of the player's stats for setting the stats of enemies
 	private ArrayList<Item> lootDrop;
 	private Random rand = new Random();
+	Monster monsterBeingFought;
 
 	private int escapesAttempted = 0;
 
@@ -283,11 +284,13 @@ public class Battle {
 		else if(result == 2)
 		{
 			GamePanel.dialog.addMessage(player.getName() + " was victorious!");
+			int numberDead = 0;
 			for(Enemy e : enemies)
 			{
 				//get XP for defeated enemies
 				if(e.isDead() && e.currHP <= 0)
 				{
+					numberDead++;
 					GamePanel.dialog.addMessage("Gained " + e.getXP() + " for the " + e.getName());
 					System.out.println("Gained " + e.getXP() + " for the " + e.getName());
 					player.awardXP(e.getXP());
@@ -304,6 +307,12 @@ public class Battle {
 					}									
 				}
 			}
+			
+			if (numberDead == enemies.size()){
+				//remove monster from world if defeated
+				GamePanel.levels.get(GamePanel.currentLevel).monsters.remove(monsterBeingFought);
+			}
+			
 		}
 		//end battle
 		GamePanel.inBattle = false;
@@ -349,7 +358,7 @@ public class Battle {
 			//system.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh);
 
 			double pick = rand.nextDouble();
-			pick = (attackCh + skillCh)/2;
+			
 			if(pick > skillCh)
 				attemptRun(e);
 			else if(pick > attackCh)
@@ -561,7 +570,7 @@ public class Battle {
 		//draw the enemies
 		for(int i = 0; i<enemies.size();i++){
 			Enemy currentEnemy = enemies.get(i);
-			int yDifference = sceneWidth/(enemies.size()+1);
+			int yDifference = sceneHeight/(enemies.size()+1);
 			g.drawImage(currentEnemy.battleArt, sceneX, sceneY+(yDifference*i), sceneWidth/3, sceneHeight/2, null);
 		}
 

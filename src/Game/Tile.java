@@ -857,9 +857,11 @@ public class Tile {
 			g.drawImage(vegetationImage,x,y,(int)(double)(32*scale),(int)(double)(32*scale),null);
 		}
 		for (int i = 0; i<itemsOnThisTile.size(); i++){
-			System.out.println("called draw method");
+			//System.out.println("called draw method");
 			if (itemsOnThisTile.get(i)!=null){
-				itemsOnThisTile.get(i).draw(g);
+				//System.out.println("inside item draw");
+				//itemsOnThisTile.get(i).draw(g);
+				g.drawImage(itemsOnThisTile.get(i).itemArtwork, x, y, 20, 20, null);
 			}
 			else{
 				itemsOnThisTile.remove(i);
@@ -893,6 +895,14 @@ public class Tile {
 		if(door!=null){
 			//door.Draw(g);
 		}
+		
+		if(collisionType==1&&false){//show collision boxes
+			g.setColor(new Color(255,255,0,100));
+			for(int i = 0; i<collisionBoxes.size();i++){
+				g.fillRect(x+(collisionBoxes.get(i).x-xpos), y+(collisionBoxes.get(i).y-ypos), collisionBoxes.get(i).width, collisionBoxes.get(i).height);
+			}
+		}
+		
 		//Font font = new Font("Iwona Heavy",Font.BOLD,10);
 		//g.setFont(font);
 		//g.setColor(Color.WHITE);

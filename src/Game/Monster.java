@@ -101,6 +101,7 @@ public class Monster extends Entity{
 							if (!GamePanel.inBattle){
 							GamePanel.inBattle = true;
 							GamePanel.bat = new Battle(1.0);
+							GamePanel.bat.monsterBeingFought = this;
 							//change menu state
 							GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
 
@@ -137,6 +138,7 @@ public class Monster extends Entity{
 							if (!GamePanel.inBattle){
 							GamePanel.inBattle = true;
 							GamePanel.bat = new Battle(1.0);
+							GamePanel.bat.monsterBeingFought = this;
 							//change menu state
 							GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
 							}
