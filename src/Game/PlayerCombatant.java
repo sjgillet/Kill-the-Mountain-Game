@@ -82,7 +82,7 @@ public class PlayerCombatant extends CombatEntity{
 
 	public int getStatTotal()
 	{
-		return (acc + eva + str + intel + mag + mre + lck);
+		return (str + acc + mag + intel + eva + lck + arm + mre);
 	}
 
 	public short getLevel()
