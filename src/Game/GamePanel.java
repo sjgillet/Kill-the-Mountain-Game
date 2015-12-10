@@ -149,7 +149,7 @@ public class GamePanel extends JPanel{
 	public static void setCurrentLevel(Level lvl){
 		for(int i = 0; i<levels.size();i++){
 			if(levels.get(i).name.equals(lvl.name)){
-				System.out.println("Set level!");
+				System.out.println("Set level" + lvl.name + "!");
 				currentLevel = i;
 				return;
 			}

@@ -16,6 +16,8 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 
+import java.util.Random;
+
 public class Controller implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener,DragSourceListener{
 	private JPanel gamePanel;
 	static boolean mousePressed = false;
@@ -311,10 +313,17 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			}
 			else
 			{
+				Random rand = new Random();
 				GamePanel.inBattle = true;
-				GamePanel.bat = new Battle(1.0);
+
+				GamePanel.bat = new Battle(1.2);
 				//change menu state
 				GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
+				//GamePanel.bat = new Battle((rand.nextDouble()*0.5) + 0.75);
+
+
+				
+
 			}
 		}
 

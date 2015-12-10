@@ -142,12 +142,14 @@ public class Battle {
 	}
 	private void getAvailableMonsters()
 	{
-		//System.out.println("Fetching Monsters...");
-		if(lvl.name.equals("overworld"))	//gets a list of monsters that only spawn in the overworld
+		System.out.println("Fetching Monsters...");
+		System.out.println("Level = " + lvl.name);
+		if(lvl.name.equals("Test"))	//gets a list of monsters that only spawn in the overworld
 		{
 			availableMonsters = monsters.getOverworldMonsters();
+			System.out.println("Overworld Monsters: " + availableMonsters.size() + " of them.");
 		}		
-		else if(lvl.name.equals("dungeon"))	//gets a list of dungeon monsters based on player level
+		else if(lvl.name.equals("Dungeon"))	//gets a list of dungeon monsters based on player level
 		{
 			availableMonsters = monsters.getLowLevelMonsters(); 
 
@@ -183,7 +185,10 @@ public class Battle {
 		//retrieve a random monster from possible opponents
 		while(true)
 		{
-			opponent = availableMonsters.get(rand.nextInt(monsters.getAllMonsters().size() - 1));
+			int temp = rand.nextInt(availableMonsters.size());
+			System.out.println("Selection: " + temp + "\t" + availableMonsters.get(temp).getName());
+			opponent = availableMonsters.get(temp);
+			//opponent = availableMonsters.get(rand.nextInt(monsters.getAllMonsters().size() - 1));
 			if(opponent.getChallenge() <= challengeRating)
 			{
 				opponent = new Enemy(opponent);
@@ -355,9 +360,11 @@ public class Battle {
 			double attackCh = (double)(attackWt/totalWt);
 			double skillCh = (double)(skillWt/totalWt + attackCh);
 			double runCh = (double)(runWt/totalWt + skillCh);
-			//system.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh);
-
 			double pick = rand.nextDouble();
+
+
+			System.out.println("Run: " + runCh + " Skill: " + skillCh + " Attack: " + attackCh + "Pick: " + pick);
+
 			
 			if(pick > skillCh)
 				attemptRun(e);
@@ -369,10 +376,12 @@ public class Battle {
 				e.setAcc((int)(double)(normAcc*0.8));
 				e.updateStats();
 				GamePanel.dialog.addMessage("The " + e.getName() + " attacks with a surge of energy!");
+				System.out.println("The " + e.getName() + " attacks with a surge of energy!");
 				attack(e,player);
 				e.setStrength((int)normStr);
 				e.setAcc((int)normAcc);			
 				e.updateStats();
+				e.setCurrSP(e.getCurrSP() - 1);
 			}
 			else 
 				attack(e,player);
@@ -553,7 +562,8 @@ public class Battle {
 
 		PlayerCombatant plr = getPlayer();
 		ArrayList<Enemy> enemies = getEnemies();
-		Enemy e = enemies.get(0);
+		//System.out.println("Enemies: " + enemies.size());
+		
 		int sceneWidth = ApplicationUI.windowWidth/2;
 		int sceneHeight = ApplicationUI.windowHeight/2;
 		int sceneX = (ApplicationUI.windowWidth/2)-(sceneWidth/2);
