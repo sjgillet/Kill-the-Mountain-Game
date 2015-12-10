@@ -58,11 +58,45 @@ public class MenuButton {
 			GamePanel.menu.menuState("Options");
 
 		} 
-		
+
 		//title screen
 		else if (this.text.equals("New Game")){
 			System.out.println("here");
 			GamePanel.createLevel();
+		}
+
+		//combat menu states
+
+		else if (this.text.equals("Attack")) {
+			GamePanel.menu.combatState("Pick Target");
+		}
+
+		//from the attack menu
+
+		else if (this.text.equals("Enemy 1")){
+			GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(0));
+			GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
+		}
+
+		else if (this.text.equals("Enemy 2")){
+			if (GamePanel.bat.getEnemies().get(1)!=null){
+				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(1));
+				GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
+			}
+		}
+
+		else if (this.text.equals("Enemy 3")){
+			if (GamePanel.bat.getEnemies().get(2)!=null){
+				GamePanel.bat.attack(GamePanel.bat.getPlayer(),GamePanel.bat.getEnemies().get(2));
+			}
+		}
+		
+		else if (this.text.equals("nvm")){
+			GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
+		}
+		
+		else if (this.text.equals("Run")){
+			GamePanel.bat.attemptRun();
 		}
 
 
@@ -102,7 +136,7 @@ public class MenuButton {
 		FontMetrics m = g.getFontMetrics(font);
 		g.setColor(Color.black);
 		g.drawString(text, xPosition+(buttonWidth/2) - (m.stringWidth(text)/2), yPosition + 27);
-		
+
 	}
 
 }

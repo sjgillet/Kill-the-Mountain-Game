@@ -91,6 +91,24 @@ public class Monster extends Entity{
 							}
 
 						}
+
+						//updates collisionBox
+						Rectangle playerBox = new Rectangle((int)GamePanel.player.xpos, (int)GamePanel.player.ypos,32,32);
+
+						//initiate battle if collides with player
+						if (collisionBoxAtNewXPosition.intersects(playerBox)){
+
+							if (!GamePanel.inBattle){
+							GamePanel.inBattle = true;
+							GamePanel.bat = new Battle(1.0);
+							//change menu state
+							GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
+
+							}
+						}
+
+
+
 					}
 				}
 			}
@@ -109,6 +127,24 @@ public class Monster extends Entity{
 							}
 
 						}
+
+						//updates collision box
+						Rectangle playerBox = new Rectangle((int)GamePanel.player.xpos, (int)GamePanel.player.ypos,32,32);
+
+						//initiate battle if collides with player
+						if (collisionBoxAtNewYPosition.intersects(playerBox)){
+
+							if (!GamePanel.inBattle){
+							GamePanel.inBattle = true;
+							GamePanel.bat = new Battle(1.0);
+							//change menu state
+							GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
+							}
+
+						}
+
+
+
 					}
 				}
 			}
@@ -133,6 +169,7 @@ public class Monster extends Entity{
 			}
 			collisionBox.y=(int)ypos;
 		}
+
 		if(collidedWithSomethingX||collidedWithSomethingY){
 			changeDirection();
 		}

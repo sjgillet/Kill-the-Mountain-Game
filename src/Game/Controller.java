@@ -313,6 +313,8 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 			{
 				GamePanel.inBattle = true;
 				GamePanel.bat = new Battle(1.0);
+				//change menu state
+				GamePanel.menu.currentMenu = GamePanel.menu.combatMain;
 			}
 		}
 

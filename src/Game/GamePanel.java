@@ -242,6 +242,7 @@ public class GamePanel extends JPanel{
 			if(inBattle)
 			{
 				bat.Draw(g);
+				menu.drawMenu(g, menu.currentMenu);
 			}
 
 			//			g.setColor(Color.yellow);

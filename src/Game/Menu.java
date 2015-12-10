@@ -13,11 +13,16 @@ public class Menu {
 	ArrayList<MenuButton> load = new ArrayList<MenuButton>();
 	ArrayList<MenuButton> currentMenu = title;
 
+	//combat menus
+	ArrayList<MenuButton> combatMain = new ArrayList<MenuButton>();
+	
+	ArrayList<MenuButton> pickTarget = new ArrayList<MenuButton>();
+ 
 	int menuxPos;
 	int menuyPos;
 	int buttonWidth = 250;
 	int buttonHeight = 40;
-	
+
 	/*
 	 * Add Menu Buttons to each menu state
 	 */
@@ -25,7 +30,7 @@ public class Menu {
 		title.add(new MenuButton(buttonWidth, buttonHeight,"New Game"));
 		title.add(new MenuButton(buttonWidth, buttonHeight,"Load Game"));
 		title.add(new MenuButton(buttonWidth, buttonHeight,"Exit"));
-		
+
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Game"));
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Inventory"));
 		pauseMain.add(new MenuButton(buttonWidth, buttonHeight, "Display Stats"));
@@ -44,6 +49,18 @@ public class Menu {
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Back to Save/Load"));
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Load Last Checkpoint"));
 		load.add(new MenuButton(buttonWidth, buttonHeight, "Load Last Save"));
+
+		//combat menus
+		combatMain.add(new MenuButton(buttonWidth, buttonHeight, "Attack"));
+		combatMain.add(new MenuButton(buttonWidth, buttonHeight, "Skills"));
+		combatMain.add(new MenuButton(buttonWidth, buttonHeight, "Items"));
+		combatMain.add(new MenuButton(buttonWidth, buttonHeight, "Run"));
+		
+		pickTarget.add(new MenuButton(buttonWidth, buttonHeight, "Enemy 1"));
+		pickTarget.add(new MenuButton(buttonWidth, buttonHeight, "Enemy 2"));
+		pickTarget.add(new MenuButton(buttonWidth, buttonHeight, "Enemy 3"));
+		pickTarget.add(new MenuButton(buttonWidth, buttonHeight, "nvm"));
+		
 	}
 
 	/*
@@ -108,60 +125,63 @@ public class Menu {
 
 	}
 
-	/*
-	public void combatState(combatMenu current) {
 
-		switch(current)
+	public void combatState(String current) {
+
+		switch(current.toLowerCase())
 		{
-		case COMBAT_MAIN:
+		case "combat main":
+			currentMenu = combatMain;
 			//attack
 			//items
 			//skills
 			//run
 			break;
 
-		case ITEMS:
+		case "items":
 			//Equip
 			//Use
 			break;
 
-		case EQUIPMENT_INV:
+		case "equipment inv":
 			//Equipment inventory
 			break;
 
-		case EQUIP_ITEM:
+		case "equip item":
 			//equip
 			//cancel
 			break;
 
-		case INVENTORY:
+		case "inventory":
 			//arraylist of inventory
 			break;
 
-		case USE_INVENTORY:
+		case "use inventory":
 			//use
 			//cancel
 			break;
 
-		case SKILLS:
+		case "skills":
 			//skill menu select
 			break;
 
-		case USE_SKILL:
+		case "use skill":
 			//use
 			//back
 			break;
 
-		case PICK_TARGET:
+		case "pick target":
 			//names of targets
+			currentMenu = pickTarget;
+			
 			break;
 
 		}
 
 	}
 
-	 */
-	
+
+
 	/*
 	 * Draw current menu state
 	 * 
@@ -170,8 +190,14 @@ public class Menu {
 	 */
 	public void drawMenu(Graphics2D g, ArrayList<MenuButton> a){
 
-		menuxPos = (ApplicationUI.windowWidth/2 - (buttonWidth/2));
-		menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
+		if (!GamePanel.inBattle){
+			menuxPos = (ApplicationUI.windowWidth/2 - (buttonWidth/2));
+			menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
+		}
+		else {
+			menuxPos = (ApplicationUI.windowWidth - buttonWidth);
+			menuyPos = (ApplicationUI.windowHeight/2 - ((buttonHeight*a.size())/2));
+		}
 
 		for (int i = 0; i<a.size(); i++) {
 			a.get(i).xPosition=menuxPos;

@@ -180,6 +180,10 @@ public class Inventory {
 		
 		//end tier 3 items
 		
+		longsword.itemArtwork = GamePanel.sword;
+		equipped[0].item = longsword;
+		
+		
 	}
 	public Item randomItem(String type){
 		Item tempItem = null;
